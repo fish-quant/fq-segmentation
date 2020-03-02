@@ -65,8 +65,9 @@ pip install cellpose
 TODO create setup.py
 
 From your `cellpose` environment, install this package its dependencies with
+TODO: update to master branch once committed.
 ```
-pip install git+https://github.com/muellerflorian/segmentation/debug --upgrade
+pip install git+https://github.com/muellerflorian/segmentation/develop --upgrade
 ```
 
 # Data

@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="cellpose",
+    name="cellpose-wrapper",
     version="0.0.1.0",
     author="Florian MUELLER",
     author_email="muellerf.research@gmail.com",
