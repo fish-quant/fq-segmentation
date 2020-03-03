@@ -2,7 +2,7 @@
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
-Note, this document is also provided as [**PDF**](https://github.com/muellerflorian/segmentation/blob/develop/readme.pdf)
+Note, this document is also provided as [**PDF**](https://github.com/muellerflorian/segmentation/blob/develop/readme.pdf).
 
 **Two main functionalities are provided**:
 1. Prepare z-stacks for segmentation by performing z-stack projections.
@@ -12,7 +12,7 @@ Note, this document is also provided as [**PDF**](https://github.com/muellerflor
 - [Installation](#installation)
   - [Pyton with Miniconda](#pyton-with-miniconda)
   - [Create dedicated environment to run Cellpose](#create-dedicated-environment-to-run-cellpose)
-  - [Installing cellpose](#installing-cellpose)
+  - [Installing Cellpose](#installing-cellpose)
   - [Installing this package](#installing-this-package)
 - [Data](#data)
   - [Data organization](#data-organization)
@@ -32,9 +32,8 @@ The installation consists of the following steps
 
 1. **Python**. Recommended with Miniconda:
 0. Create a **dedicated environment** with Jupyter to run your code
-0. Install **Jupyter lab** to run your code interactively.
-0. Install **CellPose**
-0. Install our code to provide wrappers to easily use CellPose.  
+1. Install **CellPose**
+2. Install **code from this repositry**.  
    
 
 ## Pyton with Miniconda
@@ -56,21 +55,20 @@ Then activate your environment (Note you will always have to run conda activate 
 conda activate cellpose
 ```
 
-
-## Installing cellpose
+## Installing Cellpose
 From your `cellpose` environment, install Cellpose and its dependencies with
 ```
 pip install cellpose  --upgrade
 ```
 
 ## Installing this package
-TODO create setup.py
 
 From your `cellpose` environment, install this package its dependencies with
-TODO: update to master branch once committed.
+
 ```
 pip install git+https://github.com/muellerflorian/segmentation/develop --upgrade
 ```
+TODO: update to master branch once merged.
 
 # Data
 
@@ -107,6 +105,8 @@ The organization of the provided test data is the following
 ```
 
 ## Test data
+Already processed test data can be downloaded from [**Dropbox**](https://www.dropbox.com/sh/yr1s5olqwkvyx0i/AADH0QQtdNuWWq7z9wgQpLiOa?dl=0). With these data, the different analysis steps can be verified. 
+
 
 # Usage
 
