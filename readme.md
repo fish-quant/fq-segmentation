@@ -1,13 +1,12 @@
 
-
-
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
-Two main functionalities are provided:
+Note, this document is also provided as [**PDF**]()
+
+**Two main functionalities are provided**:
 1. Prepare z-stacks for segmentation by performing z-stack projections.
 2. Provide convenient interface to batch segment a large number of images.
-
 
 - [Overview](#overview)
 - [Installation](#installation)
@@ -148,7 +147,7 @@ This is done with the jupyter notebook `preprocessing.ipynb`
     `Data path`    | str  |  | Full path to folder containing data to be segmented.
     `Results path` | str  |  | Full path to folder where results should be stored.
     `Channel str`    | str  |  dapi | Unique string to identify channel that should be processed.
-    `Projection`    | str  |  mean | Different projection types: mean, max, indiv. Indiv implies that z-stack is split into individual slices. 
+    `Projection`    | str  |  mean | Different projection types: `mean`, `max`, `indiv`. The option `Indiv` implies that a z-stack is split into individual slices, stored in subfolder for each image. 
 
 
 3. Pressing the button `Pre-process data` will start the segpre-processing. Progress 
@@ -157,12 +156,11 @@ This is done with the jupyter notebook `preprocessing.ipynb`
 4. Once the segmentation is finished, results can be inspected in the lower part of the interface. 
    The dropdown menus allow to inspect the results for cell and nuclear segmentation. 
 
-    ![](images/preprocess-result.png "preprocess-result")
+    ![](images/preprocess-results.png "preprocess-result")
 
 
 5. **Results** will be saved in the specified folder. For each image a json file with 
     basic properties of the file, and an image with the same name as the original one will be saved. 
-
 
 
 ## Performing segmentation of cells and nuclei
@@ -171,9 +169,10 @@ This is done with the jupyter notebook `segmentation_cells_nuclei.ipynb`
 1. Running the first code cell will import the user-interface.
    
 2. Running the second code cell will display the user-interface. 
-   Here the following parameters can be set: 
+   
+   ![](images/segmentation-interface.png "segmentation-ui")
 
-    ![](images/segmentation-interface.png "segmentation-ui")
+   Here the following parameters can be set: 
 
     Option           | Type | Default     | Description
     ---------------- | ---- | ----------- | -----------
@@ -192,12 +191,12 @@ This is done with the jupyter notebook `segmentation_cells_nuclei.ipynb`
    The actual segmentation can take a while, depending on the numberof images that should be segmented 
    (and their size). Progress can be monitored in the tab `Log`.
 
-    ![](images/segmentation-log.png "segmentation-log")
+   ![](images/segmentation-log.png "segmentation-log")
 
 4. Once the segmentation is finished, results can be inspected in the lower part of the interface. 
    The dropdown menus allow to inspect the results for cell and nuclear segmentation. 
 
-    ![](images/segmentation-results.png "segmentation-results") 
+   ![](images/segmentation-results.png "segmentation-results") 
    
 5. **Results** will be saved in the specified folder. For each image the following files, results files 
     with different suffices are created: 
@@ -233,7 +232,7 @@ with `FQ_seg`. The relevant part of the interface is the central panel _Cell Pro
        `mask__cells__` for the cells. 
     3. File-extensions of the masks and original file-names, e.g. `tif` for the example data. 
    
-0. [Optional] Generating outline files for a second color. This option allows to generate outline files for a second color,
+0. [Optional] **Generating outline files for a second color**. This option allows to generate outline files for a second color,
     e.g. for a dual-color FISH experiment or if the cell segmentation was performed with a different channel than the FISH channel. The outlines for this color will be based on the segmentation results of the first color and the exact cells will be used. This allows a simple comparison between the detection results. As above, the identifier for the second color has to be specified, e.g. `cy5`. You also have to redefine the experimental parameters (most often to adjust the excitation and emission wavelength). 
 
     Additionally, you can choose to not create the outlines for the channel that was used for cell segmentation. This option is useful if the first color does not contain actual smFISH data but results of a dedicated cell segmentation stain. 
@@ -241,8 +240,9 @@ with `FQ_seg`. The relevant part of the interface is the central panel _Cell Pro
 0. Several options exist to **specify the folder** where the results will be saved. By default, the FQ outlines will be stored
    in a sub-folder `__FQ_outlines` within the folder containing the segmentation results. You can then move it to another location, e.g. directly into the `analysis` folder as done for the example data. 
 
-0. Specify images that will be analyzed. You can either choose different images that you want to analyze (`Define images`), 
+0. Specify **images that will be analyzed**. You can either choose different images that you want to analyze (`Define images`), 
    or select an entire folder (`Select folder`). For the latter, you can also specify a recursive search; this means that all subfolders will be searched as well (not recommended for this workflow). The script will only consider images that follow the above explained naming convention – other images will be ignored. 
+   In the example data, the folder `analysis\segmentation-results` contains the relevant data.
 
 0. **Create outlines**. Lastly, press the button `Create FQ outlines`. The script will then automatically search for the files
    describing the segmentation of cells and nuclei. For each image an outline file with the reference to the ORIGINAL 3D image will be generated and nuclei assigned to their respective cells. 
