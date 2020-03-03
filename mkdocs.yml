@@ -1,0 +1,82 @@
+# Project information
+site_name: Cell segmentation
+site_description:  Wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**]
+site_author: Florian MUELLER
+site_url: https://github.com/muellerflorian/segmentation
+
+# Repository
+repo_name: GitHub
+repo_url: https://github.com/muellerflorian/segmentation.git
+edit_uri: ""
+
+# Copyright
+copyright: 'Copyright &copy; 2019 Florian MUELLER'
+
+# Configuration
+theme:
+  name: 'material'
+  #name: mkdocs
+  # 404 page
+  static_templates:
+    - 404.html
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  feature:
+    tabs: true
+  palette:
+    primary: indigo
+    accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: /img/icons8-eukaryotic-cells-filled-100.png
+  logo:
+    icon: wb_sunny
+
+# Customization
+extra:
+  social:
+    - type: github-alt
+      link: https://github.com/muellerflorian
+    - type: linkedin
+      link: https://www.linkedin.com/in/muellerflorian/
+    - type: google
+      link: https://scholar.google.fr/citations?user=WrEj9t4AAAAJ
+
+# MD extension
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.tasklist
+  - pymdownx.superfences
+  - pymdownx.tilde
+
+nav:
+    - Overview: index.md   # Needed for material theme but not for other
+    - Tools: tools.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
+    - Installation: installation.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
+    - Data: data.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
+
+    - Analysis with ImJoy:
+      - Preprocessing: imjoy-pre-processing.md
+      - Segmentation: imjoy-segmentation.md
+
+    - Analysis with Jupyter:
+      - Preprocessing: jupyter-pre-processing.md
+      - Segmentation: jupyter-segmentation.md
+
+    - Post-processing:
+      - Create FQ outline files: post-processing-fq.md
+
+    - About:
+      - Licence: licence.md
+
+#theme:
+#  name: 'material'

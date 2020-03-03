@@ -1,12 +1,3 @@
-
-# Overview
-This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
-
-For more information, please consult the dedicated [**documentation**]().
-
-# Licensing
- 
-
 - **Cellpose** is (general) are BSD-licenced (3 clause)
 
 > Copyright © 2020 Howard Hughes Medical Institute

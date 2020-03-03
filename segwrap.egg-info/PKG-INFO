@@ -1,0 +1,12 @@
+Metadata-Version: 1.1
+Name: segwrap
+Version: 0.0.1.0
+Summary: wrapper package for cellpose
+Home-page: UNKNOWN
+Author: Florian MUELLER
+Author-email: muellerf.research@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent

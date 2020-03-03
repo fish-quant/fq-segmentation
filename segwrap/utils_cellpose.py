@@ -18,11 +18,25 @@ from pathlib import Path
 # Imports of CellPose specific libraries
 from cellpose import models, utils
 from cellpose import plot, transforms
-from utils_segmentation import resize_mask
+
+def log_message(msg, callback_fun=None):
+    """ Display log, either terminal or any callback accepting a string as input.
+
+    Parameters
+    ----------
+    msg : [string]
+        [description]
+    callback_fun : [type], optional
+        [description], by default None
+    """
+    if callback_fun:
+        callback_fun(msg)
+    else:
+        print(msg)
 
 
 # Function to load and segment nuclei images
-def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, path_save): 
+def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, path_save, callback_log=None): 
     """ TODO: write docs
     
     Parameters
@@ -52,7 +66,7 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
     (model_cells, model_nuclei) = models
     
     # Which device to use
-    device = check_device()
+    device = check_device(callback_log=callback_log)
 
     # Load data
     imgs_cyto, imgs_nuclei, files_cyto, files_nuclei, channels_cyto, channels_nuclei, sizes_orginal = load_imgs_ctyo_nuclei(
@@ -60,7 +74,8 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
                                                             str_cyto=str_cyto,     
                                                             str_nuclei=str_nuclei,
                                                             img_ext=img_ext, 
-                                                            new_size=new_size)
+                                                            new_size=new_size,
+                                                            callback_log=callback_log)
 
     # %% Call function for prediction of cell
     config = {'model_type': model_cells, 
@@ -75,7 +90,7 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
             'obj_name':'cells'
     }
                 
-    cellpose_predict(data, config, path_save = path_save )
+    cellpose_predict(data, config, path_save=path_save, callback_log=callback_log)
         
     # Call function for prediction of nuclei
     config = {'model_type': model_nuclei, 
@@ -90,12 +105,12 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
             'obj_name':'nuclei'
     }
                 
-    cellpose_predict(data, config, path_save = path_save )
+    cellpose_predict(data, config, path_save=path_save, callback_log=callback_log)
 
 
 
 # Function to load and segment nuclei images
-def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, path_save):
+def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, path_save,callback_log=None):
     """ Wrapper function to load and segment nuclei in 2D images. 
     
     Parameters
@@ -147,7 +162,7 @@ def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, p
 
 
 # Function: check if GPU working, and if so use it
-def check_device(gpu_number=0):
+def check_device(gpu_number=0, callback_log=None):
     """ Check on which device (GPU or CPU) CellPose will be running. 
      
     Parameters
@@ -157,16 +172,16 @@ def check_device(gpu_number=0):
     """
     use_gpu = utils.use_gpu(gpu_number=gpu_number)
     if use_gpu:
-        print('CellPose will be USING GPU')
+        log_message('CellPose will be USING GPU', callback_fun=callback_log)
         device = mx.gpu()
     else:
-        print('CellPose will be USING CPU')
+        log_message('CellPose will be USING CPU', callback_fun=callback_log)
         device = mx.cpu()
 
     return device
 
 # Path to save results 
-def cellpose_predict(data, config, path_save):
+def cellpose_predict(data, config, path_save, callback_log=None):
     """Perform prediction with CellPose. 
     
     Parameters
@@ -192,7 +207,7 @@ def cellpose_predict(data, config, path_save):
     obj_size = config['obj_size']
     device = config['device']
     
-    print(f'\n\nPerforming segmentation of {obj_name}\n')
+    log_message(f'\n\nPerforming segmentation of {obj_name}\n', callback_fun=callback_log)
     
     start_time = time.time()
     
@@ -205,7 +220,7 @@ def cellpose_predict(data, config, path_save):
     masks, flows, styles, diams = model.eval(imgs, rescale=30./obj_size, channels=channels, net_avg=False, threshold=0.4)
 
     # Display and save 
-    print(f' ... creating outputs ...\n')
+    log_message(f' ... creating outputs ...\n', callback_fun=callback_log)
     n_img = len(imgs)
     
     for idx in tqdm(range(n_img)):
@@ -235,13 +250,11 @@ def cellpose_predict(data, config, path_save):
         else:
             imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
 
-
-        
-    print("SEGMENTATION FINISHED")
-    print("\n--- %s seconds ---" % (time.time() - start_time))
+    log_message("SEGMENTATION FINISHED", callback_fun=callback_log)    
+    log_message("\n--- %s seconds ---" % (time.time() - start_time), callback_fun=callback_log)    
 
 
-def load_imgs_nuclei(path_scan, str_dapi, img_ext, new_size):
+def load_imgs_nuclei(path_scan, str_dapi, img_ext, new_size, callback_log=None):
     """[summary]
     
     Parameters
@@ -265,7 +278,7 @@ def load_imgs_nuclei(path_scan, str_dapi, img_ext, new_size):
     imgs_nuclei = []
     files_nuclei = []
     sizes_orginal = []
-    print(f'Loading images and creating processing list')
+    log_message(f'Loading images and creating processing list', callback_fun=callback_log)    
 
     for path_dapi in path_scan.glob(f'*{str_dapi}*{img_ext}'):
 
@@ -282,13 +295,13 @@ def load_imgs_nuclei(path_scan, str_dapi, img_ext, new_size):
         imgs_nuclei.append(img_3d_dpi)
         files_nuclei.append(path_dapi)
         
-    print(f' ... prepared {len(imgs_nuclei)} images for segmentation ...\n')
-    
+    log_message(f' ... prepared {len(imgs_nuclei)} images for segmentation ...\n', callback_fun=callback_log) 
+
     return imgs_nuclei, files_nuclei, channels_nuclei, sizes_orginal
 
 
 # Load data for nuclei and cyto segmentation
-def load_imgs_ctyo_nuclei(path_scan, str_cyto, str_nuclei, img_ext, new_size ):
+def load_imgs_ctyo_nuclei(path_scan, str_cyto, str_nuclei, img_ext, new_size, callback_log=None ):
     """[summary]
     
     Parameters
@@ -315,21 +328,21 @@ def load_imgs_ctyo_nuclei(path_scan, str_cyto, str_nuclei, img_ext, new_size ):
     files_cyto = []
     files_nuclei = []
     sizes_orginal = []
-    print(f'Loading images and creating processing list')
-    
+    log_message(f'Loading images and creating processing list', callback_fun=callback_log) 
+               
     # Create processing lists
     channels_cyto = [1, 3]
     channels_nuclei = [0, 1]
     
     if not path_scan.is_dir():
-        print(f'Path {path_scan} does not exist.')
+        log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
         return
 
     for path_cyto in path_scan.glob(f'*{str_cyto}*{img_ext}'):
         # DAPI image: existing?
         path_nuclei = Path(str(path_cyto).replace(str_cyto, str_nuclei))
         if not path_nuclei.is_file():
-            print(f'DAPI image not found : {path_nuclei}')
+            log_message(f'DAPI image not found : {path_nuclei}', callback_fun=callback_log)
             continue
 
         # Read images
@@ -354,6 +367,42 @@ def load_imgs_ctyo_nuclei(path_scan, str_cyto, str_nuclei, img_ext, new_size ):
         imgs_nuclei.append(img_3d_dpi)
         files_nuclei.append(path_nuclei)
 
-    print(f' ... prepared {len(imgs_nuclei)} images for segmentation ...\n')
+    log_message(f' ... prepared {len(imgs_nuclei)} images for segmentation ...\n', callback_fun=callback_log)
     
     return  imgs_cyto, imgs_nuclei, files_cyto, files_nuclei, channels_cyto, channels_nuclei, sizes_orginal
+
+
+def resize_mask(mask_small, size_orginal):
+    """ Resize a label image.
+
+    Parameters
+    ----------
+    mask_small : [type]
+        [description]
+    size_orginal : [type]
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """
+
+    mask_full = np.zeros(size_orginal).astype('uint16')
+    maski_template = np.zeros(mask_small.shape).astype('uint8')
+
+    ind_objs = np.unique(mask_small)
+    ind_objs = np.delete(ind_objs, np.where(ind_objs == 0))
+
+    if ind_objs.size > 0:
+
+        for obj_int in np.nditer(ind_objs):
+
+            # Create binary mask for current object and find contour
+            img_obj_loop = np.copy(maski_template)
+            img_obj_loop[mask_small == obj_int] = 1
+
+            img_obj_loop_large = resize(img_obj_loop, size_orginal, order=1).astype('bool')
+            mask_full[img_obj_loop_large] = obj_int
+
+    return mask_full

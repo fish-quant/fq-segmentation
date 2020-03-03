@@ -1,0 +1,87 @@
+﻿<docs lang="markdown">
+[TODO: write documentation for this plugin.]
+</docs>
+
+<config lang="json">
+{
+  "name": "Pre-process",
+  "type": "native-python",
+  "version": "0.1.0",
+  "description": "[TODO: describe this plugin with one sentence.]",
+  "tags":  ["stable","dev"],
+  "ui": [
+        "Data path: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
+        "Path save: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "Channel string: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
+        "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}"
+        ],
+  "cover": "",
+  "inputs": null,
+  "outputs": null,
+  "flags": [],
+  "icon": "extension",
+  "api_version": "0.1.7",
+  "env": "",
+  "permissions": [],
+  "requirements": {"dev": ["pip:  -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"]},
+  "dependencies": []
+}
+</config>
+
+<script lang="python">
+from imjoy import api
+from pathlib import Path
+
+from segwrap import utils_segmentation
+class ImJoyPlugin():
+    def setup(self):
+        api.log('initialized')
+
+    def run(self, ctx):
+        
+        api.log(ctx.config)
+
+        # Get path for testing
+        if api.TAG == 'stable':
+            path_process = ctx.config.path_process
+            path_save = ctx.config.path_save
+        else:
+            path_process = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition'
+            path_save = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input-imjoy'
+ 
+        # >>> CHECK INPUT PARAMETERS
+
+        # Path containing the data
+        if path_process == 'paste-path-to-data':
+            api.alert('Path containing data to be processed has to be specified.')
+            return
+        
+        path_process = Path(path_process)
+    
+        if not path_process.is_dir():
+            api.alert('Path containing data to be processed does not exist.')    
+            return
+        
+        # Path to save data
+        if path_save == 'paste-path-to-save-data':
+            api.alert('Path to save data has to be specified.')
+            return
+
+        path_save = Path(path_save)
+
+        if not path_save.is_dir():
+            path_save.mkdir(parents=True) 
+
+        # Call pre-processing function
+        api.showStatus('Preprocessing ... see log for details')
+        utils_segmentation.folder_prepare_prediction(
+                          path_process=path_process,
+                          search_type=None,
+                          channel_ident=ctx.config.channel_ident,
+                          projection_type=ctx.config.projection_type,
+                          path_save=path_save,
+                          callback_log=api.log)
+        api.showStatus('Preprocessing finished.')
+
+api.export(ImJoyPlugin())
+</script>

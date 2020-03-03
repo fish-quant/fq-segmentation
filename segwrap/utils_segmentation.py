@@ -6,8 +6,24 @@ from skimage.transform import resize
 import numpy as np
 
 
+def log_message(msg, callback_fun=None):
+    """ Display log, either terminal or any callback accepting a string as input.
+
+    Parameters
+    ----------
+    msg : [string]
+        [description]
+    callback_fun : [type], optional
+        [description], by default None
+    """
+    if callback_fun:
+        callback_fun(msg)
+    else:
+        print(msg)
+
+
 # Functions
-def folder_prepare_prediction(path_process, search_type, channel_ident, path_save, projection_type):
+def folder_prepare_prediction(path_process, search_type, channel_ident, path_save, projection_type, callback_log=None):
     """[summary]
 
     Parameters
@@ -39,7 +55,7 @@ def folder_prepare_prediction(path_process, search_type, channel_ident, path_sav
     # Process files
     for file_proc in files_proc:
 
-        print(f'Processing file: {file_proc}')
+        log_message(f'Processing file: {file_proc}', callback_fun = callback_log)
         name_base = file_proc.stem
 
         if projection_type == 'indiv':
@@ -69,7 +85,7 @@ def folder_prepare_prediction(path_process, search_type, channel_ident, path_sav
             for i in range(img.shape[0]):
                 name_save = path_save_indiv / f'{name_base}_Z{str(i+1).zfill(3)}.png'
                 if name_save.is_file():
-                    print(f'File already exists. will be overwritten {name_save}')
+                    log_message(f'File already exists. will be overwritten {name_save}', callback_fun = callback_log)
                 imsave(name_save, img[i, :, :])
 
         else:
@@ -83,41 +99,5 @@ def folder_prepare_prediction(path_process, search_type, channel_ident, path_sav
             name_save = path_save / f'{name_base}.png'
 
             if name_save.is_file():
-                print(f'File already exists. will be overwritten {name_save}')
+                log_message(f'File already exists. will be overwritten {name_save}', callback_fun = callback_log)
             imsave(name_save, img_proj)
-
-
-def resize_mask(mask_small, size_orginal):
-    """ Resize a label image.
-
-    Parameters
-    ----------
-    mask_small : [type]
-        [description]
-    size_orginal : [type]
-        [description]
-
-    Returns
-    -------
-    [type]
-        [description]
-    """
-
-    mask_full = np.zeros(size_orginal).astype('uint16')
-    maski_template = np.zeros(mask_small.shape).astype('uint8')
-
-    ind_objs = np.unique(mask_small)
-    ind_objs = np.delete(ind_objs, np.where(ind_objs == 0))
-
-    if ind_objs.size > 0:
-
-        for obj_int in np.nditer(ind_objs):
-
-            # Create binary mask for current object and find contour
-            img_obj_loop = np.copy(maski_template)
-            img_obj_loop[mask_small == obj_int] = 1
-
-            img_obj_loop_large = resize(img_obj_loop, size_orginal, order=1).astype('bool')
-            mask_full[img_obj_loop_large] = obj_int
-
-    return mask_full
