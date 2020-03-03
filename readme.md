@@ -4,10 +4,11 @@ This repository provides wrapper code to use the generalist cell/nuclei segmenta
 
 Note, this document is also provided as [**PDF**](https://github.com/muellerflorian/segmentation/blob/develop/readme.pdf).
 
-**Two main functionalities are provided**:
+**Two main functionalities are provided**
 1. Prepare z-stacks for segmentation by performing z-stack projections.
 2. Provide convenient interface to batch segment a large number of images.
 
+**Table of contents**
 - [Overview](#overview)
 - [Installation](#installation)
   - [Pyton with Miniconda](#pyton-with-miniconda)
@@ -25,14 +26,15 @@ Note, this document is also provided as [**PDF**](https://github.com/muellerflor
   - [Performing segmentation of cells and nuclei](#performing-segmentation-of-cells-and-nuclei)
   - [Post-processing](#post-processing)
     - [Create FISH-quant [Matlab] outline files](#create-fish-quant-matlab-outline-files)
+- [Licensing](#licensing)
 
 
 # Installation
 The installation consists of the following steps
 
 1. **Python**. Recommended with Miniconda:
-0. Create a **dedicated environment** with Jupyter to run your code
-1. Install **CellPose**
+0. Create a **dedicated environment** with Jupyter to run your code.
+1. Install **CellPose**.
 2. Install **code from this repositry**.  
    
 
@@ -50,7 +52,7 @@ to run the jupyter notebooks for easier execution (confirm with `y` when asked i
 conda create --name cellpose python=3.7 jupyter
 ```
 
-Then activate your environment (Note you will always have to run conda activate cellpose before you run cellpose):
+Then activate the `cellpose` environment (Note you will always have to run this command when using this workflow):
 ```
 conda activate cellpose
 ```
@@ -62,9 +64,7 @@ pip install cellpose  --upgrade
 ```
 
 ## Installing this package
-
 From your `cellpose` environment, install this package its dependencies with
-
 ```
 pip install git+https://github.com/muellerflorian/segmentation/develop --upgrade
 ```
@@ -125,7 +125,7 @@ It can be execude by pressing `SHIFT+ENTER`
 ### Starting a Jupyter notebook
 
 
-1. Open an anaconda prompt
+1. Open an anaconda prompt.
 2. Activate the `cellpose` environment:
     ```
     conda activate cellpose
@@ -268,3 +268,45 @@ with `FQ_seg`. The relevant part of the interface is the central panel _Cell Pro
 
 0. **Create outlines**. Lastly, press the button `Create FQ outlines`. The script will then automatically search for the files
    describing the segmentation of cells and nuclei. For each image an outline file with the reference to the ORIGINAL 3D image will be generated and nuclei assigned to their respective cells. 
+
+
+# Licensing
+ 
+
+- **Cellpose** is (general) are BSD-licenced (3 clause)
+
+> Copyright © 2020 Howard Hughes Medical Institute
+
+> Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+> Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+Neither the name of HHMI nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+- The rest of the code provided in this repository (general) are BSD-licenced (3 clause):
+>Copyright © 2020, Florian Mueller  
+>All rights reserved.
+>
+>Redistribution and use in source and binary forms, with or without
+>modification, are permitted provided that the following conditions are met:
+>    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+>    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+>    * Neither the name of the copyright holder nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+>
+>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
