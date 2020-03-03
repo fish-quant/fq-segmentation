@@ -2,7 +2,7 @@
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
-Note, this document is also provided as [**PDF**]()
+Note, this document is also provided as [**PDF**](https://github.com/muellerflorian/segmentation/blob/develop/readme.pdf)
 
 **Two main functionalities are provided**:
 1. Prepare z-stacks for segmentation by performing z-stack projections.
@@ -18,8 +18,9 @@ Note, this document is also provided as [**PDF**]()
   - [Data organization](#data-organization)
   - [Test data](#test-data)
 - [Usage](#usage)
-  - [Resizing to speed up prediction.](#resizing-to-speed-up-prediction)
   - [Working with Jupyter notebooks](#working-with-jupyter-notebooks)
+    - [What is Jupyter?](#what-is-jupyter)
+    - [Starting a Jupyter notebook](#starting-a-jupyter-notebook)
   - [Preprocessing](#preprocessing)
   - [Performing segmentation of cells and nuclei](#performing-segmentation-of-cells-and-nuclei)
   - [Post-processing](#post-processing)
@@ -109,12 +110,9 @@ The organization of the provided test data is the following
 
 # Usage
 
-## Resizing to speed up prediction. 
-Segmentation speed depends on the image size. In our experience, resizing the images
-can lead to a substantial speed-up. In case you resize the images, we implemented a post-processing
-routine that will resize the predicted masks back to the original image size. 
-
 ## Working with Jupyter notebooks
+
+### What is Jupyter?
 Jupyter notebooks provide a convenient way to execute code with minimal user input. 
 We further provide notebooks with interactive control, to faciliate ussage. 
 
@@ -124,6 +122,24 @@ It can be execude by pressing `SHIFT+ENTER`
 
 ![](images/jupyer-code-cell.png "jupyter-code-cell")
 
+### Starting a Jupyter notebook
+
+
+1. Open an anaconda prompt
+2. Activate the `cellpose` environment:
+    ```
+    conda activate cellpose
+    ```
+2. Start Jupyter notebook:
+    ```
+    jupyter notebook
+    ```
+    This will launch a new browser window (or a new tab) showing the Notebook Dashboard, a sort of control panel that allows
+     (among other things) to select which notebook to open. Here, you can then start a jupyter notebook (files ending with `.ipynb`)
+    ![](images/jupyter-landing-page.png "jupyter-landing-page")
+3. Note that closing the browser (or the tab) will not close the Jupyter Notebook App. 
+   To completely shut it down you need to close the associated anaconda terminal.
+    
 
 ## Preprocessing
 Segmentation is done on 2D images. In this step, 3D images are transformed into
@@ -164,6 +180,12 @@ This is done with the jupyter notebook `preprocessing.ipynb`
 
 
 ## Performing segmentation of cells and nuclei
+
+**Resizing to speed up prediction**: segmentation speed depends on the image size. In our experience, resizing the images
+can lead to a substantial speed-up. In case you resize the images, we implemented a post-processing
+routine that will resize the predicted masks back to the original image size. 
+
+
 This is done with the jupyter notebook `segmentation_cells_nuclei.ipynb`
 
 1. Running the first code cell will import the user-interface.
