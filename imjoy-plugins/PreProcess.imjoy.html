@@ -4,14 +4,14 @@
 
 <config lang="json">
 {
-  "name": "Pre-process",
+  "name": "PreProcess",
   "type": "native-python",
   "version": "0.1.0",
-  "description": "[TODO: describe this plugin with one sentence.]",
+  "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
-        "Data path: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
-        "Path save: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "Path DATA: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
+        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
         "Channel string: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
         "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}"
         ],

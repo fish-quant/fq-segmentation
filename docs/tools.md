@@ -1,7 +1,10 @@
 # Tools
-Here, we describe the different software packages that are used. 
+Here, we describe the different software packages that are used. We provide for all analysis workflows
+dedicated **ImJoy plugins**, to faciliate their use. 
 
-For installation instruction, please consult the dedicated section. 
+We also provide Python source code illustrating the basic usage in the folder `workflows`.
+
+For installation instruction, please consult the dedicated [**section**](installation.md). 
 
 A more detailed description of each workflow is provided in the dedicated sections. 
 
@@ -22,7 +25,8 @@ for its execution.
  3. ImJoy can have several workspaces. Each workspace can contain multiple plugins and is often
     dedicated to a specific data processing task. Workspaces can be selected from little puzzle symbol in the upper left part of the interface.
  
-   <img src="https://raw.githubusercontent.com/muellerflorian/walesky-rna-loc-liver/master/docs/img/imjoy-interface.png" width="600px"></img>
+    <img src="img\imjoy-interface.png" width="600px"></img>
+
 
 ### Installing plugins
 We provide links to install the different ImJoy plugins. These installation links also specify
@@ -47,11 +51,11 @@ to which ImJoy can connect:
     ```
     conda activate cellpose
     ```
-2. **Start Jupyter notebook**. . 
+2. **Start Jupyter notebook**. Type
     ```
     jupyter notebook --NotebookApp.allow_origin='*' --no-browser
     ```
-    Copy the provided URL including the token, somehting like `http://127.0.0.1:8889/?token=16126ce8b02ee35103200c46d71b3f946bfb408d1cae0f68`
+    Copy the provided URL including the token, something like `http://127.0.0.1:8889/?token=16126ce8b02ee35103200c46d71b3f946bfb408d1cae0f68`
 3. In ImJoy, press on the rocket symbol in the upper right corner, select `Add Jupyter-Engine` 
     and past the URL from the step above. 
 4. You can now connect your plugin to this Juypyter Kernel, by clicking on the puzzle symbol 

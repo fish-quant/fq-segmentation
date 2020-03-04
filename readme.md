@@ -1,8 +1,18 @@
 
+<a href="https://imjoy.io" target="_blank" ><img src="https://raw.githubusercontent.com/muellerflorian/walesky-rna-loc-liver/master/docs/img/imjoy-logo-powered.svg?sanitize=true" width="140"></img>
+</a>
+![GitHub](https://img.shields.io/github/license/muellerflorian/segmentation)
+
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
-For more information, please consult the dedicated [**documentation**]().
+For more information, please consult the dedicated [**documentation**](https://muellerflorian.github.io/segmentation/).
+
+Example of **nuclear segmentation**:
+<img src="docs\img\segmentation__nuclei.png" width="600px"></img>
+
+Example of **cytoplasmic segmentation**:
+<img src="docs\img\segmentation__cells.png" width="600px"></img>
 
 # Licensing
  

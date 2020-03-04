@@ -17,7 +17,6 @@ Note, this document is also provided as [**PDF**](https://github.com/muellerflor
   - [Installing this package](#installing-this-package)
 - [Data](#data)
   - [Data organization](#data-organization)
-  - [Test data](#test-data)
 - [Usage with Jupyter notebooks](#usage-with-jupyter-notebooks)
   - [Working with Jupyter notebooks](#working-with-jupyter-notebooks)
     - [What is Jupyter?](#what-is-jupyter)
@@ -104,8 +103,7 @@ The organization of the provided test data is the following
 
 ```
 
-## Test data
-Already processed test data can be downloaded from [**Dropbox**](https://www.dropbox.com/sh/yr1s5olqwkvyx0i/AADH0QQtdNuWWq7z9wgQpLiOa?dl=0). With these data, the different analysis steps can be verified. 
+ 
 
 
 # Usage with Jupyter notebooks

@@ -1,13 +1,12 @@
 
 # Installation
-The installation consists of the following steps
+In order to use the workflows in this repository, you need to follows these steps, which we detail below: 
 
 1. **Python**. Recommended with Miniconda:
 0. Create a **dedicated environment** with Jupyter to run your code.
 1. Install **CellPose**.
 2. Install **code from this repositry**.  
    
-
 ## Pyton with Miniconda
 We recommend installing an [Miniconda distribution of Python](https://docs.conda.io/en/latest/miniconda.html): choose Python 3.7 and your operating system. 
 
@@ -36,6 +35,6 @@ pip install cellpose --upgrade
 ## Installing this package
 From your `cellpose` environment, install this package and its dependencies with
 ```
-pip install git+https://github.com/muellerflorian/segmentation/develop --upgrade
+pip install git+https://github.com/muellerflorian/segmentation/ --upgrade
 ```
-TODO: update to master branch once merged.
+TODO: add commit tag?

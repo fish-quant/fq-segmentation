@@ -10,8 +10,8 @@
   "description": "Segment cells and nuclei",
   "tags":  ["stable","dev"],
   "ui": [
-        "Data path: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
-        "Path save: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
+        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
         "String CELLS: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
         "String NUCLEi: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
         "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
@@ -36,14 +36,15 @@
 <script lang="python">
 from imjoy import api
 from pathlib import Path
+import asyncio
 
 from segwrap import utils_cellpose
 
 class ImJoyPlugin():
     def setup(self):
-        api.log('initialized')
+        api.log('Plugin SegmentCellsNuclei initialized')
 
-    def run(self, ctx):
+    async def run(self, ctx):
         
         api.log(ctx.config)
 
@@ -91,15 +92,20 @@ class ImJoyPlugin():
 
         # Call pre-processing function
         api.showStatus('Performing segmentation ... see log for details')
-        utils_cellpose.segment_cells_nuclei(path_scan=path_scan, 
+        utils_cellpose.segment_cells_nuclei_indiv(
+                                      path_scan=path_scan, 
                                       strings=(ctx.config.str_cyto, ctx.config.str_nuclei), 
                                       img_ext=ctx.config.img_ext, 
                                       new_size=new_size,
                                       sizes=(ctx.config.size_cells, ctx.config.size_nuclei), 
                                       models=('cyto','nuclei'),
                                       path_save=path_save,
-                                      callback_log=api.log)
-
+                                      callback_log=api.log,
+                                      callback_status=api.showStatus, 
+                                      callback_progress=api.showProgress,
+                                      callback_show_results = show_image)
+        
+        api.alert(f'Segmentation finished. Results stored in {path_save}')
         api.showStatus('Segmentation finished.')
 
 api.export(ImJoyPlugin())

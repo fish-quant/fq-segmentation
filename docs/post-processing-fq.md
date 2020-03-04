@@ -5,7 +5,7 @@ FISH-quant outline files have to be created from the mask images.
 For this, we provide a Matlab GUI distributed with the [FISH-quant package](https://bitbucket.org/muellerflorian/fish_quant/src/master/). After installing FISH-quant, you can open this GUI from the command window
 with `FQ_seg`. The relevant part of the interface is the central panel _Cell Profiler: generate FQ outlines from segmentation_. 
 
-![](images/fq-create-outlines.png "fq-create-outlines")
+![](img/fq-create-outlines.png "fq-create-outlines")
 
 
 1. **Specify experimental parameters**. These parameters have to be defined – even if the default parameters are good. 

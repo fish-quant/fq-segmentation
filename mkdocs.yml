@@ -68,10 +68,6 @@ nav:
       - Preprocessing: imjoy-pre-processing.md
       - Segmentation: imjoy-segmentation.md
 
-    - Analysis with Jupyter:
-      - Preprocessing: jupyter-pre-processing.md
-      - Segmentation: jupyter-segmentation.md
-
     - Post-processing:
       - Create FQ outline files: post-processing-fq.md
 
