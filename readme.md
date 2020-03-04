@@ -6,12 +6,14 @@
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
-For more information, please consult the dedicated [**documentation**](https://muellerflorian.github.io/segmentation/).
+For more information, please consult the dedicated [**documentation**](https://fish-quant.github.io/segmentation/).
 
 Example of **nuclear segmentation**:
+
 <img src="docs\img\segmentation__nuclei.png" width="600px"></img>
 
 Example of **cytoplasmic segmentation**:
+
 <img src="docs\img\segmentation__cells.png" width="600px"></img>
 
 # Licensing
@@ -20,9 +22,9 @@ Example of **cytoplasmic segmentation**:
 - **Cellpose** is (general) are BSD-licenced (3 clause)
 
 > Copyright © 2020 Howard Hughes Medical Institute
-
+>
 > Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
+>
 > Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 Neither the name of HHMI nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
