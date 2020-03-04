@@ -35,7 +35,7 @@ in which **ImJoy workspaces** the plugin will be installed.
 If you press on the installation link, the ImJoy web app will open and display a
 dialog asking if you want to install the specified plugin. To confirm, press the `install` button.
 
-![imjoy-interface](img/imjoy-interface.png)
+![imjoy-interface](img/imjoy-plugin-installation.png)
 
 Once installed, ImJoy remembers the workspaces and plugins and you simply have to
 open the ImJoy app and select the workspace [https://imjoy.io/#/app](https://imjoy.io/#/app)

@@ -111,8 +111,7 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
         return
 
-    n_imgs = len ([f for f in path_scan.glob(f'*{str_cyto}*{img_ext}')])
-
+    n_imgs = len([f for f in path_scan.glob(f'*{str_cyto}*{img_ext}')])
     for idx, path_cyto in enumerate(path_scan.glob(f'*{str_cyto}*{img_ext}')):
         
         imgs_cyto = []
@@ -128,7 +127,6 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         
         if callback_progress:
             progress = float((idx+1)/n_imgs)
-            log_message(f'Progress : {progress}', callback_fun=callback_log)
             callback_progress(progress)
         
         # DAPI image: existing?

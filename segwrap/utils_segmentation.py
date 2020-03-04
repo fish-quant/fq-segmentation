@@ -23,7 +23,7 @@ def log_message(msg, callback_fun=None):
 
 
 # Functions
-def folder_prepare_prediction(path_process, search_type, channel_ident, path_save, projection_type, callback_log=None):
+def folder_prepare_prediction(path_process, search_type, channel_ident, path_save, projection_type, callback_log=None, callback_status=None, callback_progress=None):
     """[summary]
 
     Parameters
@@ -53,9 +53,15 @@ def folder_prepare_prediction(path_process, search_type, channel_ident, path_sav
             files_proc.append(path_dapi)
 
     # Process files
-    for file_proc in files_proc:
+    n_files = len(files_proc)
+    for idx, file_proc in enumerate(files_proc):
 
-        log_message(f'Processing file: {file_proc}', callback_fun = callback_log)
+        log_message(f'Processing file: {file_proc}', callback_fun = callback_status)
+
+        if callback_progress:
+            progress = float((idx+1)/n_files)
+            callback_progress(progress)
+
         name_base = file_proc.stem
 
         if projection_type == 'indiv':

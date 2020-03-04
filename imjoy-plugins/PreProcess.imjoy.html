@@ -24,8 +24,10 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
   "api_version": "0.1.7",
   "env": "",
   "permissions": [],
-  "requirements": {"dev": ["pip:  -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"],
-                   "stable": []},
+  "requirements": {
+                    "dev":   ["pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"],
+                    "stable":["pip: -U git+https://github.com/fish-quant/segmentation@78f0d75"]
+                   },
   "dependencies": []
 }
 </config>
@@ -82,7 +84,9 @@ class ImJoyPlugin():
                           channel_ident=ctx.config.channel_ident,
                           projection_type=ctx.config.projection_type,
                           path_save=path_save,
-                          callback_log=api.log)
+                          callback_log=api.log,
+                          callback_status=api.showStatus, 
+                          callback_progress=api.showProgress)
         api.showStatus('Preprocessing finished.')
 
 api.export(ImJoyPlugin())
