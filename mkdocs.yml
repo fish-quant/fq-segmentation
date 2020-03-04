@@ -67,7 +67,8 @@ nav:
     - Post-processing:
       - Create FQ outline files: post-processing-fq.md
 
-    - About:
+    - Advanced:
+      - Developer notes: developer-notes.md
       - Licence: licence.md
 
 #theme:
