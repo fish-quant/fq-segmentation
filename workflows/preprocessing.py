@@ -8,8 +8,8 @@ import utils_segmentation  # Either on sys path or pip installed
 # %% Function call
 
 # Parameters
-path_process = Path(r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition')
-path_save = Path(r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input-workflow')
+path_process = Path(r'paste-path-to-data')       # For example data: \example_data\acquisition
+path_save = Path(r'paste-path-to-save-results')  # For example data: example_data\analysis\segmentation-input
 channel_ident = 'dapi'          # Identifier of channel that should be pre-processed 
 projection_type = 'max'         # Projection type (mean, max, indiv)
 
