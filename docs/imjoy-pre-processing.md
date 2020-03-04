@@ -3,13 +3,13 @@
 Segmentation is done on 2D images. In this step, 3D images are transformed into
 2D images by applying a projection. 
 
-Preprocessing is done with the ImJoy plugin `PreProcess`. 
-<a href="https://imjoy.io/#/app?w=cellpose&plugin=fish-quant/segmentation:PreProcess@stable&upgrade=1" target="_blank">**Install from here.**</a>. 
+Preprocessing is done with the ImJoy plugin `PreProcess`:  
+<a href="https://imjoy.io/#/app?w=cellpose&plugin=fish-quant/segmentation:PreProcess@stable&upgrade=1" target="_blank">**install from here.**</a>
 
 1. Before running the plugin, you have to specify a few parameters. Note that you have to perform this 
    projection for each channel-type. This allows to use different projection methods for a channel. This can be set in the plugin interface, avaible after clicking on the arrow down next to the plugin name.
 
-    <img src="img\imjoy-preprocess-ui.png" width="600px"></img>
+    ![imjoy-preprocess](img/imjoy-preprocess-ui.png)
 
     Here the following parameters can be set. 
 

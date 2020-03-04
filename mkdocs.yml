@@ -61,6 +61,7 @@ nav:
     - Data: data.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
 
     - Analysis with ImJoy:
+      - Overview: imjoy-overview.md
       - Preprocessing: imjoy-pre-processing.md
       - Segmentation: imjoy-segmentation.md
 

@@ -25,7 +25,7 @@ for its execution.
  3. ImJoy can have several workspaces. Each workspace can contain multiple plugins and is often
     dedicated to a specific data processing task. Workspaces can be selected from little puzzle symbol in the upper left part of the interface.
  
-    <img src="img\imjoy-interface.png" width="600px"></img>
+    ![imjoy-interface](img/imjoy-interface.png)
 
 
 ### Installing plugins
@@ -35,7 +35,7 @@ in which **ImJoy workspaces** the plugin will be installed.
 If you press on the installation link, the ImJoy web app will open and display a
 dialog asking if you want to install the specified plugin. To confirm, press the `install` button.
 
-<img src="https://raw.githubusercontent.com/muellerflorian/walesky-rna-loc-liver/master/docs/img/annotor_install.png" width="400px"></img>
+![imjoy-interface](img/imjoy-interface.png)
 
 Once installed, ImJoy remembers the workspaces and plugins and you simply have to
 open the ImJoy app and select the workspace [https://imjoy.io/#/app](https://imjoy.io/#/app)
