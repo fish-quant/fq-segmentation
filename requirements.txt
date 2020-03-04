@@ -1,6 +1,4 @@
-numpy
+numpy<1.17.0
 skimage
-matplotlib
-jupyter
-ipywidgets
 tqdm
+cellpose

@@ -8,8 +8,10 @@ setuptools.setup(
     description="wrapper package for cellpose",
     url="",
     packages=setuptools.find_packages(),
-    install_requires = ['numpy<1.17.0', 'tqdm', 'scikit-image', 
-                        'matplotlib','jupyter', 'ipywidgets'],
+    install_requires = ['numpy<1.17.0', 
+                        'tqdm', 
+                        'scikit-image', 
+                        'cellpose'],
     include_package_data=True,
     classifiers=(
         "Programming Language :: Python :: 3",
