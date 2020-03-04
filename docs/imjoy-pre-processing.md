@@ -1,5 +1,5 @@
 
-## Preprocessing
+# Preprocessing
 Segmentation is done on 2D images. In this step, 3D images are transformed into
 2D images by applying a projection. 
 
