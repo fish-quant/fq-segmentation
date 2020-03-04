@@ -7,7 +7,7 @@
   {
    "name": "PreProcess",
    "type": "native-python",
-   "version": "0.1.0",
+   "version": "0.1.1",
    "description": "Pre-process 3D images to obtain 2D images for segmentation.",
    "tags": [
     "stable",
@@ -29,7 +29,10 @@
    "permissions": [],
    "requirements": {
     "dev": [
-     "pip:  -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
+     "pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
+    ],
+    "stable": [
+     "pip: -U git+https://github.com/fish-quant/segmentation@b35f86e"
     ]
    },
    "dependencies": [],
@@ -38,7 +41,7 @@
   {
    "name": "SegmentCellsNuclei",
    "type": "native-python",
-   "version": "0.1.0",
+   "version": "0.1.1",
    "description": "Segment cells and nuclei",
    "tags": [
     "stable",
@@ -54,7 +57,7 @@
     "Size NUCLEI: {id: 'size_nuclei', type: 'number', placeholder: 50}",
     "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
    ],
-   "cover": "",
+   "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
    "inputs": null,
    "outputs": null,
    "flags": [],
@@ -64,7 +67,10 @@
    "permissions": [],
    "requirements": {
     "dev": [
-     "pip:  -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
+     "pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
+    ],
+    "stable": [
+     "pip: -U git+https://github.com/fish-quant/segmentation@b35f86e"
     ]
    },
    "dependencies": [],
