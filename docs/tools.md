@@ -9,10 +9,7 @@ Once you followed the instructions below you can connect ImJoy to a Jupyter note
 2. **Start Jupyter notebook**: `jupyter notebook --NotebookApp.allow_origin='*' --no-browser`
 3. Copy the provided URL including the token, in ImJoy connect to this Jupyter notebook. 
 
-We also provide Python source code illustrating the 
-basic usage in the folder `workflows`.
-
-For installation instruction, please consult the dedicated [**section**](installation.md). 
+We also provide Python source code illustrating the basic usage in the folder `workflows`.
 
 A more detailed description of each workflow is provided in the dedicated sections. 
 
@@ -27,9 +24,10 @@ In order to use the workflows in this repository, you need to follows these step
 ### Miniconda with Python
 We recommend installing an [Miniconda distribution of Python](https://docs.conda.io/en/latest/miniconda.html): choose Python 3.7 and your operating system. You  can then use the annoconda prompt to excecute the different commands listed below. 
 
-### Create environment for Cellpose
-We recommend creating a dedicated environment to run Cellpose. To create an environment called `cellpose`, open an anaconda prompt and type. Note that you will also install jupyter, which will allow 
-to run the jupyter notebooks for easier execution (confirm with `y` when asked if you want to proceed): 
+### Conda environment for Cellpose
+We recommend creating a dedicated environment to run Cellpose. This guarantess that only necessary code is installed. 
+To create an environment called `cellpose`, open an anaconda prompt and type. Note that you will also install 
+jupyter, which will allow to run the jupyter notebooks for easier execution (confirm with `y` when asked if you want to proceed: 
 
 ```
 conda create --name cellpose python=3.7 jupyter
@@ -39,7 +37,6 @@ To activate the `cellpose` environment type (Note you will always have to run th
 ```
 conda activate cellpose
 ```
-
 
 ## ImJoy
 [**ImJoy**](https://imjoy.io/docs/#/) is image processing platform with an easy
@@ -68,7 +65,7 @@ dialog asking if you want to install the specified plugin. To confirm, press the
 ![imjoy-interface](img/imjoy-plugin-installation.png)
 
 Once installed, ImJoy remembers the workspaces and plugins and you simply have to
-open the ImJoy app and select the workspace (`cellpose`): [https://imjoy.io/#/app](https://imjoy.io/#/app)
+open the ImJoy app and select the workspace (which will be `cellpose`): [https://imjoy.io/#/app](https://imjoy.io/#/app)
 
 ### Jupyter notebook for Python plugins 
 Some of the provided plugins use code written in Python. In order for ImJoy this code, it can connect 
