@@ -8,6 +8,8 @@ This repository provides wrapper code to use the generalist cell/nuclei segmenta
 
 For more information, please consult the dedicated [**documentation**](https://fish-quant.github.io/segmentation/).
 
+If you encounter a problems, please file an [**issue**](https://github.com/fish-quant/segmentation/issues).
+
 Example of **nuclear segmentation**:
 
 <img src="docs\img\segmentation__nuclei.png" width="600px"></img>
