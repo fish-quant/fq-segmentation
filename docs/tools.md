@@ -1,18 +1,23 @@
 # Tools
-Here, we describe the different software packages that are used.
+Here, we describe the different software packages that are used, and how to install them.
 
-We provide for all analysis workflows dedicated **ImJoy plugins**, to faciliate their use. 
-The ImJoy plugins are build on Python and require that you connect to a Jupyter Notebook. 
-Once you followed the instructions below you can connect ImJoy to a Jupyter notebook with:
+A detailed description of each analysis workflow is provided in the dedicated sections. 
 
-1. **Activate the environment**: `conda activate cellpose`
-2. **Start Jupyter notebook**: `jupyter notebook --NotebookApp.allow_origin='*' --no-browser`
-3. Copy the provided URL including the token, in ImJoy connect to this Jupyter notebook. 
+## Summary
+Here, you find a brief summary of the installation steps detailed in the sections below.
 
-We also provide Python source code illustrating the basic usage in the folder `workflows`.
-
-A more detailed description of each workflow is provided in the dedicated sections. 
-
+* The analysis workflows are provided as dedicated **ImJoy plugins**. 
+* Once the plugin are installed in ImJoy, you can access them in a dedicated **workspace** `fq-seg`. 
+* To use the plugins them you have to connect to the **Jupyter engine**
+    1. **Activate the environment**: 
+        ```
+        conda activate cellpose
+        ```
+    1. **Start Jupyter notebook**: 
+       ```
+       jupyter notebook --NotebookApp.allow_origin='*' --no-browser
+       ```
+    3. Copy the provided URL including the token. In ImJoy connect to this Jupyter notebook. 
 
 ## Installation
 In order to use the workflows in this repository, you need to follows these steps, which we detail below: 
