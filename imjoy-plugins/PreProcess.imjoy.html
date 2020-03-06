@@ -7,14 +7,16 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "PreProcess",
   "type": "native-python",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
         "Path DATA: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
         "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
         "Channel string: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
-        "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}"
+        "Img extension: {id: 'img_ext', type: 'string', placeholder: '.tif'}",
+        "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}",
+        "Search recursive: {id: 'search_recursive', type: 'choose', options: ['false', 'true'], placeholder: 'false'}"
         ],
   "cover": "",
   "inputs": null,
@@ -51,8 +53,8 @@ class ImJoyPlugin():
             path_save = ctx.config.path_save
         else:
             path_process = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition'
-            path_save = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input-imjoy'
- 
+            path_save = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input-imjoy-2'
+            #path_save = 'acquisition>>analysis'
         # >>> CHECK INPUT PARAMETERS
 
         # Path containing the data
@@ -67,17 +69,24 @@ class ImJoyPlugin():
             return
         
         # Path to save data
-        if path_save == 'paste-path-to-save-data':
-            api.alert('Path to save data has to be specified.')
-            return
+        if '>>' in path_save:
+            api.log('Path replacement defined in path_save. Will keep string as is.')
 
-        path_save = Path(path_save)
+        else:
+            if path_save == 'paste-path-to-save-data':
+                api.alert('Path to save data has to be specified.')
+                return
+            path_save = Path(path_save)
 
-        if not path_save.is_dir():
-            path_save.mkdir(parents=True) 
+        # Interpret search_recursive
+        if ctx.config.search_recursive == 'true':
+            search_recursive = True 
+        else:
+            search_recursive = False
 
         # Call pre-processing function
         api.showStatus('Preprocessing ... see log for details')
+        """
         utils_segmentation.folder_prepare_prediction(
                           path_process=path_process,
                           search_type=None,
@@ -87,6 +96,20 @@ class ImJoyPlugin():
                           callback_log=api.log,
                           callback_status=api.showStatus, 
                           callback_progress=api.showProgress)
+        """
+
+        utils_segmentation.folder_prepare_prediction(
+                    path_process=path_process,
+                    channel_ident=ctx.config.channel_ident,
+                    img_ext = ctx.config.img_ext,
+                    path_save=path_save,
+                    projection_type=ctx.config.projection_type,
+                    search_recursive=search_recursive,
+                    callback_log=api.log,
+                    callback_status=api.showStatus, 
+                    callback_progress=api.showProgress)
+
+
         api.showStatus('Preprocessing finished.')
 
 api.export(ImJoyPlugin())

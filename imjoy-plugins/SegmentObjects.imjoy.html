@@ -1,23 +1,23 @@
 ﻿<docs lang="markdown">
-ImJoy plugin to perform cell segmentation with 
+ImJoy plugin to perform object segmentation with 
 the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 </docs>
 
 <config lang="json">
 {
-  "name": "SegmentCellsNuclei",
+  "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.2",
-  "description": "Segment cells AND nuclei.",
+  "version": "0.1.1",
+  "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
         "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
         "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
-        "String CELLS: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
-        "String NUCLEi: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
+        "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
+        "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
         "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
-        "Size CELLS: {id: 'size_cells', type: 'number', placeholder: 100}",
-        "Size NUCLEI: {id: 'size_nuclei', type: 'number', placeholder: 50}",
+        "Size object: {id: 'obj_size', type: 'number', placeholder: 50}",
+        "Cellpose model: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
         "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
         ],
   "cover": "",
@@ -58,7 +58,7 @@ class ImJoyPlugin():
             path_save = ctx.config.path_save
         else:
             path_scan = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input'
-            path_save = 'segmentation-input>>segmentation-results-imjoy-cells-nuclei'
+            path_save = 'segmentation-input>>segmentation-results-imjoy-nuclei'
  
         # >>> CHECK INPUT PARAMETERS
 
@@ -96,17 +96,19 @@ class ImJoyPlugin():
 
         # Call pre-processing function
         api.showStatus('Performing segmentation ... see log for details')
-        utils_cellpose.segment_cells_nuclei_indiv(
-                                      path_scan=path_scan, 
-                                      strings=(ctx.config.str_cyto, ctx.config.str_nuclei), 
-                                      img_ext=ctx.config.img_ext, 
-                                      new_size=new_size,
-                                      sizes=(ctx.config.size_cells, ctx.config.size_nuclei), 
-                                      models=('cyto','nuclei'),
-                                      path_save=path_save,
-                                      callback_log=api.log,
-                                      callback_status=api.showStatus, 
-                                      callback_progress=api.showProgress)
+
+        utils_cellpose.segment_obj_indiv(
+                                path_scan=path_scan, 
+                                obj_name=ctx.config.obj_name,
+                                str_channel=ctx.config.str_channel, 
+                                img_ext=ctx.config.img_ext, 
+                                new_size=new_size,
+                                obj_size= ctx.config.obj_size, 
+                                model_type=ctx.config.model_type,
+                                path_save=path_save,
+                                callback_log=api.log,
+                                callback_status=api.showStatus, 
+                                callback_progress=api.showProgress)
         
         api.alert(f'Segmentation finished. Results stored in {path_save}')
         api.showStatus('Segmentation finished.')
