@@ -21,7 +21,7 @@ The plugin allows to define the results folder in two ways
 
 ## Running the plugin
 1. Before running the plugin, you have to specify a few parameters. Note that you have to perform this 
-   projection for each channel-type. This allows to use different projection methods for a channel. This can be set in the plugin interface, avaible after clicking on the arrow down next to the plugin name.
+    projection for each channel-type. This allows to use different projection methods for a channel. This can be set in the plugin interface, avaible after clicking on the arrow down next to the plugin name.
 
     ![imjoy-preprocess](img/imjoy-preprocess-ui.png)
 
@@ -30,7 +30,7 @@ The plugin allows to define the results folder in two ways
     Option           | Type | Default     | Description
     ---------------- | ---- | ----------- | -----------
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
-    `Path SAVE` | str  |  | Full path to folder where results should be stored. Or string to defined path by a replacement operation (more details above).
+    `Path SAVE` | str  |  | Path to folder where results should be stored (for more details see above).
     `Channel string`    | str  |  dapi | Unique string to identify channel that should be processed.
     `Img extension`    | str  |  .tif | Extensions of images to be loaded.
     `Projection type`    | str  |  mean | Different projection types: `max`, `mean`, `indiv`. The option `indiv` implies that a z-stack is split into individual slices, stored in subfolder for each image. 
