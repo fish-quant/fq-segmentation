@@ -28,7 +28,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
     projection_type : [type]
         [description]
     search_recursive : bool
-        Recursively search folder, default: false. 
+        Recursively search folder, default: false.
     callback_log : [type], optional
         [description], by default None
     callback_status : [type], optional
@@ -39,9 +39,10 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
 
     # Use provided absolute user-path to save images.
     if isinstance(path_save, pathlib.PurePath):
-        if not path_save.is_dir():
-            path_save.mkdir(parents=True)
-        path_save_settings = path_save
+        path_save_results = path_save
+        if not path_save_results.is_dir():
+            path_save_results.mkdir(parents=True)
+        path_save_settings = path_save_results
 
     else:
         path_save_str_replace = path_save
@@ -59,7 +60,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
     n_files = len(files_proc)
     for idx, file_proc in enumerate(files_proc):
 
-        log_message(f'Processing file: {file_proc}', callback_fun = callback_status)
+        log_message(f'\n>>> Processing file: {file_proc}', callback_fun = callback_status)
 
         if callback_progress:
             progress = float((idx+1)/n_files)
@@ -69,12 +70,13 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
 
         # Create new output path if specified
         if not isinstance(path_save, pathlib.PurePath):
-            path_save = create_output_path(file_proc.parent, path_save_str_replace, subfolder='segmentation-input', create_path=True)
-            path_save_settings = path_save
+            path_save_results = create_output_path(file_proc.parent, path_save_str_replace, subfolder='segmentation-input', create_path=True)
+            log_message(f'Results will be save here : {path_save_results}', callback_fun=callback_status)
+            path_save_settings = path_save_results       
 
         # Create subfolder when processing individual images
         if projection_type == 'indiv':
-            path_save_indiv = path_save / name_base
+            path_save_indiv = path_save_results / name_base
 
             if not path_save_indiv.is_dir():
                 path_save_indiv.mkdir(parents=True)
@@ -89,8 +91,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
                             "img_name": file_proc.name,
                             "img_path": str(file_proc.parent),
                             "channel_ident": channel_ident,
-                            "projection_type": projection_type
-        }
+                            "projection_type": projection_type}
 
         name_json = path_save_settings / f'img-prop__{name_base}.json'
         with open(name_json, 'w') as fp:
@@ -102,7 +103,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
             for i in range(img.shape[0]):
                 name_save = path_save_indiv / f'{name_base}_Z{str(i+1).zfill(3)}.png'
                 if name_save.is_file():
-                    log_message(f'File already exists. will be overwritten {name_save}', callback_fun = callback_log)
+                    log_message(f'File already exists. will be overwritten {name_save}', callback_fun=callback_log)
                 imsave(name_save, img[i, :, :])
 
         else:
@@ -113,8 +114,8 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
             elif projection_type == 'max':
                 img_proj = img.mean(axis=0)
 
-            name_save = path_save / f'{name_base}.png'
+            name_save = path_save_results / f'{name_base}.png'
 
             if name_save.is_file():
-                log_message(f'File already exists. will be overwritten {name_save}', callback_fun = callback_log)
+                log_message(f'File already exists. will be overwritten {name_save}', callback_fun=callback_log)
             imsave(name_save, img_proj.astype('uint16'))
