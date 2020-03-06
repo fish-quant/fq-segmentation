@@ -10,35 +10,23 @@ from skimage.io import imread, imsave
 import numpy as np
 from tqdm import tqdm
 import time
-import sys
 import mxnet as mx
 import matplotlib.pyplot as plt
+import pathlib
 from pathlib import Path
 
 # Imports of CellPose specific libraries
 from cellpose import models, utils
 from cellpose import plot, transforms
 
-# Log message
-def log_message(msg, callback_fun=None):
-    """ Display log, either terminal or any callback accepting a string as input.
+from segwrap.utils_general import log_message
+from segwrap.utils_general import create_output_path
 
-    Parameters
-    ----------
-    msg : [string]
-        [description]
-    callback_fun : [type], optional
-        [description], by default None
-    """
-    if callback_fun:
-        callback_fun(msg)
-    else:
-        print(msg)
 
 # Function: check if GPU working, and if so use it
 def check_device(gpu_number=0, callback_log=None):
     """ Check on which device (GPU or CPU) CellPose will be running. 
-     
+    
     Parameters
     ----------
     gpu_number : int, optional
@@ -53,6 +41,195 @@ def check_device(gpu_number=0, callback_log=None):
         device = mx.cpu()
 
     return device
+
+
+# Call predict function
+def cellpose_predict(data, config, path_save, callback_log=None):
+    """Perform prediction with CellPose. 
+
+    Parameters
+    ----------
+    data : dict
+        Contains data on which prediction should be performed. 
+    config : dict
+        Configuration of CellPose prediction. 
+    path_save : pathline Path object
+        Path where results will be saved. 
+    """
+
+    # Get data
+    imgs = data['imgs']
+    file_names = data['file_names']
+    sizes_orginal = data['sizes_orginal']
+    channels = data['channels']
+    new_size = data['new_size']
+    obj_name = data['obj_name']
+
+    # Get config
+    model_type = config['model_type']
+    obj_size = config['obj_size']
+    device = config['device']
+
+    log_message(f'\nPerforming segmentation of {obj_name}\n', callback_fun=callback_log)
+
+    start_time = time.time()
+
+    if not path_save.is_dir():
+        path_save.mkdir()
+
+    # Perform segmentation with CellPose
+
+    model = models.Cellpose(device, model_type=model_type )  # model_type can be 'cyto' or 'nuclei'
+    masks, flows, styles, diams = model.eval(imgs, rescale=30./obj_size, channels=channels, net_avg=False, threshold=0.4)
+
+    # Display and save 
+    log_message(f'\n ... creating outputs ...\n', callback_fun=callback_log)
+    n_img = len(imgs)
+
+    for idx in tqdm(range(n_img)):
+        img = transforms.reshape(imgs[idx], channels)
+        file_name = file_names[idx]
+
+        img = plot.rgb_image(img)
+        maski = masks[idx]
+        flowi = flows[idx][0]
+
+        # Save overview image
+        fig = plt.figure(figsize=(12, 3))
+        plot.show_segmentation(fig, img, maski, flowi)
+        plt.tight_layout()
+
+        plt.savefig(path_save / f'segmentation__{obj_name}__{file_name.stem}.png', dpi=600)
+        plt.close()
+
+        # Save mask and flow images
+        imsave(path_save / f'flow__{obj_name}__{file_name.stem}.png', flowi, check_contrast=False)
+
+        if new_size:
+            mask_full = resize_mask(maski, sizes_orginal[idx])
+
+            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', mask_full.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'mask_resize__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
+        else:
+            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
+
+    log_message(f"Segmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
+    # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
+
+
+# Function to load and segment nuclei images individually 
+def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_size, model_type, path_save, callback_log=None, callback_status=None, callback_progress=None):
+    """ Will recursively search folder for images to be analyzed!
+
+    Parameters
+    ----------
+    path_scan : [type]
+        [description]
+    str_nuclei : [type]
+        [description]
+    img_ext : [type]
+        [description]
+    new_size : [type]
+        [description]
+    size_nuclei : [type]
+        [description]
+    model_nuclei : [type]
+        [description]
+    path_save : pathlin object or string
+        Path to save results,
+        - If Pathlib object, then this absolute path is used.
+        - If 'string' a replacement operation on the provided name of the data path will be applied (see create_output_path).
+          And results will be stored in subfolder 'segmentation-input'
+    callback_log : [type], optional
+        [description], by default None
+    callback_status : [type], optional
+        [description], by default None
+    callback_progress : [type], optional
+        [description], by default None
+
+    Returns
+    -------
+    [type]
+        [description]
+    """
+
+    # Print all input parameters
+    log_message(f"Function (segment_obj_indiv) called with: {str(locals())} ", callback_fun=callback_log) 
+
+    # Configurations
+    device = check_device(callback_log=callback_log)
+
+    config = {'model_type': model_type,
+              'obj_size': obj_size,
+              'device': device}
+
+    channels = [0, 1]
+
+    # Use provided absolute user-path to save images.
+    if isinstance(path_save, pathlib.PurePath):
+        if not path_save.is_dir():
+            path_save.mkdir(parents=True)
+
+    else:
+        path_save_str_replace = path_save
+
+    # Loop over data
+    log_message(f'\nLoading images and segment them on the fly', callback_fun=callback_log)
+
+    if not path_scan.is_dir():
+        log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
+        return
+
+    n_imgs = len([f for f in path_scan.glob(f'*{str_channel}*{img_ext}')])
+
+    for idx, path_img in enumerate(path_scan.rglob(f'*{str_channel}*{img_ext}')):
+
+        imgs = []
+        files = []
+        sizes_orginal = []
+
+        log_message(f'Segmenting image : {path_img.name}', callback_fun=callback_log)
+
+        if callback_status:
+            callback_status(f'Segmenting image : {path_img.name}')
+
+        if callback_progress:
+            progress = float((idx+1)/n_imgs)
+            callback_progress(progress)
+
+        # Read images
+        img = imread(str(path_img))
+        sizes_orginal.append(img.shape)
+
+        # Resize
+        if new_size:
+            img = resize(img, new_size)
+
+        img_zeros = np.zeros(img.shape)
+
+        # For object segmentation
+        img_3d_dpi = np.dstack([img_zeros, img_zeros, img])
+        imgs.append(img_3d_dpi)
+        files.append(path_img)
+
+        # >>> Call function for prediction
+        data = {'imgs': imgs,
+                'file_names': files,
+                'sizes_orginal': sizes_orginal,
+                'channels': channels,
+                'new_size': new_size,
+                'obj_name': obj_name}
+
+        # Create new output path if specified
+        if not isinstance(path_save, pathlib.PurePath):
+            path_save = create_output_path(path_img.parent, path_save_str_replace, subfolder='', create_path=True)
+            path_save_settings = path_save
+
+        cellpose_predict(data, config, path_save=path_save, callback_log=callback_log)
+
+    log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
+    #return {'status': 'segmentation finished'}
+
 
 # Function to load and segment nuclei images individually 
 def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, models, path_save, callback_log=None, callback_status=None, callback_progress=None): 
@@ -72,8 +249,11 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         [description]
     models : [type]
         [description]
-    path_save : [type]
-        [description]
+    path_save : pathlin object or string
+        Path to save results,
+        - If Pathlib object, then this absolute path is used.
+        - If 'string' a replacement operation on the provided name of the data path will be applied (see create_output_path).
+          And results will be stored in subfolder 'segmentation-input'
     callback_log : [type], optional
         [description], by default None
     callback_status : [type], optional
@@ -81,22 +261,30 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
     callback_progress : [type], optional
         [description], by default None
     """
-    
+
     # Print all input parameters
     log_message(f"Function (segment_cells_nuclei_indiv) called with: {str(locals())} ", callback_fun=callback_log) 
-    
+
     # Get parameters
     (str_cyto, str_nuclei) = strings
     (size_cells, size_nuclei) = sizes
     (model_cells, model_nuclei) = models
-    
+
+    # Use provided absolute user-path to save images.
+    if isinstance(path_save, pathlib.PurePath):
+        if not path_save.is_dir():
+            path_save.mkdir(parents=True)
+
+    else:
+        path_save_str_replace = path_save
+
     # Configurations
     device = check_device(callback_log=callback_log)
-    
+
     config_nuclei = {'model_type': model_nuclei, 
                      'obj_size': size_nuclei,
                      'device': device}
-        
+
     config_cyto = {'model_type': model_cells, 
                    'obj_size': size_cells,
                    'device': device}
@@ -106,29 +294,29 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
 
     # Loop over data
     log_message(f'\nLoading image pairs and segment them on the fly', callback_fun=callback_log) 
-               
+
     if not path_scan.is_dir():
         log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
         return
 
-    n_imgs = len([f for f in path_scan.glob(f'*{str_cyto}*{img_ext}')])
+    n_imgs = len([f for f in path_scan.rglob(f'*{str_cyto}*{img_ext}')])
     for idx, path_cyto in enumerate(path_scan.glob(f'*{str_cyto}*{img_ext}')):
-        
+
         imgs_cyto = []
         imgs_nuclei = []
         files_cyto = []
         files_nuclei = []
         sizes_orginal = []        
-        
+
         log_message(f'Segmenting image : {path_cyto.name}', callback_fun=callback_log)
-        
+
         if callback_status:
             callback_status(f'Segmenting image : {path_cyto.name}')
-        
+
         if callback_progress:
             progress = float((idx+1)/n_imgs)
             callback_progress(progress)
-        
+
         # DAPI image: existing?
         path_nuclei = Path(str(path_cyto).replace(str_cyto, str_nuclei))
         if not path_nuclei.is_file():
@@ -157,35 +345,44 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         imgs_nuclei.append(img_3d_dpi)
         files_nuclei.append(path_nuclei)
 
+        # Create new output path if specified
+        if not isinstance(path_save, pathlib.PurePath):
+            path_save = create_output_path(path_cyto.parent, path_save_str_replace, subfolder='', create_path=True)
+            path_save_settings = path_save
+
         # >>> Call function for prediction of cell
-        data_cyto = { 'imgs': imgs_cyto,
-                'file_names': files_cyto, 
-                'sizes_orginal': sizes_orginal,
-                'channels': channels_cyto,
-                'new_size': new_size,
-                'obj_name':'cells'
-        }
-                    
+        data_cyto = {'imgs': imgs_cyto,
+                     'file_names': files_cyto,
+                     'sizes_orginal': sizes_orginal,
+                     'channels': channels_cyto,
+                     'new_size': new_size,
+                     'obj_name': 'cells'}
+
         cellpose_predict(data_cyto, config_cyto, path_save=path_save, callback_log=callback_log)
-            
+
         # >>> Call function for prediction of nuclei
-        data_nuclei = { 'imgs': imgs_nuclei,
-                'file_names': files_nuclei, 
-                'sizes_orginal': sizes_orginal,
-                'channels': channels_nuclei,
-                'new_size': new_size,
-                'obj_name':'nuclei'
-        }
-                    
+        data_nuclei = {'imgs': imgs_nuclei,
+                       'file_names': files_nuclei,
+                       'sizes_orginal': sizes_orginal,
+                       'channels': channels_nuclei,
+                       'new_size': new_size,
+                       'obj_name': 'nuclei'}
+
         cellpose_predict(data_nuclei, config_nuclei, path_save=path_save, callback_log=callback_log)
-        
+
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
-    #return {'statuus': 'segmentation finished'}
+    #return {'status': 'segmentation finished'}
+
+
+
+
+# >>>> OLDER IMPLEMENTATIONS .... the ones above have the advantage that outputs are immediately generate.
+
 
 # Function to load and segment nuclei images
 def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, path_save, callback_log=None): 
     """ TODO: segment cells and nuclei in bulk, e.g. first all images are loaded and then segmented. 
-    
+
     Parameters
     ----------
     path_scan : [type]
@@ -203,7 +400,7 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
     path_save : [type]
         [description]
     """
-    
+
     # Print all input parameters
     print("Function (segment_cells_nuclei) called with: ", locals())
 
@@ -211,7 +408,7 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
     (str_cyto, str_nuclei) = strings
     (size_cells, size_nuclei) = sizes
     (model_cells, model_nuclei) = models
-    
+
     # Which device to use
     device = check_device(callback_log=callback_log)
 
@@ -226,35 +423,31 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
 
     # >>> Call function for prediction of cell
     config = {'model_type': model_cells, 
-            'obj_size': size_cells,
-            'device': device}
+              'obj_size': size_cells,
+              'device': device}
 
-    data = { 'imgs': imgs_cyto,
+    data = {'imgs': imgs_cyto,
             'file_names': files_cyto, 
             'sizes_orginal': sizes_orginal,
             'channels': channels_cyto,
             'new_size': new_size,
-            'obj_name':'cells'
-    }
-                
+            'obj_name': 'cells'}
+
     cellpose_predict(data, config, path_save=path_save, callback_log=callback_log)
-        
+
     # >>> Call function for prediction of nuclei
     config = {'model_type': model_nuclei, 
-            'obj_size': size_nuclei,
-            'device': device}
+              'obj_size': size_nuclei,
+              'device': device}
 
-    data = { 'imgs': imgs_nuclei,
+    data = {'imgs': imgs_nuclei,
             'file_names': files_nuclei, 
             'sizes_orginal': sizes_orginal,
             'channels': channels_nuclei,
             'new_size': new_size,
-            'obj_name':'nuclei'
-    }
-                
+            'obj_name': 'nuclei'}
+
     cellpose_predict(data, config, path_save=path_save, callback_log=callback_log)
-
-
 
 # Function to load and segment nuclei images
 def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, path_save,callback_log=None):
@@ -278,7 +471,6 @@ def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, p
         packed regions. 
     """
     
-        
     # Print all input parameters
     print("Function (segment_cells_nuclei) called with: ", locals())
     
@@ -307,80 +499,6 @@ def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, p
     cellpose_predict(data, config, 
                     path_save = path_save )
 
-
-# Call predict function
-def cellpose_predict(data, config, path_save, callback_log=None):
-    """Perform prediction with CellPose. 
-    
-    Parameters
-    ----------
-    data : dict
-        Contains data on which prediction should be performed. 
-    config : dict
-        Configuration of CellPose prediction. 
-    path_save : pathline Path object
-        Path where results will be saved. 
-    """
-    
-    # Get data
-    imgs = data['imgs']
-    file_names = data['file_names']
-    sizes_orginal = data['sizes_orginal']
-    channels = data['channels']
-    new_size = data['new_size']
-    obj_name = data['obj_name']
-    
-    # Get config
-    model_type = config['model_type']
-    obj_size = config['obj_size']
-    device = config['device']
-    
-    log_message(f'\nPerforming segmentation of {obj_name}\n', callback_fun=callback_log)
-    
-    start_time = time.time()
-    
-    if not path_save.is_dir():
-        path_save.mkdir()
-        
-    # Perform segmentation with CellPose
-    
-    model = models.Cellpose(device, model_type=model_type )  # model_type can be 'cyto' or 'nuclei'
-    masks, flows, styles, diams = model.eval(imgs, rescale=30./obj_size, channels=channels, net_avg=False, threshold=0.4)
-
-    # Display and save 
-    log_message(f'\n ... creating outputs ...\n', callback_fun=callback_log)
-    n_img = len(imgs)
-    
-    for idx in tqdm(range(n_img)):
-        img = transforms.reshape(imgs[idx], channels)
-        file_name = file_names[idx]
-
-        img = plot.rgb_image(img)
-        maski = masks[idx]
-        flowi = flows[idx][0]
-
-        # Save overview image
-        fig = plt.figure(figsize=(12, 3))
-        plot.show_segmentation(fig, img, maski, flowi)
-        plt.tight_layout()
-
-        plt.savefig(path_save / f'segmentation__{obj_name}__{file_name.stem}.png', dpi=600)
-        plt.close()
-
-        # Save mask and flow images
-        imsave(path_save / f'flow__{obj_name}__{file_name.stem}.png', flowi, check_contrast=False)
-
-        if new_size:
-            mask_full = resize_mask(maski, sizes_orginal[idx])
-
-            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', mask_full.astype('uint16'), check_contrast=False)
-            imsave(path_save / f'mask_resize__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
-        else:
-            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
-
-    log_message(f"Segmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)    
-    
-    # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
 
 
 def load_imgs_nuclei(path_scan, str_dapi, img_ext, new_size, callback_log=None):
