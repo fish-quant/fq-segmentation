@@ -1,7 +1,7 @@
 
 We provide different plugins for different segmentation tasks
 
-* Segment cells OR nuclei with the Plugin `SegmentCellsNuclei`: <a href="https://imjoy.io/#/app?w=fq-seg&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**install from here.**</a>
+* Segment cells OR nuclei with the Plugin `SegmentObjects`: <a href="https://imjoy.io/#/app?w=fq-seg&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**install from here.**</a>
 * Segment cells AND nuclei with the Plugin `SegmentCellsNuclei`: <a href="https://imjoy.io/#/app?w=fq-seg&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**install from here.**</a>
 
 
@@ -9,7 +9,15 @@ We provide different plugins for different segmentation tasks
 
 ### Recursive search for images
 Plugins will search RECURSIVELY in the provided folders for all images fitting the specified criteria, 
-and segment them. Results will then be stored in a dedicated subfolder
+and segment them. Results will then be stored in a dedicated subfolder.
+
+By default, all images matching the naming scheme will be processed. An optional parameter allows to specify
+in which subfolder the images have to be in order to be segmented. This allows to process nested folder
+hierachies and only segmenting images in the relevant subfolders.
+
+As an example, in the provided data we could specif the folder `example_data\analysis` as the data folder. 
+This would then scan this folder and all subfolders and potentially find inappropriate files for segmentation.
+BY defingin the `Input subfolder` to be `segmentation-input`, the analysis will be restricted to this folder. 
 
 ### Defining folder to save results
 The plugin allows to define the results folder in two ways
@@ -55,6 +63,7 @@ routine that will resize the predicted masks back to the original image size.
     Option           | Type | Default     | Description
     ---------------- | ---- | ----------- | -----------
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
+    `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented. 
     `Path SAVE` | str  |  |Path to folder where results should be stored (for more details see above).
     `Object name`    | str  |  nuclei | How the object is called.
     `String channel`    | str  |  dapi | Unique identifier to .
@@ -85,6 +94,7 @@ routine that will resize the predicted masks back to the original image size.
     Option           | Type | Default     | Description
     ---------------- | ---- | ----------- | -----------
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
+    `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented. 
     `Path SAVE` | str  |  | Path to folder where results should be stored (for more details see above).
     `String CELLS`    | str  |  cy3 | Unique identifier for images of cytoplasmic stain.
     `String NUCLEI`    | str  |  dapi | Unique identifier for images of nuclear stain.

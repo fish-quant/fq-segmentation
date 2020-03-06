@@ -7,11 +7,12 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
         "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
+        "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: ''}",
         "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
         "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
         "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
@@ -83,6 +84,12 @@ class ImJoyPlugin():
                 return
             path_save = Path(path_save)
 
+        # Input sub-folder
+        if len(ctx.config.input_subfolder):
+            input_subfolder = None
+        else:
+            input_subfolder = ctx.config.input_subfolder
+
         # Check new size
         new_size_str = ctx.config.new_size
         if len(new_size_str) == 0:
@@ -106,6 +113,7 @@ class ImJoyPlugin():
                                 obj_size= ctx.config.obj_size, 
                                 model_type=ctx.config.model_type,
                                 path_save=path_save,
+                                input_subfolder=input_subfolder,
                                 callback_log=api.log,
                                 callback_status=api.showStatus, 
                                 callback_progress=api.showProgress)

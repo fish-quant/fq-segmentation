@@ -118,7 +118,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
 
 
 # Function to load and segment nuclei images individually 
-def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_size, model_type, path_save, callback_log=None, callback_status=None, callback_progress=None):
+def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_size, model_type, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None):
     """ Will recursively search folder for images to be analyzed!
 
     Parameters
@@ -139,7 +139,8 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
         Path to save results,
         - If Pathlib object, then this absolute path is used.
         - If 'string' a replacement operation on the provided name of the data path will be applied (see create_output_path).
-          And results will be stored in subfolder 'segmentation-input'
+    input_subfolder : str
+        Name of subfolder that contains results. If specified ONLY files in this folder will be processed.
     callback_log : [type], optional
         [description], by default None
     callback_status : [type], optional
@@ -156,6 +157,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
     # Print all input parameters
     log_message(f"Function (segment_obj_indiv) called with: {str(locals())} ", callback_fun=callback_log) 
 
+    print('what?')
     # Configurations
     device = check_device(callback_log=callback_log)
 
@@ -167,23 +169,35 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
 
     # Use provided absolute user-path to save images.
     if isinstance(path_save, pathlib.PurePath):
-        if not path_save.is_dir():
-            path_save.mkdir(parents=True)
+        path_save_results = path_save
+        if not path_save_results.is_dir():
+            path_save_results.mkdir(parents=True)
 
     else:
         path_save_str_replace = path_save
-
-    # Loop over data
-    log_message(f'\nLoading images and segment them on the fly', callback_fun=callback_log)
 
     if not path_scan.is_dir():
         log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
         return
 
-    n_imgs = len([f for f in path_scan.glob(f'*{str_channel}*{img_ext}')])
+    # Search for file to be analyzed
+    log_message(f'\nLoading images and segment them on the fly', callback_fun=callback_log)
+    files_proc = []
+    for path_img in path_scan.rglob(f'*{str_channel}*{img_ext}'):
+        if input_subfolder:
+            if path_img.parts[-2] == input_subfolder:
+                files_proc.append(path_img)
+        else:
+            files_proc.append(path_img)
+    n_imgs = len(files_proc)
 
-    for idx, path_img in enumerate(path_scan.rglob(f'*{str_channel}*{img_ext}')):
+    if n_imgs == 0:
+        log_message(f'NO IMAGES FOUND. Check your settings.', callback_fun=callback_log)
+        return
 
+    # Process files
+
+    for idx, path_img in enumerate(files_proc):
         imgs = []
         files = []
         sizes_orginal = []
@@ -222,17 +236,17 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
 
         # Create new output path if specified
         if not isinstance(path_save, pathlib.PurePath):
-            path_save = create_output_path(path_img.parent, path_save_str_replace, subfolder='', create_path=True)
-            path_save_settings = path_save
+            path_save_results = create_output_path(path_img.parent, path_save_str_replace, subfolder='', create_path=True)
+            path_save_settings = path_save_results
 
-        cellpose_predict(data, config, path_save=path_save, callback_log=callback_log)
+        cellpose_predict(data, config, path_save=path_save_results, callback_log=callback_log)
 
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
     #return {'status': 'segmentation finished'}
 
 
 # Function to load and segment nuclei images individually 
-def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, models, path_save, callback_log=None, callback_status=None, callback_progress=None): 
+def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, models, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None): 
     """[summary] segment cells and nuclei in bulk, e.g. first all images are loaded and then segmented. 
     TODO: specify parameters
     Parameters
@@ -272,8 +286,9 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
 
     # Use provided absolute user-path to save images.
     if isinstance(path_save, pathlib.PurePath):
-        if not path_save.is_dir():
-            path_save.mkdir(parents=True)
+        path_save_results = path_save
+        if not path_save_results.is_dir():
+            path_save_results.mkdir(parents=True)
 
     else:
         path_save_str_replace = path_save
@@ -299,9 +314,24 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
         return
 
-    n_imgs = len([f for f in path_scan.rglob(f'*{str_cyto}*{img_ext}')])
-    for idx, path_cyto in enumerate(path_scan.glob(f'*{str_cyto}*{img_ext}')):
+    # Search for file to be analyzed
+    log_message(f'\nLoading images and segment them on the fly', callback_fun=callback_log)
+    files_proc = []
+    for path_img in path_scan.rglob(f'*{str_cyto}*{img_ext}'):
+        if input_subfolder:
+            if path_img.parts[-2] == input_subfolder:
+                files_proc.append(path_img)
+        else:
+            files_proc.append(path_img)
+    n_imgs = len(files_proc)
 
+    if n_imgs == 0:
+        log_message(f'NO IMAGES FOUND. Check your settings.', callback_fun=callback_log)
+        return
+
+    # Process files
+
+    for idx, path_cyto in enumerate(files_proc):
         imgs_cyto = []
         imgs_nuclei = []
         files_cyto = []
@@ -347,8 +377,8 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
 
         # Create new output path if specified
         if not isinstance(path_save, pathlib.PurePath):
-            path_save = create_output_path(path_cyto.parent, path_save_str_replace, subfolder='', create_path=True)
-            path_save_settings = path_save
+            path_save_results = create_output_path(path_cyto.parent, path_save_str_replace, subfolder='', create_path=True)
+            path_save_settings = path_save_results
 
         # >>> Call function for prediction of cell
         data_cyto = {'imgs': imgs_cyto,
@@ -358,7 +388,7 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
                      'new_size': new_size,
                      'obj_name': 'cells'}
 
-        cellpose_predict(data_cyto, config_cyto, path_save=path_save, callback_log=callback_log)
+        cellpose_predict(data_cyto, config_cyto, path_save=path_save_results, callback_log=callback_log)
 
         # >>> Call function for prediction of nuclei
         data_nuclei = {'imgs': imgs_nuclei,
@@ -368,7 +398,7 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
                        'new_size': new_size,
                        'obj_name': 'nuclei'}
 
-        cellpose_predict(data_nuclei, config_nuclei, path_save=path_save, callback_log=callback_log)
+        cellpose_predict(data_nuclei, config_nuclei, path_save=path_save_results, callback_log=callback_log)
 
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
     #return {'status': 'segmentation finished'}
