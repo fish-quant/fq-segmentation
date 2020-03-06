@@ -2,7 +2,7 @@
 # Segmentation of cells and nuclei
 
 Preprocessing is done with the ImJoy plugin `SegmentCellsNuclei`: 
-<a href="https://imjoy.io/#/app?w=cellpose&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**install from here.**</a>
+<a href="https://imjoy.io/#/app?w=fq-seg&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**install from here.**</a>
 
 
 **Resizing to speed up prediction**: segmentation speed depends on the image size. In our experience, resizing the images

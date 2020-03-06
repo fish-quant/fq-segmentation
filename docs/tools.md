@@ -1,18 +1,26 @@
 # Tools
-Here, we describe the different software packages that are used.
+Here, we describe the different software packages that are used, and how to install them.
 
-We provide for all analysis workflows dedicated **ImJoy plugins**, to faciliate their use. 
-The ImJoy plugins are build on Python and require that you connect to a Jupyter Notebook. 
-Once you followed the instructions below you can connect ImJoy to a Jupyter notebook with:
+* Most tasks are performed by **Python plugins running in ImJoy**, and described in the section [**ImJoy analysis**](imjoy-overview.md).
+* For less frequently tasks, we provide some explanations in  [**Diverse workflows**](Diverse-workflows.md).
 
-1. **Activate the environment**: `conda activate cellpose`
-2. **Start Jupyter notebook**: `jupyter notebook --NotebookApp.allow_origin='*' --no-browser`
-3. Copy the provided URL including the token, in ImJoy connect to this Jupyter notebook. 
+A detailed description of each analysis workflow is provided in the dedicated sections. 
 
-We also provide Python source code illustrating the basic usage in the folder `workflows`.
+## Summary
+Here, you find a brief summary of the installation steps detailed in the sections below.
 
-A more detailed description of each workflow is provided in the dedicated sections. 
-
+* The analysis workflows are provided as dedicated **ImJoy plugins**. 
+* Once the plugin are installed in ImJoy, you can access them in a dedicated **workspace** `fq-seg`. 
+* To use the plugins them you have to connect to the **Jupyter engine**
+    1. **Activate the environment**: 
+        ```
+        conda activate cellpose
+        ```
+    1. **Start Jupyter notebook**: 
+       ```
+       jupyter notebook --NotebookApp.allow_origin='*' --no-browser
+       ```
+    3. Copy the provided URL including the token. In ImJoy connect to this Jupyter notebook. 
 
 ## Installation
 In order to use the workflows in this repository, you need to follows these steps, which we detail below: 
@@ -40,10 +48,11 @@ conda activate cellpose
 
 ## ImJoy
 [**ImJoy**](https://imjoy.io/docs/#/) is image processing platform with an easy
- to use interface. ImJoy can be used directly in your browser, withoyt any prior installation. 
- While ImJoy is running in the browser, NO data will be transferred. 
+ to use interface. ImJoy can be used directly in your browser, without any prior installation. 
+
+ While ImJoy is an app running in the browser, **NO** user data will be transferred over the internet. 
  
- Some important features
+ Some important **features**:
 
  2. Specific functionality is provided by plugins, which can be installed with simple links. Available 
     plugins are listed in the plugin list on the left part of the interface. Depending on the implementation 
@@ -67,9 +76,10 @@ dialog asking if you want to install the specified plugin. To confirm, press the
 Once installed, ImJoy remembers the workspaces and plugins and you simply have to
 open the ImJoy app and select the workspace (which will be `cellpose`): [https://imjoy.io/#/app](https://imjoy.io/#/app)
 
-### Jupyter notebook for Python plugins 
-Some of the provided plugins use code written in Python. In order for ImJoy this code, it can connect 
-to a **Jupyter notebook**, which can be installed via Miniconda.
+### Running Python plugins 
+Most of the provided plugins use Python for the processing. In order for ImJoy these plugins, you have 
+to connect ImJoy to a **Jupyter notebook server**, which can be installed via Miniconda. Please note
+that this "server" can run on your local machine, so no data-transfer over the internet is taking place. 
     
 Once you have the computational environment set up (see Installation), you start an Jupyter Notebook, 
 to which ImJoy can connect: 
@@ -89,11 +99,12 @@ to which ImJoy can connect:
     next to the plugin name, and selecting the Juypyter Notebook as engine.  
 
 
-## Workflows
-We also provide the Python code that is called in the ImJoy plugins, as simple
-Python files in the folder `workflow`. 
+## Jupyter notebooks 
+We also illustrate the workflow in the ImJoy Python plugins in dedicated Jupyter notebooks, which can 
+be found in the folder `notebooks`. 
 
-To run this code, install this repository in a dedicated conda environment, e.g. with 
+To run this code, we recommend following the instructions above to create a dedicated conda environment, 
+and install the code of this plugin in this env, e.g. with 
 ```
 pip install git+https://github.com/muellerflorian/segmentation/ --upgrade
 ```

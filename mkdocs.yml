@@ -59,13 +59,15 @@ nav:
     - Tools: tools.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
     - Data: data.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
 
-    - Analysis with ImJoy:
+    - ImJoy Analysis:
       - Overview: imjoy-overview.md
       - Preprocessing: imjoy-pre-processing.md
       - Segmentation: imjoy-segmentation.md
 
-    - Post-processing:
-      - Create FQ outline files: post-processing-fq.md
+    - Diverse workflows:
+      - Overview: diverse-workflows-overview.md
+      - Split channels: fiji-split-channels.md
+      - Create FQ outline files: create-fq-outlines.md
 
     - Advanced:
       - Developer notes: developer-notes.md

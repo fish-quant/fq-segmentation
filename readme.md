@@ -20,8 +20,7 @@ Example of **cytoplasmic segmentation**:
 
 # Licensing
  
-
-- **Cellpose** is (general) are BSD-licenced (3 clause)
+- **Cellpose** is BSD-licenced (3 clause)
 
 > Copyright © 2020 Howard Hughes Medical Institute
 >
