@@ -1,6 +1,9 @@
 # Tools
 Here, we describe the different software packages that are used, and how to install them.
 
+* Most tasks are performed by **Python plugins running in ImJoy**, and described in the section [**ImJoy analysis**](imjoy-overview.md).
+* For less frequently tasks, we provide some explanations in  [**Diverse workflows**](Diverse-workflows.md).
+
 A detailed description of each analysis workflow is provided in the dedicated sections. 
 
 ## Summary
