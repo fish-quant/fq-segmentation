@@ -7,7 +7,7 @@
   {
    "name": "PreProcess",
    "type": "native-python",
-   "version": "0.1.1",
+   "version": "0.1.2",
    "description": "Pre-process 3D images to obtain 2D images for segmentation.",
    "tags": [
     "stable",
@@ -17,7 +17,9 @@
     "Path DATA: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
     "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
     "Channel string: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
-    "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}"
+    "Img extension: {id: 'img_ext', type: 'string', placeholder: '.tif'}",
+    "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}",
+    "Search recursive: {id: 'search_recursive', type: 'choose', options: ['false', 'true'], placeholder: 'false'}"
    ],
    "cover": "",
    "inputs": null,
@@ -41,8 +43,8 @@
   {
    "name": "SegmentCellsNuclei",
    "type": "native-python",
-   "version": "0.1.1",
-   "description": "Segment cells and nuclei",
+   "version": "0.1.2",
+   "description": "Segment cells AND nuclei.",
    "tags": [
     "stable",
     "dev"
@@ -75,6 +77,44 @@
    },
    "dependencies": [],
    "uri": "imjoy-plugins\\SegmentCellsNuclei.imjoy.html"
+  },
+  {
+   "name": "SegmentObjects",
+   "type": "native-python",
+   "version": "0.1.1",
+   "description": "Segment cells OR nuclei.",
+   "tags": [
+    "stable",
+    "dev"
+   ],
+   "ui": [
+    "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
+    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+    "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
+    "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
+    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
+    "Size object: {id: 'obj_size', type: 'number', placeholder: 50}",
+    "Cellpose model: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
+    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
+   ],
+   "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": "extension",
+   "api_version": "0.1.7",
+   "env": "",
+   "permissions": [],
+   "requirements": {
+    "dev": [
+     "pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
+    ],
+    "stable": [
+     "pip: -U git+https://github.com/fish-quant/segmentation@986c9a6"
+    ]
+   },
+   "dependencies": [],
+   "uri": "imjoy-plugins\\SegmentObjects.imjoy.html"
   }
  ],
  "collections": []
