@@ -12,11 +12,12 @@ Here, you find a brief summary of the installation steps detailed in the section
 * The analysis workflows are provided as dedicated **ImJoy plugins**. 
 * Once the plugin are installed in ImJoy, you can access them in a dedicated **workspace** `fq-seg`. 
 * To use the plugins them you have to connect to the **Jupyter engine**
+  
     1. **Activate the environment**: 
         ```
         conda activate cellpose
         ```
-    1. **Start Jupyter notebook**: 
+    2. **Start Jupyter notebook**: 
        ```
        jupyter notebook --NotebookApp.allow_origin='*' --no-browser
        ```
@@ -106,5 +107,5 @@ be found in the folder `notebooks`.
 To run this code, we recommend following the instructions above to create a dedicated conda environment, 
 and install the code of this plugin in this env, e.g. with 
 ```
-pip install git+https://github.com/muellerflorian/segmentation/ --upgrade
+pip install git+https://github.com/fish-quant/segmentation --upgrade
 ```
