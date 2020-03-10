@@ -67,6 +67,7 @@ nav:
     - Diverse workflows:
       - Overview: diverse-workflows-overview.md
       - Split channels: fiji-split-channels.md
+      - Distance to objects: distance-objects.md
       - Create FQ outline files: create-fq-outlines.md
 
     - Advanced:

@@ -1,0 +1,99 @@
+﻿<docs lang="markdown">
+ImJoy plugin to calculate images facilitating distance calculations.
+</docs>
+
+<config lang="json">
+{
+  "name": "ObjectDist",
+  "type": "native-python",
+  "version": "0.1.1",
+  "description": "Pre-process 3D images to obtain 2D images for segmentation.",
+  "tags":  ["stable","dev"],
+  "ui": [
+        "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
+        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "String channel: {id: 'str_label', type: 'string', placeholder: 'mask__nuclei__'}",
+        "String save INDEX: {id: 'str_save_ind', type: 'string', placeholder: 'nuclei_close_ind__'}",
+        "String save DIST: {id: 'str_save_dist', type: 'string', placeholder: 'nuclei_close_dist__'}",
+        "Truncate distance: {id: 'truncate_distance', type: 'number', placeholder: 255}"
+        ],
+  "cover": "",
+  "inputs": null,
+  "outputs": null,
+  "flags": [],
+  "icon": "extension",
+  "api_version": "0.1.7",
+  "env": "",
+  "permissions": [],
+  "requirements": {
+                    "dev":   ["pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"],
+                    "stable":["pip: -U git+https://github.com/fish-quant/segmentation@master"]
+                   },
+  "dependencies": []
+}
+</config>
+
+<script lang="python">
+from imjoy import api
+from pathlib import Path
+
+from segwrap import utils_masks
+class ImJoyPlugin():
+    def setup(self):
+        api.log('initialized')
+
+    def run(self, ctx):
+        
+        api.log(ctx.config)
+
+        # Get path for testing
+        if api.TAG == 'stable':
+            path_scan = ctx.config.path_scan
+            path_save = ctx.config.path_save
+        else:
+            path_scan = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-results'
+            path_save = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-nuclei-closest-imjoy'
+        # >>> CHECK INPUT PARAMETERS
+
+        # Path containing the data
+        if path_scan == 'paste-path-to-data':
+            api.alert('Path containing data to be processed has to be specified.')
+            return
+        
+        path_scan = Path(path_scan)
+    
+        if not path_scan.is_dir():
+            api.alert('Path containing data to be processed does not exist.')    
+            return
+        
+        # Path to save data
+        if '>>' in path_save:
+            api.log('Path replacement defined in path_save. Will keep string as is.')
+
+        else:
+            if path_save == 'paste-path-to-save-data':
+                api.alert('Path to save data has to be specified.')
+                return
+            path_save = Path(path_save)
+
+        # Interpret search_recursive
+        if ctx.config.search_recursive == 'true':
+            search_recursive = True 
+        else:
+            search_recursive = False
+
+        # Call pre-processing function
+        api.showStatus('Calculate distance masks ... see log for details')
+
+        utils_masks.create_img_closest_obj(path_scan=path_scan,
+                                   str_label=ctx.config.str_label,
+                                   strs_save=(ctx.config.str_save_ind,ctx.config.str_save_dist),
+                                   path_save = path_save,
+                                   truncate_distance=ctx.config.truncate_distance,
+                                   callback_log=api.log)
+
+
+        api.showStatus('Calculation finished.')
+
+api.export(ImJoyPlugin())
+</script>
