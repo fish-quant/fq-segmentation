@@ -1,5 +1,3 @@
-# TODO: centralize some of the general purpose methods (log_message, ...) in a separate module.
-
 # Imports
 import pathlib
 import json
@@ -60,7 +58,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
     n_files = len(files_proc)
     for idx, file_proc in enumerate(files_proc):
 
-        log_message(f'\n>>> Processing file: {file_proc}', callback_fun = callback_status)
+        log_message(f'\n>>> Processing file: {file_proc}', callback_fun=callback_status)
 
         if callback_progress:
             progress = float((idx+1)/n_files)

@@ -108,10 +108,10 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         if new_size:
             mask_full = resize_mask(maski, sizes_orginal[idx])
 
-            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', mask_full.astype('uint16'), check_contrast=False)
-            imsave(path_save / f'mask_resize__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.png', mask_full.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'mask_resize__{obj_name}__{file_name.stem}.png', maski.astype('uint16'), check_contrast=False)
         else:
-            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.tif', maski.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.png', maski.astype('uint16'), check_contrast=False)
 
     log_message(f"Segmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
     # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
@@ -482,7 +482,7 @@ def segment_cells_nuclei(path_scan, strings, img_ext, new_size, sizes, models, p
 # Function to load and segment nuclei images
 def segment_nuclei(path_scan, str_dapi, img_ext, new_size, size_nuclei, model, path_save,callback_log=None):
     """ Wrapper function to load and segment nuclei in 2D images. 
-    
+
     Parameters
     ----------
     path_scan : pathline Path object
