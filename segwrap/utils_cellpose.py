@@ -26,7 +26,7 @@ from segwrap.utils_general import create_output_path
 # Function: check if GPU working, and if so use it
 def check_device(gpu_number=0, callback_log=None):
     """ Check on which device (GPU or CPU) CellPose will be running. 
-    
+
     Parameters
     ----------
     gpu_number : int, optional
@@ -45,7 +45,7 @@ def check_device(gpu_number=0, callback_log=None):
 
 # Call predict function
 def cellpose_predict(data, config, path_save, callback_log=None):
-    """Perform prediction with CellPose. 
+    """ Perform prediction with CellPose. 
 
     Parameters
     ----------
@@ -155,7 +155,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
     """
 
     # Print all input parameters
-    log_message(f"Function (segment_obj_indiv) called with: {str(locals())} ", callback_fun=callback_log) 
+    log_message(f"Function (segment_obj_indiv) called with: {str(locals())} ", callback_fun=callback_log)
 
     print('what?')
     # Configurations

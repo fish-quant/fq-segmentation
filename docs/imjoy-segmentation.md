@@ -1,8 +1,8 @@
 
 We provide different plugins for different segmentation tasks
 
-* Segment cells OR nuclei with the Plugin `SegmentObjects`: <a href="https://imjoy.io/#/app?w=fq-seg&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**install from here.**</a>
-* Segment cells AND nuclei with the Plugin `SegmentCellsNuclei`: <a href="https://imjoy.io/#/app?w=fq-seg&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**install from here.**</a>
+* Segment cells OR nuclei with the Plugin `SegmentObjects`: <a href="https://imjoy.io/#/app?w=fq-segment&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**install from here.**</a>
+* Segment cells AND nuclei with the Plugin `SegmentCellsNuclei`: <a href="https://imjoy.io/#/app?w=fq-segment&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**install from here.**</a>
 
 
 ## General behavior
