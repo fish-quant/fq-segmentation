@@ -70,7 +70,7 @@
      "pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@4e2c002"
+     "pip: -U git+https://github.com/fish-quant/segmentation@master"
     ]
    },
    "dependencies": [],
@@ -109,7 +109,7 @@
      "pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@4e2c002"
+     "pip: -U git+https://github.com/fish-quant/segmentation@master"
     ]
    },
    "dependencies": [],
@@ -148,7 +148,7 @@
      "pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@4e2c002"
+     "pip: -U git+https://github.com/fish-quant/segmentation@master"
     ]
    },
    "dependencies": [],
