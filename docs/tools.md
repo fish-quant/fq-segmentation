@@ -10,7 +10,7 @@ A detailed description of each analysis workflow is provided in the dedicated se
 Here, you find a brief summary of the installation steps detailed in the sections below.
 
 * The analysis workflows are provided as dedicated **ImJoy plugins**. 
-* Once the plugin are installed in ImJoy, you can access them in a dedicated **workspace** `fq-seg`. 
+* Once the plugin are installed in ImJoy, you can access them in a dedicated **workspace** `fq-segment`. 
 * To use the plugins them you have to connect to the **Jupyter engine**
   
     1. **Activate the environment**: 
@@ -30,21 +30,15 @@ In order to use the workflows in this repository, you need to follows these step
 0. Create a **dedicated environment** with Jupyter to run your code.
 0. Install the plugins for the workflows of interest. 
 
-### Miniconda with Python
+## Python with Miniconda
 We recommend installing an [Miniconda distribution of Python](https://docs.conda.io/en/latest/miniconda.html): choose Python 3.7 and your operating system. You  can then use the annoconda prompt to excecute the different commands listed below. 
 
-### Conda environment for Cellpose
-We recommend creating a dedicated environment to run Cellpose. This guarantess that only necessary code is installed. 
+We also recommend creating a dedicated environment to run the code in this package. This guarantess that only necessary code is installed. 
 To create an environment called `cellpose`, open an anaconda prompt and type. Note that you will also install 
-jupyter, which will allow to run the jupyter notebooks for easier execution (confirm with `y` when asked if you want to proceed: 
+Jupyter, which will allow to run the Python plugins in ImJoy. Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`): 
 
 ```
 conda create --name cellpose python=3.7 jupyter
-```
-
-To activate the `cellpose` environment type (Note you will always have to run this command when using this workflow):
-```
-conda activate cellpose
 ```
 
 ## ImJoy
@@ -74,30 +68,39 @@ dialog asking if you want to install the specified plugin. To confirm, press the
 
 ![imjoy-interface](img/imjoy-plugin-installation.png)
 
-Once installed, ImJoy remembers the workspaces and plugins and you simply have to
-open the ImJoy app and select the workspace (which will be `cellpose`): [https://imjoy.io/#/app](https://imjoy.io/#/app)
+Once a plugin is installed, ImJoy remembers the workspaces and plugins it contains. 
+If you want to redo an analysis, you simply have to open the [ImJoy app](https://imjoy.io/#/app)and select the appropriate (`fq-segment` for this package) 
+
+![imjoy-workspacer.gif](img/imjoy-workspace.gif)
 
 ### Running Python plugins 
-Most of the provided plugins use Python for the processing. In order for ImJoy these plugins, you have 
-to connect ImJoy to a **Jupyter notebook server**, which can be installed via Miniconda. Please note
-that this "server" can run on your local machine, so no data-transfer over the internet is taking place. 
+Most of the provided plugins use Python for data processing. To use these plugins, you have 
+to connect ImJoy to a **Jupyter notebook**, which can be installed via Miniconda (see section about Python Installation [above](#python-with-miniconda). Please note
+that this "notebook" runs on your local machine, so no data-transfer over the internet is taking place. 
     
 Once you have the computational environment set up (see Installation), you start an Jupyter Notebook, 
 to which ImJoy can connect: 
+
+![terminal-launch-jupyter.png](img/terminal-launch-jupyter.png)
 
 1. **Activate the environment**:
     ```
     conda activate cellpose
     ```
-2. **Start Jupyter notebook**. Type
+0. **Start Jupyter notebook**. Type
     ```
     jupyter notebook --NotebookApp.allow_origin='*' --no-browser
     ```
     Copy the provided URL including the token, something like `http://127.0.0.1:8889/?token=16126ce8b02ee35103200c46d71b3f946bfb408d1cae0f68`
-3. In ImJoy, press on the rocket symbol in the upper right corner, select `Add Jupyter-Engine` 
-    and past the URL from the step above. 
-4. You can now connect your plugin to this Juypyter Kernel, by clicking on the puzzle symbol 
-    next to the plugin name, and selecting the Juypyter Notebook as engine.  
+0. To **connect ImJoy to the notebook**, 
+   
+    1. go to the ImJoy app and press on the rocket symbol in the upper right corner, 
+       select `Add Jupyter-Engine` and paste the URL from the step above. 
+    2. Plugins will then be automatically **connected to this Jupyter Kernel**. You can verify this, 
+       by clicking on the puzzle symbol next to the plugin name. Depending on the plugin, installation
+       might take a while, during this period the plugin name will be in red.  
+
+    ![imjoy-connect-jupyter.gif](img/imjoy-connect-jupyter.gif) 
 
 
 ## Jupyter notebooks 
