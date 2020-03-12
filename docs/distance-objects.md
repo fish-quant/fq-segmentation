@@ -18,7 +18,7 @@ In the **example data**, you can find processed images for the nuclei segmentati
 To **calculate these images** for all masks in a folder, you can use either
 
 * **ImJoy plugin**:  `ObjectDist`, which you  
-<a href="https://imjoy.io/#/app?w=fq-segment&plugin=fish-quant/segmentation:ObjectDist@stable&upgrade=1" target="_blank">**install from here.**</a>
+<a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:ObjectDist@stable&upgrade=1" target="_blank">**install from here.**</a>
 * **Jupyter notebook**: notebooks\distance-closest-object.ipynb
 
 In either case, the following **parameters** have to be specified

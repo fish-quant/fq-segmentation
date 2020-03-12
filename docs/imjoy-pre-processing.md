@@ -4,7 +4,7 @@ Segmentation is done on 2D images. In this step, 3D images are transformed into
 2D images by applying a projection, and these images are stored in a separate folder.
 
 Preprocessing is done with the ImJoy plugin `PreProcess`:  
-<a href="https://imjoy.io/#/app?w=fq-segment&plugin=fish-quant/segmentation:PreProcess@stable&upgrade=1" target="_blank">**install from here.**</a>
+<a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:PreProcess@stable&upgrade=1" target="_blank">**install from here.**</a>
 
 ## Defining folder to save results
 The plugin allows to define the results folder in two ways
