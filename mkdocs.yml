@@ -62,7 +62,7 @@ nav:
 
     - ImJoy Analysis:
       - Overview: imjoy-overview.md
-      - Preprocessing: imjoy-pre-processing.md
+      - Pre-processing: imjoy-pre-processing.md
       - Segmentation: imjoy-segmentation.md
 
     - Diverse workflows:
