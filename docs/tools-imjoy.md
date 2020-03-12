@@ -12,7 +12,7 @@
 
         !!! abstract "Quick summary for how to connect ImJoy to Jupyter engine"
             1. Open anaconda terminal. 
-            2. **Activate environment**: `conda activate fq-seqmentation`
+            2. **Activate environment**: `conda activate fq-segmentation`
             3. **Start Jupyter engine**: `imjoy --jupyter`
             4. Connect ImJoy to Jupyter Engine 🚀.
 
@@ -62,7 +62,7 @@ to which ImJoy can connect.
 1. Launch a **Jupyter Engine for ImJoy**:
    
     1. Start an **anaconda terminal**. 
-    2. **Activate the environment**: `conda activate fq-seqmentation`
+    2. **Activate the environment**: `conda activate fq-segmentation`
     3. **Start Jupyter engine**: `imjoy --jupyter`
     4. **First time only**: copy the provided URL including the token, 
         e.g. `http://127.0.0.1:8888/?token=8b4885e452db1af7cd7b3cfa6c62036cbae46995e473c25e`
@@ -100,16 +100,16 @@ choose Python 3.7 and your operating system. You  can then use the annoconda pro
 
 We further recommend creating a **dedicated environment** to run code in this analysis package. 
 This guarantess that only necessary code is installed. 
-To create an environment called `fq-seqmentation`, open an anaconda prompt and type. Note that you will also install Jupyter, which will allow to run Python plugins in ImJoy.
+To create an environment called `fq-segmentation`, open an anaconda prompt and type. Note that you will also install Jupyter, which will allow to run Python plugins in ImJoy.
 Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`): 
 
 ```
-conda create --name fq-seqmentation python=3.7
+conda create --name fq-segmentation python=3.7
 ```
 
 **Activate the environment**:
 ```
-conda activate fq-seqmentation
+conda activate fq-segmentation
 ```
 
 **Install code Jupyter optimized for ImJoy**:
@@ -131,7 +131,7 @@ At one point, your conda environment might get corrupted. You can easily remove 
 
 1. Open anaconda terminal
 0. **Activate base environment**: `conda activate base`
-0. **Remove `fq-seqmentation` environment**: `conda env remove --name fq-seqmentation`
+0. **Remove `fq-segmentation` environment**: `conda env remove --name fq-segmentation`
 
 
 ### Reporting bugs
