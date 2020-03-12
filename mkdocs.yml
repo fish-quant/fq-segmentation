@@ -53,10 +53,11 @@ markdown_extensions:
   - pymdownx.tasklist
   - pymdownx.superfences
   - pymdownx.tilde
+  - attr_list
 
 nav:
     - Overview: index.md   # Needed for material theme but not for other
-    - Tools: tools.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
+    - ImJoy: tools-imjoy.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
     - Data: data.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
 
     - ImJoy Analysis:
