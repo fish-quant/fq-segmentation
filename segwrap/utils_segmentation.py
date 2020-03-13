@@ -34,6 +34,9 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
     callback_progress : [type], optional
         [description], by default None
     """
+    
+    # Print all input parameters
+    log_message(f"Function (segment_obj_indiv) called with: {str(locals())} ", callback_fun=callback_log)
 
     # Use provided absolute user-path to save images.
     if isinstance(path_save, pathlib.PurePath):
