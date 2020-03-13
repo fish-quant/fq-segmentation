@@ -58,6 +58,7 @@ markdown_extensions:
 nav:
     - Overview: index.md   # Needed for material theme but not for other
     - ImJoy: tools-imjoy.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
+    - Jupyter: tools-jupyter.md 
     - Data: data.md  # This is strange but only with this organization this file shows upd in the overview together with the index.md
 
     - ImJoy Analysis:
