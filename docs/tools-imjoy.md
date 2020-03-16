@@ -10,12 +10,6 @@
         plugins are listed in the plugin list on the left part of the interface. Plugins using Python require 
         a Plugin engine to be executed. Installation and usasage is detailed below.  
 
-        !!! abstract "Quick summary for how to connect ImJoy to Jupyter engine"
-            1. Open anaconda terminal. 
-            2. **Activate environment**: `conda activate fq-segmentation`
-            3. **Start Jupyter engine**: `imjoy --jupyter`
-            4. Connect ImJoy to Jupyter Engine 🚀.
-
     2. ImJoy can have several **workspaces**. Each workspace can contain multiple plugins and is 
         dedicated to a specific data processing task. Workspaces can be selected from little puzzle 
         symbol in the upper left part of the interface.
@@ -26,26 +20,30 @@
 
 ### Installing plugins
 We provide links to install ImJoy plugins for the different workflows. 
-These installation links also specify in which **ImJoy workspaces** the plugin will be installed  
 
-If you press on the installation link, the ImJoy web app will open and display a
+If you press on the installation link, the ImJoy app will open and display a
 dialog asking if you want to install the specified plugin. To confirm, press 
 the `install` button.
 
 ![imjoy-plugin-installation](img/imjoy-plugin-installation.png){: style="width:400px"}
 
+These installation links also specify in which **ImJoy workspaces** the plugin will be installed.  
+
 ### Opening a workspace
 Once a plugin is installed, ImJoy remembers the workspaces and plugins it contains. 
+
 If you want to redo an analysis, you simply have to open the [ImJoy app](https://imjoy.io/#/app) 
-and select the appropriate (`rna-loc-elegans` for this package): 
+and select the appropriate (`fq-segmentation` for this package): 
 
 ![imjoy-workspacer.gif](img/imjoy-workspace.gif){: style="width:500px"}
 
+If **updates** for the installed plugins 
+are available, you will see a corresponding symbol next to the plugin name.
 
 ## Running Python plugins 
 Most of the provided plugins use Python for data processing. To use these plugins, 
 you have to connect ImJoy to a Plugin engine. For this repository, we use **Jupyter notebooks** as 
-and engine, which can be installed via Miniconda (see section about Python Installation [below](#python-for-imjoy)). 
+and engine, which can be installed via Miniconda (see section about Python Installation [below](#installing-python-for-imjoy)). 
 
 ### Connect Jupyter engine
 
@@ -98,10 +96,9 @@ registered engines by pressing on the rocket symbol.
 We recommend installing an [Miniconda distribution of Python](https://docs.conda.io/en/latest/miniconda.html): 
 choose Python 3.7 and your operating system. You  can then use the annoconda prompt to excecute the different commands listed below. 
 
-We further recommend creating a **dedicated environment** to run code in this analysis package. 
-This guarantess that only necessary code is installed. 
-To create an environment called `fq-segmentation`, open an anaconda prompt and type. Note that you will also install Jupyter, which will allow to run Python plugins in ImJoy.
-Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`): 
+We further recommend creating a **dedicated environment** to run code in this analysis package. This guarantess that only necessary code is installed. 
+To create an environment called `fq-segmentation`, open an anaconda prompt and type
+(Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`): 
 
 ```
 conda create --name fq-segmentation python=3.7

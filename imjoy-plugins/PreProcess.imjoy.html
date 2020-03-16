@@ -47,14 +47,18 @@ class ImJoyPlugin():
         
         api.log(ctx.config)
 
+        # Path containing data, and to save results
+        path_process = ctx.config.path_process
+        path_save = ctx.config.path_save
+
         # Get path for testing
-        if api.TAG == 'stable':
-            path_process = ctx.config.path_process
-            path_save = ctx.config.path_save
-        else:
-            path_process = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition'
-            path_save = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input-imjoy-2'
-            #path_save = 'acquisition>>analysis'
+        if api.TAG == 'dev':
+
+            if path_process == 'paste-path-to-data':
+                path_process = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition'
+            if path_save == 'paste-path-to-save-data':
+                path_save = 'acquisition>>analysis'
+
         # >>> CHECK INPUT PARAMETERS
 
         # Path containing the data
