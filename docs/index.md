@@ -9,8 +9,20 @@ This repository provides wrapper code for the **segmentation of cells and nuclei
     ![segmentation__nuclei](img/segmentation__nuclei.png)
     ![segmentation__cells](img/segmentation__cells.png)
 
-Most of the workflows are implemented **ImJoy plugins**, allowing to use them with minimal installation and a user-interface. We also provide Jupyter notebooks for these workflows, which we recommend for more experienced Python users. Below we describe 
+Most of the workflows are implemented **ImJoy plugins**, allowing to use them with minimal installation and a user-interface. 
 
-* How to install the **ImJoy** needed for this analysis. 
-* How to organize the **data** to able to use these workflows.
+!!! abstract "Quick summary for how to connect ImJoy to Jupyter engine"
+    1. Open **anaconda terminal**. 
+    2. **Activate environment**: `conda activate fq-segmentation`
+    3. **Start Jupyter engine**: `imjoy --jupyter`
+    4. **Connect** ImJoy to Jupyter Engine with 🚀 button.
+
+Below we describe 
+
+* How to **install & use ImJoy**. 
+* How to **organize data** for best use in the provided workflows.
+
+We also provide **Jupyter notebooks** for these workflows, which we recommend for more experienced Python users. 
+
+
 
