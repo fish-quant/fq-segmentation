@@ -1,5 +1,8 @@
 # Data
 
+## Test data
+Already processed test data can be downloaded from [**Dropbox**](https://www.dropbox.com/sh/yr1s5olqwkvyx0i/AADH0QQtdNuWWq7z9wgQpLiOa?dl=0). With these data, you can verify if the different analysis steps are properly executed.
+
 ## Data organization
 We strongly recommend the following data-organization on which this workflow has been tested.
 
@@ -32,5 +35,3 @@ The organization of the provided test data is the following
 │  │  │  ├─ ....
 ```
 
-## Test data
-Already processed test data can be downloaded from [**Dropbox**](https://www.dropbox.com/sh/yr1s5olqwkvyx0i/AADH0QQtdNuWWq7z9wgQpLiOa?dl=0). With these data, you can verify if the different analysis steps are properly executed.

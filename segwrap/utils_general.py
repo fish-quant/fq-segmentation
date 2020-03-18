@@ -21,7 +21,7 @@ def log_message(msg, callback_fun=None):
 
 
 # Create new output path
-def create_output_path(path_orig, str_replace, subfolder='', create_path=True, callback_log=None):
+def create_output_path(path_orig, str_replace, subfolder=None, create_path=True, callback_log=None):
     """ Allows to create new path object by replacing a string in a provided path object.
 
     Parameters
@@ -52,9 +52,11 @@ def create_output_path(path_orig, str_replace, subfolder='', create_path=True, c
         str_rep = re.search(r'^(.*)>>(.*)$', str_replace).group(2)
 
         path_replace = Path(str(path_orig).replace(str_orig, str_rep))
-        path_replace = path_replace / subfolder
+    
+        if subfolder:
+            path_replace = path_replace / subfolder
+        
         log_message(f'Replacement parameters found: original string: {str_orig}, replacement string: {str_rep}', callback_fun=callback_log)
-
         log_message(f'Output path: {path_replace}', callback_fun=callback_log)
 
     else:

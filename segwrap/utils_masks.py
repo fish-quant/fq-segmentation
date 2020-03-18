@@ -5,11 +5,12 @@ import numpy as np
 from tqdm import tqdm
 from scipy import ndimage
 from pathlib import Path
+import pathlib
 
-from segwrap.utils_general import log_message
+from segwrap.utils_general import log_message, create_output_path
 
 # Calculate images summarizing distance to objects
-def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, truncate_distance=None, callback_log=None):
+def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, search_recursive=False, truncate_distance=None, callback_log=None, callback_status=None, callback_progress=None):
     """   Function to process label images and facilitate assignment to closest segmented object.
     Will create two 2D images with the same size as the label image. Pixel values in either image
     encode 
@@ -24,8 +25,10 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, trun
         Unique string contained in label iamge to be saved.
     strs_save : tuple of strings
         Strings defining how to save the result images, either string will replace str_save.
-    path_scan : pathlib Path object
-        Path to scan for label images. If None, path_scan will be used.
+    path_save : pathlib Path object
+        Path to save results,
+        - If Pathlib object, then this absolute path is used.
+        - If 'string' a replacement operation path containing the analyzed mask will be applied (see create_output_path).
     truncate_distance : int
         Distance above which distances will be truncated. Using a value of 255 has the advantage
         that the saved image is 8bit and thus small.
@@ -34,17 +37,50 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, trun
         For more details see segwrap.utils_general.log_message
     """
 
+    # Check scan directory
+    if not path_scan.is_dir():
+        log_message(f'Path {path_scan} does not exist.', callback_fun=callback_log) 
+        return
+
     # Path to save results
-    if not path_save:
-        path_save = path_scan
+    if isinstance(path_save, pathlib.PurePath):
+        path_save_results = path_save
+        if not path_save_results.is_dir():
+            path_save_results.mkdir(parents=True)
+        path_save_settings = path_save_results
+
     else:
-        if not path_save.is_dir():
-            path_save.mkdir(parents=True)
+        path_save_str_replace = path_save
 
+    # Search files: recursively or not
+    files_proc = []
+    if search_recursive:
+        for path_mask in path_scan.rglob(f'*{str_label}*'):
+            files_proc.append(path_mask)
+    else:
+        for path_mask in path_scan.glob(f'*{str_label}*'):
+            files_proc.append(path_mask)
+
+    # Process files
+    n_files = len(files_proc)
+    for idx, file_label in enumerate(files_proc):
+
+        log_message(f'\n>>> Processing file: {file_label}', callback_fun=callback_status)
+
+    #    if callback_progress:
+    #        progress = float((idx+1)/n_files)
+    #        callback_progress(progress)
+    #return
+    
     # Look for all segmentation masks
-    for file_label in path_scan.glob(f'*{str_label}*'):
+    #for file_label in path_scan.glob(f'*{str_label}*'):
 
-        log_message(f'Analyzing file {file_label}', callback_fun=callback_log)
+    #    log_message(f'Analyzing file {file_label}', callback_fun=callback_log)
+    
+        # >>> Create path to save data if necessary
+        if not isinstance(path_save, pathlib.PurePath):
+            path_save_results = create_output_path(file_label.parent, path_save_str_replace, subfolder=None, create_path=True)
+            log_message(f'Results will be save here : {path_save_results}', callback_fun=callback_status)
 
         # >>>> Read label image
         img_labels = imread(file_label)
@@ -80,15 +116,16 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, trun
         for indx, obj_int in enumerate(np.nditer(labels)):
             ind_obj_closest[dist_obj_ind_2D == indx] = obj_int
 
+
         # Save index of closest object
-        name_save_ind = path_save / f'{file_label.stem.replace(str_label, strs_save[0])}.png'
+        name_save_ind = path_save_results / f'{file_label.stem.replace(str_label, strs_save[0])}.png'
         if str(name_save_ind) != str(file_label):
             imsave(name_save_ind, ind_obj_closest.astype('uint16'), check_contrast=False)
         else:
             log_message(f'Name to save index matrix could not be established: {name_save_ind}', callback_fun=callback_log)
 
         # Save distances to closest object
-        name_save_dist = path_save / f'{file_label.stem.replace(str_label, strs_save[1])}.png'
+        name_save_dist = path_save_results / f'{file_label.stem.replace(str_label, strs_save[1])}.png'
         if str(name_save_dist) != str(file_label):
             imsave(name_save_dist, dist_obj_dist_3D[:, :, 0].astype('uint16'), check_contrast=False)
         else:

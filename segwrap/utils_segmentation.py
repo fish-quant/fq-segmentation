@@ -3,11 +3,10 @@ import pathlib
 import json
 from skimage.io import imread, imsave
 
-from segwrap.utils_general import log_message
-from segwrap.utils_general import create_output_path
+from segwrap.utils_general import log_message, create_output_path
 
 # Functions
-def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, projection_type, search_recursive=False, callback_log=None, callback_status=None, callback_progress=None):
+def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, projection_type, subfolder=None, search_recursive=False, callback_log=None, callback_status=None, callback_progress=None):
     """[summary]
 
     Parameters
@@ -25,6 +24,8 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
           And results will be stored in subfolder 'segmentation-input'
     projection_type : [type]
         [description]
+    subfolder: str
+        subfolder where data should be stored. Will only be used when string replacement for path is used. 
     search_recursive : bool
         Recursively search folder, default: false.
     callback_log : [type], optional
@@ -71,7 +72,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
 
         # Create new output path if specified
         if not isinstance(path_save, pathlib.PurePath):
-            path_save_results = create_output_path(file_proc.parent, path_save_str_replace, subfolder='segmentation-input', create_path=True)
+            path_save_results = create_output_path(file_proc.parent, path_save_str_replace, subfolder=subfolder, create_path=True)
             log_message(f'Results will be save here : {path_save_results}', callback_fun=callback_status)
             path_save_settings = path_save_results       
 

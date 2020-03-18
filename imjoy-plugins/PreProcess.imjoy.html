@@ -7,12 +7,13 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "PreProcess",
   "type": "native-python",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
         "Path DATA: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
-        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'acquisition˃˃analysis'}",
+        "Subfolder: {id: 'subfolder', type: 'string', placeholder: 'segmentation-input'}",
         "Channel string: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
         "Img extension: {id: 'img_ext', type: 'string', placeholder: '.tif'}",
         "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}",
@@ -27,7 +28,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
   "env": "",
   "permissions": [],
   "requirements": {
-                    "dev":   ["pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"],
+                    "dev":   [""],
                     "stable":["pip: -U git+https://github.com/fish-quant/segmentation@master"]
                    },
   "dependencies": []
@@ -38,7 +39,16 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 from imjoy import api
 from pathlib import Path
 
+if api.TAG == 'dev':
+    import sys
+    import socket
+    hostname = socket.gethostname()
+
+    if hostname == 'DESKTOP-U9QO0OG':
+        sys.path.insert(0, r'D:\Work\GitHub\projects\segmentation') 
+
 from segwrap import utils_segmentation
+
 class ImJoyPlugin():
     def setup(self):
         api.log('initialized')
@@ -55,9 +65,7 @@ class ImJoyPlugin():
         if api.TAG == 'dev':
 
             if path_process == 'paste-path-to-data':
-                path_process = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition'
-            if path_save == 'paste-path-to-save-data':
-                path_save = 'acquisition>>analysis'
+                path_process = r'F:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\acquisition'
 
         # >>> CHECK INPUT PARAMETERS
 
@@ -67,11 +75,16 @@ class ImJoyPlugin():
             return
         
         path_process = Path(path_process)
-    
         if not path_process.is_dir():
             api.alert('Path containing data to be processed does not exist.')    
             return
         
+        # This looks a bit weird, but the default string does not contain the greater sign,
+        # but a close unicode replacement (otherwise rendering would not be possible due security risk, strings are sanitised)
+        if path_save == 'acquisition˃˃analysis':
+            path_save = 'acquisition>>analysis'
+            print('default string')
+
         # Path to save data
         if '>>' in path_save:
             api.log('Path replacement defined in path_save. Will keep string as is.')
@@ -97,6 +110,7 @@ class ImJoyPlugin():
                     img_ext = ctx.config.img_ext,
                     path_save=path_save,
                     projection_type=ctx.config.projection_type,
+                    subfolder = ctx.config.subfolder,
                     search_recursive=search_recursive,
                     callback_log=api.log,
                     callback_status=api.showStatus, 
