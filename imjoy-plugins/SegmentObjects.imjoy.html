@@ -7,13 +7,13 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
         "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
-        "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: ''}",
-        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
+        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-output'}",
         "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
         "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
         "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
@@ -30,7 +30,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
   "env": "",
   "permissions": [],
   "requirements": {
-                    "dev":   ["pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"],
+                    "dev":   [""],
                     "stable":["pip: -U git+https://github.com/fish-quant/segmentation@master"]
                    },
   "dependencies": [],
@@ -43,6 +43,14 @@ from imjoy import api
 from pathlib import Path
 import asyncio
 
+if api.TAG == 'dev':
+    import sys
+    import socket
+    hostname = socket.gethostname()
+
+    if hostname == 'DESKTOP-U9QO0OG':
+        sys.path.insert(0, r'D:\Work\GitHub\projects\segmentation') 
+
 from segwrap import utils_cellpose
 
 class ImJoyPlugin():
@@ -53,14 +61,15 @@ class ImJoyPlugin():
         
         api.log(ctx.config)
 
+        # Path containing data, and to save results
+        path_scan = ctx.config.path_scan
+        path_save = ctx.config.path_save
+
         # Get path for testing
-        if api.TAG == 'stable':
-            path_scan = ctx.config.path_scan
-            path_save = ctx.config.path_save
-        else:
-            path_scan = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input'
-            path_save = 'segmentation-input>>segmentation-results-imjoy-nuclei'
- 
+        if api.TAG == 'dev':
+            if path_scan == 'paste-path-to-data':
+                path_scan = r'F:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input'
+  
         # >>> CHECK INPUT PARAMETERS
 
         # Path containing the data
@@ -69,12 +78,17 @@ class ImJoyPlugin():
             return
         
         path_scan = Path(path_scan)
-    
         if not path_scan.is_dir():
             api.alert('Path containing data to be processed does not exist.')    
             return
         
-        # Path to save data
+        # >> Path to save data
+
+        # This looks a bit weird, but the default string does not contain the greater sign,
+        # but a close unicode replacement (otherwise rendering would not be possible due security risk, strings are sanitised)
+        if path_save == 'segmentation-input˃˃segmentation-output':
+            path_save = 'segmentation-input>>segmentation-output'
+
         if '>>' in path_save:
             api.log('Path replacement defined in path_save. Will keep string as is.')
 

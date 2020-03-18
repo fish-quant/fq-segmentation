@@ -6,16 +6,17 @@ ImJoy plugin to calculate images facilitating distance calculations.
 {
   "name": "ObjectDist",
   "type": "native-python",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
         "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
-        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'paste-path-to-save-data'}",
+        "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-results˃˃distance-maps'}",
         "String channel: {id: 'str_label', type: 'string', placeholder: 'mask__nuclei__'}",
         "String save INDEX: {id: 'str_save_ind', type: 'string', placeholder: 'nuclei_close_ind__'}",
         "String save DIST: {id: 'str_save_dist', type: 'string', placeholder: 'nuclei_close_dist__'}",
-        "Truncate distance: {id: 'truncate_distance', type: 'number', placeholder: 255}"
+        "Truncate distance: {id: 'truncate_distance', type: 'number', placeholder: 255}",
+        "Search recursive: {id: 'search_recursive', type: 'choose', options: ['false', 'true'], placeholder: 'false'}"
         ],
   "cover": "",
   "inputs": null,
@@ -26,7 +27,7 @@ ImJoy plugin to calculate images facilitating distance calculations.
   "env": "",
   "permissions": [],
   "requirements": {
-                    "dev":   ["pip: -U --editable D:\\Documents\\code\\GitHub\\projects\\segmentation"],
+                    "dev":   [""],
                     "stable":["pip: -U git+https://github.com/fish-quant/segmentation@master"]
                    },
   "dependencies": []
@@ -37,7 +38,16 @@ ImJoy plugin to calculate images facilitating distance calculations.
 from imjoy import api
 from pathlib import Path
 
+if api.TAG == 'dev':
+    import sys
+    import socket
+    hostname = socket.gethostname()
+
+    if hostname == 'DESKTOP-U9QO0OG':
+        sys.path.insert(0, r'D:\Work\GitHub\projects\segmentation') 
+
 from segwrap import utils_masks
+
 class ImJoyPlugin():
     def setup(self):
         api.log('initialized')
@@ -45,14 +55,14 @@ class ImJoyPlugin():
     def run(self, ctx):
         
         api.log(ctx.config)
-
+        path_scan = ctx.config.path_scan
+        path_save = ctx.config.path_save
+        
         # Get path for testing
-        if api.TAG == 'stable':
-            path_scan = ctx.config.path_scan
-            path_save = ctx.config.path_save
-        else:
-            path_scan = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-results'
-            path_save = r'D:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-nuclei-closest-imjoy'
+        if api.TAG == 'dev':
+            if path_scan == 'paste-path-to-data':
+                path_scan = r'F:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-results'
+ 
         # >>> CHECK INPUT PARAMETERS
 
         # Path containing the data
@@ -67,6 +77,11 @@ class ImJoyPlugin():
             return
         
         # Path to save data
+        # This looks a bit weird, but the default string does not contain the greater sign,
+        # but a close unicode replacement (otherwise rendering would not be possible due security risk, strings are sanitised)
+        if path_save == 'segmentation-results˃˃distance-maps':
+            path_save = 'segmentation-results>>distance-maps'
+
         if '>>' in path_save:
             api.log('Path replacement defined in path_save. Will keep string as is.')
 
@@ -89,6 +104,7 @@ class ImJoyPlugin():
                                    str_label=ctx.config.str_label,
                                    strs_save=(ctx.config.str_save_ind,ctx.config.str_save_dist),
                                    path_save = path_save,
+                                   search_recursive=search_recursive,
                                    truncate_distance=ctx.config.truncate_distance,
                                    callback_log=api.log)
 

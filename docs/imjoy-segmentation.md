@@ -1,15 +1,13 @@
 
 We provide different plugins for different segmentation tasks:
 
-* Segment cells OR nuclei with the Plugin `SegmentObjects`: <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**install from here.**</a>
-* Segment cells AND nuclei with the Plugin `SegmentCellsNuclei`: <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**install from here.**</a>
-
+* Install plugin `SegmentObjects` to segment cells OR nuclei <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**from here.**</a>
+* Install plugin  `SegmentCellsNuclei` to segment cells AND nuclei <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**from here.**</a>
 
 ## General behavior
 
-### Recursive search for images
-Plugins will search RECURSIVELY in the provided folders for all images fitting the specified criteria, 
-and segment them. Results will then be stored in a dedicated subfolder.
+### Recursive search
+The plugins will search [**recursively**](general-behavior.md#recursive-search-for-data) the provided subfolder for images to segment. 
 
 By default, all images matching the naming scheme will be processed. An optional parameter allows to specify
 in which subfolder the images have to be in order to be segmented. This allows to process nested folder
@@ -17,20 +15,7 @@ hierachies and only segmenting images in the relevant subfolders.
 
 As an example, in the provided data we could specif the folder `example_data\analysis` as the data folder. 
 This would then scan this folder and all subfolders and potentially find inappropriate files for segmentation.
-BY defingin the `Input subfolder` to be `segmentation-input`, the analysis will be restricted to this folder. 
-
-### Defining folder to save results
-The plugin allows to define the results folder in two ways
-
-1. Directly define a folder where the results are stored. If the folder doesn't exist, the plugin will rename it. 
-2. Define the folder with a text replacement. This option can be useful if many folders are processed (with the optional recursive search), 
-    and it allows to automatically create corresponding subfolders. 
-    * Such a replacement operation is indicated with a text in the format  `str_orig>>str_new`,
-      where 'str_orig' is the orginal string, 'str_new' is the new string.
-    * For the example data, using the string `acquisition>>analysis` would imply that you take the folder name,
-      e.g. `D:\example_data\acquisition`, and replace `acquisition` with `analysis`, yielding 
-      `D:\example_data\analysis`. 
-    * The results wil then be saved in subfolder `segmentation-input`. So the projection will be saved in the folder `D:\example_data\analysis\segmentation-input`
+By defining the `Input subfolder` to be `segmentation-input`, the analysis will be restricted to this folder. 
 
 ### Results
 Results will be saved in the specified folder. For each image the following files, results files with different suffices are created: 
@@ -50,10 +35,17 @@ Segmentation speed depends on the image size. In our experience, resizing the im
 can lead to a substantial speed-up. In case you resize the images, we implemented a post-processing
 routine that will resize the predicted masks back to the original image size. 
 
+## Recommended workflow
+The default settings of the plugins allow to quickly perform the recommended workflow. You only have 
+to paste your data folder.  
+
+1. 2D images are stored in a subfolder  `segmentation-input`
+2. Segmentation results will be stored in a subfolder `segmentation-output`, this can be achieved by setting
+    the save path to the string replacement  `segmentation-input>>segmentation-output`
 
 ## Segmentation of nuclei OR cells
 
-![imjoy-segment-objects-ui](img/imjoy-segment-objects-ui.png)
+![imjoy-segment-objects-ui](img/imjoy-segment-objects-ui.png){: style="width:300px"}
 
 1. Before running the plugin, you have to **specify a few parameters**. This can be done in the plugin interface, 
     avaible after clicking on the arrow down next to the plugin name.
@@ -64,7 +56,7 @@ routine that will resize the predicted masks back to the original image size.
     ---------------- | ---- | ----------- | -----------
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
     `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented. 
-    `Path SAVE` | str  |  |Path to folder where results should be stored (for more details see above).
+    `Path SAVE` | str  |  | Several options exist. See dedicated section here [below](general-behavior.md#specify-folder-to-save-your-data) for more details.
     `Object name`    | str  |  nuclei | How the object is called.
     `String channel`    | str  |  dapi | Unique identifier to .
     `String img ext`     | str  | .png | File extension of images that should be segmented.
@@ -84,7 +76,7 @@ routine that will resize the predicted masks back to the original image size.
 
 
 ## Segmentation of cells AND nuclei
-![imjoy-segment-cells-nuclei-ui](img/imjoy-segment-cells-nuclei-ui.png)
+![imjoy-segment-cells-nuclei-ui](img/imjoy-segment-cells-nuclei-ui.png){: style="width:300px"}
 
 1. Before running the plugin, you have to **specify a few parameters**. This can be done in the plugin interface, 
     avaible after clicking on the arrow down next to the plugin name.
