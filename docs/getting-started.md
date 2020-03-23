@@ -24,4 +24,4 @@ specify the different workflow parameters. Below we describe how to **use ImJoy*
     3. **Start Jupyter engine**: `imjoy --jupyter`
     4. **Connect** ImJoy to Jupyter Engine with 🚀 button.
 
-We also provide **Jupyter notebooks** for these workflows, which we recommend for more experienced Python users. 
+We also provide **Jupyter notebooks** for these workflows, which we recommend only for more experienced Python users. 
