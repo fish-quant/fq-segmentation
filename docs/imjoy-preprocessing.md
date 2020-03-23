@@ -1,6 +1,6 @@
 
-# Preprocessing
-Segmentation is performed on 2D images. This plugin allows to obtain 2D images from 3D images either by 
+# Preprocessing of 3D images
+Segmentation is performed on **2D images**. This plugin allows to obtain 2D images from 3D images either by 
 a projection or by saving each z-plane separately. These images are typically stored in a separate folder. 
 2D images by applying a projection, and these images are typically stored in a separate folder.
 
