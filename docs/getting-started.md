@@ -15,7 +15,7 @@ process the test data.
 
 ## ImJoy plugins
 Most of the workflows are implemented as **ImJoy plugins**, with a simple interface to
-specify the different workflow parameters. Below we describe how to **use ImJoy** and the
+specify the different workflow parameters. We describe in a dedicated [section](tools-imjoy.md) how to **use ImJoy** and the
 **Plugin engine** to run these plugins. 
 
 !!! abstract "Quick summary for how to connect ImJoy to Jupyter engine"
