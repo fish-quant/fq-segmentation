@@ -81,7 +81,7 @@
   {
    "name": "SegmentCellsNuclei",
    "type": "native-python",
-   "version": "0.1.4",
+   "version": "0.1.5",
    "description": "Segment cells AND nuclei.",
    "tags": [
     "stable",
@@ -90,7 +90,7 @@
    "ui": [
     "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
     "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
-    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-output'}",
+    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
     "String CELLS: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
     "String NUCLEi: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
     "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
@@ -120,7 +120,7 @@
   {
    "name": "SegmentObjects",
    "type": "native-python",
-   "version": "0.1.3",
+   "version": "0.1.4",
    "description": "Segment cells OR nuclei.",
    "tags": [
     "stable",
@@ -129,7 +129,7 @@
    "ui": [
     "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
     "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
-    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-output'}",
+    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
     "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
     "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
     "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
