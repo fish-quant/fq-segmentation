@@ -86,16 +86,12 @@ class ImJoyPlugin():
 
         # This looks a bit weird, but the default string does not contain the greater sign,
         # but a close unicode replacement (otherwise rendering would not be possible due security risk, strings are sanitised)
-        if path_save == 'segmentation-input˃˃segmentation-output':
-            path_save = 'segmentation-input>>segmentation-output'
+        path_save = path_save.replace('˃˃', '>>')
 
         if '>>' in path_save:
             api.log('Path replacement defined in path_save. Will keep string as is.')
 
         else:
-            if path_save == 'paste-path-to-save-data':
-                api.alert('Path to save data has to be specified.')
-                return
             path_save = Path(path_save)
 
         # Input sub-folder
