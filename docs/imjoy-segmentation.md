@@ -40,8 +40,8 @@ The default settings of the plugins allow to quickly perform the recommended wor
 to paste your data folder.  
 
 1. 2D images are stored in a subfolder  `segmentation-input`
-2. Segmentation results will be stored in a subfolder `segmentation-output`, this can be achieved by setting
-    the save path to the string replacement  `segmentation-input>>segmentation-output`
+2. Segmentation results will be stored in a subfolder `segmentation-results`, this can be achieved by setting
+    the save path to the string replacement  `segmentation-input>>segmentation-results`
 
 ## Segmentation of nuclei OR cells
 

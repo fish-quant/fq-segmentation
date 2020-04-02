@@ -65,17 +65,8 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
     n_files = len(files_proc)
     for idx, file_label in enumerate(files_proc):
 
-        log_message(f'\n>>> Processing file: {file_label}', callback_fun=callback_status)
+        log_message(f'\n>>> Processing file:\n{file_label}', callback_fun=callback_status)
 
-    #    if callback_progress:
-    #        progress = float((idx+1)/n_files)
-    #        callback_progress(progress)
-    #return
-    
-    # Look for all segmentation masks
-    #for file_label in path_scan.glob(f'*{str_label}*'):
-
-    #    log_message(f'Analyzing file {file_label}', callback_fun=callback_log)
     
         # >>> Create path to save data if necessary
         if not isinstance(path_save, pathlib.PurePath):
@@ -89,9 +80,9 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
         n_objs = len(labels)
 
         # Loop over all nuclei and create create distance map
-        log_message(' Creating distance maps. This can take a while ...', callback_fun=callback_log)
-        dist_mat = np.zeros((img_labels.shape[0], img_labels.shape[1], n_objs))
-        mask_fill_indiv = np.zeros((img_labels.shape[0], img_labels.shape[1], n_objs))
+        log_message(f' Creating distance maps for {n_objs} objects. This can take a while ...', callback_fun=callback_log)
+        dist_mat = np.zeros((img_labels.shape[0], img_labels.shape[1], n_objs), dtype=np.uint16)
+        mask_fill_indiv = np.zeros((img_labels.shape[0], img_labels.shape[1], n_objs), dtype=np.uint16)
 
         for indx, obj_int in enumerate(tqdm(np.nditer(labels), total=n_objs)):
 
@@ -103,7 +94,7 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
             dist_obj = ndimage.distance_transform_edt(np.logical_not(img_label_loop))
             if truncate_distance:
                 dist_obj[dist_obj > truncate_distance] = truncate_distance
-            dist_mat[:, :, indx] = dist_obj
+            dist_mat[:, :, indx] = dist_obj.astype(np.uint16)
 
         # >>> Condense distmap in two matrixes: index and distance to closest object
         dist_obj_ind_3D = np.argsort(dist_mat, axis=2)
