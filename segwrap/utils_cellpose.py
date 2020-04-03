@@ -117,7 +117,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
     # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
 
 
-# Function to load and segment nuclei images individually 
+# Function to load and segment objects individually 
 def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_size, model_type, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None):
     """ Will recursively search folder for images to be analyzed!
 
@@ -245,7 +245,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
     #return {'status': 'segmentation finished'}
 
 
-# Function to load and segment nuclei images individually 
+# Function to load and segment cells and nuclei images individually 
 def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, models, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None): 
     """[summary] segment cells and nuclei in bulk, e.g. first all images are loaded and then segmented. 
     TODO: specify parameters
