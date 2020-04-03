@@ -81,7 +81,7 @@
   {
    "name": "SegmentCellsNuclei",
    "type": "native-python",
-   "version": "0.1.5",
+   "version": "0.1.6",
    "description": "Segment cells AND nuclei.",
    "tags": [
     "stable",
@@ -92,11 +92,11 @@
     "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
     "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
     "String CELLS: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
-    "String NUCLEi: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
-    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
+    "String NUCLEI: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
+    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}",
     "Size CELLS: {id: 'size_cells', type: 'number', placeholder: 100}",
     "Size NUCLEI: {id: 'size_nuclei', type: 'number', placeholder: 50}",
-    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
+    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}"
    ],
    "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
    "inputs": null,
@@ -120,7 +120,7 @@
   {
    "name": "SegmentObjects",
    "type": "native-python",
-   "version": "0.1.4",
+   "version": "0.1.5",
    "description": "Segment cells OR nuclei.",
    "tags": [
     "stable",
@@ -130,12 +130,12 @@
     "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
     "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
     "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
-    "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
     "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
-    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
-    "Size object: {id: 'obj_size', type: 'number', placeholder: 50}",
+    "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
     "Cellpose model: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
-    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
+    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}",
+    "Size object: {id: 'obj_size', type: 'number', placeholder: 50}",
+    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}"
    ],
    "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
    "inputs": null,
