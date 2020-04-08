@@ -6,6 +6,7 @@ from skimage.io import imread, imsave
 from segwrap.utils_general import log_message, create_output_path
 
 # Functions
+# TODO: allow multiple channel identifiers for segmentation of cells and nuclei (separate by ,)
 def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, projection_type, subfolder=None, search_recursive=False, callback_log=None, callback_status=None, callback_progress=None):
     """[summary]
 
@@ -52,11 +53,11 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
     # How to look for files
     files_proc = []
     if search_recursive:
-        for path_dapi in path_process.rglob(f'*{channel_ident}*{img_ext}'):
-            files_proc.append(path_dapi)
+        for path_img in path_process.rglob(f'*{channel_ident}*{img_ext}'):
+            files_proc.append(path_img)
     else:
-        for path_dapi in path_process.glob(f'*{channel_ident}*{img_ext}'):
-            files_proc.append(path_dapi)
+        for path_img in path_process.glob(f'*{channel_ident}*{img_ext}'):
+            files_proc.append(path_img)
 
     # Process files
     n_files = len(files_proc)

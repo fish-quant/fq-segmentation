@@ -44,20 +44,20 @@
   {
    "name": "PreProcess",
    "type": "native-python",
-   "version": "0.1.3",
+   "version": "0.1.4",
    "description": "Pre-process 3D images to obtain 2D images for segmentation.",
    "tags": [
     "stable",
     "dev"
    ],
    "ui": [
-    "Path DATA: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
-    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'acquisition˃˃analysis'}",
-    "Subfolder: {id: 'subfolder', type: 'string', placeholder: 'segmentation-input'}",
-    "Channel string: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
-    "Img extension: {id: 'img_ext', type: 'string', placeholder: '.tif'}",
-    "Projection type: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}",
-    "Search recursive: {id: 'search_recursive', type: 'choose', options: ['false', 'true'], placeholder: 'false'}"
+    "<span style='font-weight: 550; color:#666362'>Path DATA</span>: {id: 'path_process', type: 'string', placeholder: 'paste-path-to-data'}",
+    "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'acquisition˃˃analysis'}",
+    "<span style='font-weight: 550; color:#666362'>Subfolder</span>: {id: 'subfolder', type: 'string', placeholder: 'segmentation-input'}",
+    "<span style='font-weight: 550; color:#666362'>Channel string</span>: {id: 'channel_ident', type: 'string', placeholder: 'dapi'}",
+    "<span style='font-weight: 550; color:#666362'>Img extension</span>: {id: 'img_ext', type: 'string', placeholder: '.tif'}",
+    "<span style='font-weight: 550; color:#666362'>Projection type</span>: {id: 'projection_type', type: 'choose', options: ['max', 'mean','indiv'], placeholder: 'max'}",
+    "<span style='font-weight: 550; color:#666362'>Search recursive</span>: {id: 'search_recursive', type: 'choose', options: ['false', 'true'], placeholder: 'false'}"
    ],
    "cover": "",
    "inputs": null,
@@ -81,22 +81,22 @@
   {
    "name": "SegmentCellsNuclei",
    "type": "native-python",
-   "version": "0.1.5",
+   "version": "0.1.6",
    "description": "Segment cells AND nuclei.",
    "tags": [
     "stable",
     "dev"
    ],
    "ui": [
-    "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
-    "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
-    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
-    "String CELLS: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
-    "String NUCLEi: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
-    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
-    "Size CELLS: {id: 'size_cells', type: 'number', placeholder: 100}",
-    "Size NUCLEI: {id: 'size_nuclei', type: 'number', placeholder: 50}",
-    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
+    "<span style='font-weight: 550; color:#666362'>Path DATA</span>: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
+    "<span style='font-weight: 550; color:#666362'>Input subfolder</span>: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
+    "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
+    "<span style='font-weight: 550; color:#666362'>String CELLS</span>: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
+    "<span style='font-weight: 550; color:#666362'>String NUCLEI</span>: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
+    "<span style='font-weight: 550; color:#666362'>New size</span>: {id: 'new_size', type: 'string', placeholder: '512,512'}",
+    "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 100}",
+    "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 50}",
+    "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
    ],
    "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
    "inputs": null,
@@ -120,22 +120,22 @@
   {
    "name": "SegmentObjects",
    "type": "native-python",
-   "version": "0.1.4",
+   "version": "0.1.5",
    "description": "Segment cells OR nuclei.",
    "tags": [
     "stable",
     "dev"
    ],
    "ui": [
-    "Path DATA: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
-    "Input subfolder: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
-    "Path SAVE: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
-    "Object name: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
-    "String channel: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
-    "String img ext: {id: 'img_ext', type: 'string', placeholder: '.png'}",
-    "Size object: {id: 'obj_size', type: 'number', placeholder: 50}",
-    "Cellpose model: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
-    "New size: {id: 'new_size', type: 'string', placeholder: '512,512'}"
+    "<span style='font-weight: 550; color:#666362'>Path DATA</span>: {id: 'path_scan', type: 'string', placeholder: 'paste-path-to-data'}",
+    "<span style='font-weight: 550; color:#666362'>Input subfolder</span>: {id: 'input_subfolder', type: 'string', placeholder: 'segmentation-input'}",
+    "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
+    "<span style='font-weight: 550; color:#666362'>String channel</span>: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
+    "<span style='font-weight: 550; color:#666362'>Object name</span>: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
+    "<span style='font-weight: 550; color:#666362'>Cellpose model</span>: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
+    "<span style='font-weight: 550; color:#666362'>New size</span>: {id: 'new_size', type: 'string', placeholder: '512,512'}",
+    "<span style='font-weight: 550; color:#666362'>Size object</span>: {id: 'obj_size', type: 'number', placeholder: 50}",
+    "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
    ],
    "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
    "inputs": null,
