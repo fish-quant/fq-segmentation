@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "PreProcess",
   "type": "native-python",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -38,14 +38,6 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 <script lang="python">
 from imjoy import api
 from pathlib import Path
-
-if api.TAG == 'dev':
-    import sys
-    import socket
-    hostname = socket.gethostname()
-
-    if hostname == 'DESKTOP-U9QO0OG':
-        sys.path.insert(0, r'D:\Work\GitHub\projects\segmentation') 
 
 from segwrap import utils_segmentation
 
