@@ -7,6 +7,8 @@
 # Imports of general purpose libraries
 from skimage.transform import resize
 from skimage.io import imread, imsave
+from skimage.exposure import rescale_intensity
+
 import numpy as np
 from tqdm import tqdm
 import time
@@ -80,23 +82,24 @@ def cellpose_predict(data, config, path_save, callback_log=None):
     # Perform segmentation with CellPose
 
     model = models.Cellpose(device, model_type=model_type )  # model_type can be 'cyto' or 'nuclei'
-    masks, flows, styles, diams = model.eval(imgs, rescale=30./obj_size, channels=channels, net_avg=False, threshold=0.4)
+    masks, flows, styles, diams = model.eval(imgs, diameter = obj_size, channels=channels, net_avg=False, threshold=0.4)
 
     # Display and save 
     log_message(f'\n ... creating outputs ...\n', callback_fun=callback_log)
     n_img = len(imgs)
 
     for idx in tqdm(range(n_img)):
-        img = transforms.reshape(imgs[idx], channels)
         file_name = file_names[idx]
-
-        img = plot.rgb_image(img)
         maski = masks[idx]
         flowi = flows[idx][0]
 
+        imgi = imgs[idx]
+        pa, pb = np.percentile(imgi, (0.1,99.9))
+        imgi_rescale = rescale_intensity(imgi, in_range=(pa, pb),out_range=np.uint8).astype('uint8')
+        
         # Save overview image
         fig = plt.figure(figsize=(12, 3))
-        plot.show_segmentation(fig, img, maski, flowi)
+        plot.show_segmentation(fig, imgi_rescale, maski, flowi, channels=channels)
         plt.tight_layout()
 
         plt.savefig(path_save / f'segmentation__{obj_name}__{file_name.stem}.png', dpi=600)
