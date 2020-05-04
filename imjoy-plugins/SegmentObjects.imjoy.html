@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -42,14 +42,6 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 from imjoy import api
 from pathlib import Path
 import asyncio
-
-if api.TAG == 'dev':
-    import sys
-    import socket
-    hostname = socket.gethostname()
-
-    if hostname == 'DESKTOP-U9QO0OG':
-        sys.path.insert(0, r'D:\Work\GitHub\projects\segmentation') 
 
 from segwrap import utils_cellpose
 
