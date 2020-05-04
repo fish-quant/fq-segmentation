@@ -85,7 +85,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
     masks, flows, styles, diams = model.eval(imgs, diameter = obj_size, channels=channels, net_avg=False, threshold=0.4)
 
     # Display and save 
-    log_message(f'\n ... creating outputs ...\n', callback_fun=callback_log)
+    log_message(f'\n Creating outputs ...\n', callback_fun=callback_log)
     n_img = len(imgs)
 
     for idx in tqdm(range(n_img)):
@@ -94,12 +94,17 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         flowi = flows[idx][0]
 
         imgi = imgs[idx]
-        pa, pb = np.percentile(imgi, (0.1,99.9))
-        imgi_rescale = rescale_intensity(imgi, in_range=(pa, pb),out_range=np.uint8).astype('uint8')
         
+        # Rescale each channel separately
+        imgi_rescale = imgi.copy()
+        for idim in range(3):
+            imgdum= imgi[:,:,idim]
+            pa, pb = np.percentile(imgdum, (0.1,99.9))
+            imgi_rescale[:,:,idim] = rescale_intensity(imgdum, in_range=(pa, pb),out_range=np.uint8).astype('uint8')
+            
         # Save overview image
         fig = plt.figure(figsize=(12, 3))
-        plot.show_segmentation(fig, imgi_rescale, maski, flowi, channels=channels)
+        plot.show_segmentation(fig, imgi_rescale.astype('uint8'), maski, flowi, channels=channels)
         plt.tight_layout()
 
         plt.savefig(path_save / f'segmentation__{obj_name}__{file_name.stem}.png', dpi=600)
