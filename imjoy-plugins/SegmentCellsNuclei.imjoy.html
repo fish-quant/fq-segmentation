@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentCellsNuclei",
   "type": "native-python",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Segment cells AND nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -95,13 +95,13 @@ class ImJoyPlugin():
 
         # Check new size
         new_size_str = ctx.config.new_size
-        if len(new_size_str) == 0:
+        if len(new_size_str) <= 1:  # Seems that for an empty field, the returned string has length 1
             new_size = ()
         else:
             if new_size_str.count(',') == 1:
                 new_size = tuple(int(x) for x in new_size_str.split(','))
             else:
-                print('String to define new size has to contain 1 \",\" to separate the new dimensions in XY.')
+                api.alert('String to define new size has to contain \",\" to separate the new dimensions in XY.')
                 return
 
         # Call pre-processing function

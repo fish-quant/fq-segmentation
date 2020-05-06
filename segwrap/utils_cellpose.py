@@ -92,7 +92,6 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         file_name = file_names[idx]
         maski = masks[idx]
         flowi = flows[idx][0]
-
         imgi = imgs[idx]
         
         # Rescale each channel separately

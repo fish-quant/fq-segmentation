@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -94,7 +94,7 @@ class ImJoyPlugin():
 
         # Check new size
         new_size_str = ctx.config.new_size
-        if len(new_size_str) == 0:
+        if len(new_size_str) <= 1: # Seems that for an empty field, the returned string has length 1
             new_size = ()
         else:
             if new_size_str.count(',') == 1:
