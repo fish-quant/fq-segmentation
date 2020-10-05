@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="segwrap",
-    version="0.0.1.3",
+    version="0.0.1.4",
     author="Florian MUELLER",
     author_email="muellerf.research@gmail.com",
     description="wrapper package for cellpose",

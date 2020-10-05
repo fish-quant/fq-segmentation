@@ -89,8 +89,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
         print(file_proc)
         img = imread(str(file_proc))
 
-        img_properties = {
-                            "file_process": str(file_proc),
+        img_properties = {  "file_process": str(file_proc),
                             "img_name": file_proc.name,
                             "img_path": str(file_proc.parent),
                             "channel_ident": channel_ident,
@@ -105,6 +104,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
 
             for i in range(img.shape[0]):
                 name_save = path_save_indiv / f'{name_base}_Z{str(i+1).zfill(3)}.png'
+                
                 if name_save.is_file():
                     log_message(f'File already exists. will be overwritten {name_save}', callback_fun=callback_log)
                 imsave(name_save, img[i, :, :])
@@ -115,7 +115,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
                 img_proj = img.mean(axis=0)
 
             elif projection_type == 'max':
-                img_proj = img.mean(axis=0)
+                img_proj = img.max(axis=0)
 
             name_save = path_save_results / f'{name_base}.png'
 
