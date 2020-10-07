@@ -106,19 +106,19 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         plot.show_segmentation(fig, imgi_rescale.astype('uint8'), maski, flowi, channels=channels)
         plt.tight_layout()
 
-        plt.savefig(path_save / f'segmentation__{obj_name}__{file_name.stem}.png', dpi=600)
+        plt.savefig(path_save / f'{file_name.stem}__segment__{obj_name}.png', dpi=600)
         plt.close()
 
         # Save mask and flow images
-        imsave(path_save / f'flow__{obj_name}__{file_name.stem}.png', flowi, check_contrast=False)
+        imsave(path_save / f'{file_name.stem}__flow__{obj_name}.png', flowi, check_contrast=False)
 
         if new_size:
             mask_full = resize_mask(maski, sizes_orginal[idx])
 
-            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.png', mask_full.astype('uint16'), check_contrast=False)
-            imsave(path_save / f'mask_resize__{obj_name}__{file_name.stem}.png', maski.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', mask_full.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'{file_name.stem}__mask_resize__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
         else:
-            imsave(path_save / f'mask__{obj_name}__{file_name.stem}.png', maski.astype('uint16'), check_contrast=False)
+            imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
 
     log_message(f"Segmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
     # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
