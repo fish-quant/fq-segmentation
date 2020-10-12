@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentCellsNuclei",
   "type": "native-python",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Segment cells AND nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -16,7 +16,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
         "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
         "<span style='font-weight: 550; color:#666362'>String CELLS</span>: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
         "<span style='font-weight: 550; color:#666362'>String NUCLEI</span>: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
-        "<span style='font-weight: 550; color:#666362'>New size</span>: {id: 'new_size', type: 'string', placeholder: '512,512'}",
+        "<span style='font-weight: 550; color:#666362'>New size</span>: {id: 'new_size', type: 'string', placeholder: '2'}",
         "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 100}",
         "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 50}",
         "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
@@ -60,11 +60,29 @@ class ImJoyPlugin():
         # Get path for debugging
         if api.TAG == 'dev':
             if path_scan == 'paste-path-to-data':
-                path_scan = r'F:\Documents\Data\test-data\cell-pose\jupyter-tests\example_data\analysis\segmentation-input'
+                path_scan = r'D:\Documents\data-test\fish-quant\fq-imjoy-demo\analysis\segmentation-input'
         
         # >>> CHECK INPUT PARAMETERS
 
-        # Path containing the data
+
+        # >> Check new size
+        new_size_str = ctx.config.new_size
+
+        if len(new_size_str) == 0: 
+            new_size = ()
+
+        else:
+            if new_size_str.count(',') == 0:
+                new_size = (int(new_size_str),)
+
+            elif new_size_str.count(',') == 1:
+                new_size = tuple(int(x) for x in new_size_str.split(','))
+
+            else:
+                api.alert('String to define new size has to contain one or zero \",\" to separate the new dimensions in XY.')
+                return
+
+        # >> Path containing the data
         if path_scan == 'paste-path-to-data':
             api.alert('Path containing data to be processed has to be specified.')
             return
@@ -81,7 +99,7 @@ class ImJoyPlugin():
         else:
             input_subfolder = ctx.config.input_subfolder
 
-        # Path to save data
+        # >> Path to save data
 
         # This looks a bit weird, but the default string does not contain the greater sign,
         # but a close unicode replacement (otherwise rendering would not be possible due security risk, strings are sanitised)
@@ -93,18 +111,8 @@ class ImJoyPlugin():
         else:
             path_save = Path(path_save)
 
-        # Check new size
-        new_size_str = ctx.config.new_size
-        if len(new_size_str) <= 1:  # Seems that for an empty field, the returned string has length 1
-            new_size = ()
-        else:
-            if new_size_str.count(',') == 1:
-                new_size = tuple(int(x) for x in new_size_str.split(','))
-            else:
-                api.alert('String to define new size has to contain \",\" to separate the new dimensions in XY.')
-                return
 
-        # Call pre-processing function
+        # >>>> Call pre-processing function
         api.showStatus('Performing segmentation ... see log for details')
         utils_cellpose.segment_cells_nuclei_indiv(
                                       path_scan=path_scan, 

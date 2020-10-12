@@ -118,11 +118,25 @@ def cellpose_predict(data, config, path_save, callback_log=None):
 
             imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', mask_full.astype('uint16'), check_contrast=False)
             imsave(path_save / f'{file_name.stem}__mask_resize__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
+
         else:
             imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
 
     log_message(f"Segmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
     # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
+
+
+def clean_par_dict(par_dict):
+    """
+    Cleam up dictionary containing all parameters such that it can
+    be written into a json file.
+    """
+    par_dict['path_scan'] = str(par_dict['path_scan'])
+    par_dict['path_save'] = str(par_dict['path_save'])
+    par_dict['callback_log'] = str(par_dict['callback_log'])
+    par_dict['callback_progress'] = str(par_dict['callback_progress'])
+    par_dict['callback_status'] = str(par_dict['callback_status'])
+    return par_dict
 
 
 # Function to load and segment objects individually 
@@ -137,13 +151,14 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
         [description]
     img_ext : [type]
         [description]
-    new_size : [type]
-        [description]
+    new_size : tuple
+        Defines resizing of image. If two elements, new size of image. If one element, resizing factor. 
+        If emtpy, no resizing.
     size_nuclei : [type]
         [description]
     model_nuclei : [type]
         [description]
-    path_save : pathlin object or string
+    path_save : pathlib object or string
         Path to save results,
         - If Pathlib object, then this absolute path is used.
         - If 'string' a replacement operation on the provided name of the data path will be applied (see create_output_path).
@@ -164,9 +179,8 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
 
     # Print all input parameters
     par_dict = locals()
+    par_dict = clean_par_dict(par_dict)
     log_message(f"Function (segment_obj_indiv) called with: {str(par_dict)} ", callback_fun=callback_log)
-    par_dict['path_scan'] = str(par_dict['path_scan'])
-    par_dict['path_save'] = str(par_dict['path_save'])
 
     # Configurations
     device = check_device(callback_log=callback_log)
@@ -226,6 +240,13 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
 
         # Resize
         if new_size:
+
+            # New size can also be defined as a scalar factor
+            if len(new_size) == 1:
+                scale_factor = new_size[0]
+                img_size = img.shape
+                new_size = tuple(int(ti/scale_factor) for ti in img_size)
+
             img = resize(img, new_size)
 
         img_zeros = np.zeros(img.shape)
@@ -270,8 +291,9 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         [description]
     img_ext : [type]
         [description]
-    new_size : [type]
-        [description]
+    new_size : tuple
+        Defines resizing of image. If two elements, new size of image. If one element, resizing factor. 
+        If emtpy, no resizing.
     sizes : [type]
         [description]
     models : [type]
@@ -290,9 +312,8 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
     """
 
     par_dict = locals()
+    par_dict = clean_par_dict(par_dict)
     log_message(f"Function (segment_obj_indiv) called with: {str(par_dict)} ", callback_fun=callback_log)
-    par_dict['path_scan'] = str(par_dict['path_scan'])
-    par_dict['path_save'] = str(par_dict['path_save'])
 
     # Get parameters
     (str_cyto, str_nuclei) = strings
@@ -311,11 +332,11 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
     # Configurations
     device = check_device(callback_log=callback_log)
 
-    config_nuclei = {'model_type': model_nuclei, 
+    config_nuclei = {'model_type': model_nuclei,
                      'obj_size': size_nuclei,
                      'device': device}
 
-    config_cyto = {'model_type': model_cells, 
+    config_cyto = {'model_type': model_cells,
                    'obj_size': size_cells,
                    'device': device}
 
@@ -375,6 +396,13 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
 
         # Resize
         if new_size:
+            
+            # New size can also be defined as a scalar factor
+            if len(new_size) == 1:
+                scale_factor = new_size[0]
+                img_size = img_cyto.shape
+                new_size = tuple(int(ti/scale_factor) for ti in img_size)
+            
             img_cyto = resize(img_cyto, new_size)
             img_nuclei = resize(img_nuclei, new_size)
 
