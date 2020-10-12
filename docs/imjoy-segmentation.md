@@ -20,20 +20,28 @@ By defining the `Input subfolder` to be `segmentation-input`, the analysis will 
 ### Results
 Results will be saved in the specified folder. For each image the following files, results files with different suffices are created: 
 
-  *  `flow_...`: these are the predicted distance maps of CellPose. They are an intermediate result, and
-     not needed for most end-users. 
-  *  `mask_...`: these contain the actual segmentation results. Each segmented object is a filled 
+  *  `..._flow`: these are the predicted distance maps of CellPose. They are an intermediate result, and
+     not needed for most end-users.
+  *  `..._mask`: these contain the actual segmentation results. Each segmented object is a filled 
       object with a constant pixel value. If the images were resized during segmentation, the mask is scaled
       back up to the original image size. The actually obtained (smaller) mask is saved under the name `mask__rescale_...`.  
-  *  `segmentation_...`: summary plot showing the input image, the predicted distance map, and the segmented
-     objects. This plot is also shown in the interface. 
+  *  `..._segmentation`: summary plot showing the input image, the predicted distance map, and the segmented
+     objects. This plot is also shown in the interface.
 
 ![segmentation__nuclei](img/segmentation__nuclei.png)
 
 ### Resizing to speed up prediction
 Segmentation speed depends on the image size. In our experience, resizing the images
 can lead to a substantial speed-up. In case you resize the images, we implemented a post-processing
-routine that will resize the predicted masks back to the original image size. 
+routine that will resize the predicted masks back to the original image size.
+
+Resizing can be specified in two ways
+
+1. **Scaling factor** recommended]: simply add an integer value. The actual image size will then be divided by this factor
+   to obtain the new size, i.e. a value of 2 will resize an image 512x512 to 256x256.
+2. **New size**: you can directly define the new size of the image, e.g. 256x256. Please note that this size
+   will be applied to all images, independly of their size. This option is hence not suitable if your data-sets 
+   contain differently sized images. 
 
 ## Recommended workflow
 The default settings of the plugins allow to quickly perform the recommended workflow. You only have 
@@ -49,13 +57,13 @@ to paste your data folder.
 
 1. Before running the plugin, you have to **specify a few parameters**. This can be done in the plugin interface, 
     avaible after clicking on the arrow down next to the plugin name.
-   
-    Here the following parameters can be set: 
+
+    Here the following parameters can be set:
 
     Option           | Type | Default     | Description
     ---------------- | ---- | ----------- | -----------
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
-    `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented. 
+    `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented.
     `Path SAVE` | str  |  | Several options exist. See dedicated section here [below](general-behavior.md#specify-folder-to-save-your-data) for more details.
     `Object name`    | str  |  nuclei | How the object is called.
     `String channel`    | str  |  dapi | Unique identifier to .
@@ -64,24 +72,23 @@ to paste your data folder.
     `Cellpose model`    | str  |  nuclei | Cellpose model for segmentation: `cyto` or `nuclei`. Note that for dense nuclei, the cytoplasmic model might work better. 
     `New size`     | str  | 512, 512 | String to specify new size of image. No resizing if empty.
 
-2. Pressing on the plugin name `SegmentObjects` will start the segmentation. 
+2. Pressing on the plugin name `SegmentObjects` will start the segmentation.
     When using CellPose for the first time, the models for nuclear and cytoplasmic segmentations are downloaded. 
-   
+
     The actual segmentation can take a while, depending on the numberof images that should be segmented 
     (and their size). Progress will be displayed in the ImJoy status bar, and more details provided in the
-    plugin log available by pressing on the `i` next to the plugin name. 
+    plugin log available by pressing on the `i` next to the plugin name.
 
     Once a image is segmented, the results will be saved (see below). So you can monitor the result folder 
-    to verify on the fly if the segmentation works. 
-
+    to verify on the fly if the segmentation works.
 
 ## Segmentation of cells AND nuclei
 ![imjoy-segment-cells-nuclei-ui](img/imjoy-segment-cells-nuclei-ui.png){: style="width:300px"}
 
 1. Before running the plugin, you have to **specify a few parameters**. This can be done in the plugin interface, 
     avaible after clicking on the arrow down next to the plugin name.
-   
-    Here the following parameters can be set: 
+
+    Here the following parameters can be set:
 
     Option           | Type | Default     | Description
     ---------------- | ---- | ----------- | -----------
