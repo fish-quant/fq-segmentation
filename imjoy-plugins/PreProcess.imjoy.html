@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "PreProcess",
   "type": "native-python",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -39,11 +39,16 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 from imjoy import api
 from pathlib import Path
 
+import segwrap
 from segwrap import utils_segmentation
 
 class ImJoyPlugin():
-    def setup(self):
-        api.log('initialized')
+
+    async def setup(self):
+        api.log('>>> Plugin PreProcess initialized')
+        api.log(f" * plugin version: {await api.getConfig('_version')}")
+        api.log(f' * segwrap version: {segwrap.__version__}')
+        api.log(f' * utils_segmentation location: {utils_segmentation.__file__}')
 
     def run(self, ctx):
         

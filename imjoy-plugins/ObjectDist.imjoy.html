@@ -6,7 +6,7 @@ ImJoy plugin to calculate images facilitating distance calculations.
 {
   "name": "ObjectDist",
   "type": "native-python",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -38,11 +38,16 @@ ImJoy plugin to calculate images facilitating distance calculations.
 from imjoy import api
 from pathlib import Path
 
+import segwrap
 from segwrap import utils_masks
 
 class ImJoyPlugin():
-    def setup(self):
-        api.log('initialized')
+
+    async def setup(self):
+        api.log('>>> Plugin ObjectDist initialized')
+        api.log(f" * plugin version: {await api.getConfig('_version')}")
+        api.log(f' * segwrap version: {segwrap.__version__}')
+        api.log(f' * utils_masks location: {utils_masks.__file__}')
 
     def run(self, ctx):
         
