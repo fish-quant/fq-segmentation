@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -43,11 +43,16 @@ from imjoy import api
 from pathlib import Path
 import asyncio
 
+import segwrap
 from segwrap import utils_cellpose
 
 class ImJoyPlugin():
-    def setup(self):
-        api.log('Plugin SegmentCellsNuclei initialized')
+
+    async def setup(self):
+        api.log('>>> Plugin SegmentObjects initialized')
+        api.log(f" * plugin version: {await api.getConfig('_version')}")
+        api.log(f' * segwrap version: {segwrap.__version__}')
+        api.log(f' * utils_cellpose location: {utils_cellpose.__file__}')
 
     async def run(self, ctx):
         

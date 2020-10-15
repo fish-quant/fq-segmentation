@@ -1,5 +1,5 @@
 numpy <1.17.0
 scikit-image
 tqdm
-cellpose
+cellpose == 0.0.1.25
 scipy 
