@@ -122,7 +122,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         else:
             imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
 
-    log_message(f"Segmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
+    log_message(f"\nSegmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
     # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
 
 
@@ -236,6 +236,10 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
 
         # Read images
         img = imread(str(path_img))
+        if img.ndim != 2:
+            log_message(f'\nERROR\n  Input image has to be 2D. Current image is {img.ndim}D', callback_fun=callback_log)
+            continue
+        
         sizes_orginal.append(img.shape)
 
         # Resize
@@ -272,9 +276,10 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
         cellpose_predict(data, config, path_save=path_save_results, callback_log=callback_log)
 
     # Save settings
-    fp = open(str(path_save_results / 'segmentation_settings.json'), "w")
-    json.dump(par_dict, fp, indent=4, sort_keys=True)
-    fp.close()
+    if len(imgs) > 0:
+        fp = open(str(path_save_results / 'segmentation_settings.json'), "w")
+        json.dump(par_dict, fp, indent=4, sort_keys=True)
+        fp.close()
 
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
 
@@ -391,7 +396,15 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
 
         # Read images
         img_cyto = imread(str(path_cyto))
+        if img_cyto.ndim != 2:
+            log_message(f'\nERROR\n  Input image of cell has to be 2D. Current image is {img_cyto.ndim}D', callback_fun=callback_log)
+            continue
+        
         img_nuclei = imread(str(path_nuclei))
+        if img_nuclei.ndim != 2:
+            log_message(f'\nERROR\n  Input image of cell has to be 2D. Current image is {img_nuclei.ndim}D', callback_fun=callback_log)
+            continue
+        
         sizes_orginal.append(img_cyto.shape)
 
         # Resize
@@ -444,9 +457,10 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         cellpose_predict(data_nuclei, config_nuclei, path_save=path_save_results, callback_log=callback_log)
 
     # Save settings
-    fp = open(str(path_save_results / 'segmentation_settings.json'), "w")
-    json.dump(par_dict, fp, indent=4, sort_keys=True)
-    fp.close()
+    if len(imgs_cyto) > 0:
+        fp = open(str(path_save_results / 'segmentation_settings.json'), "w")
+        json.dump(par_dict, fp, indent=4, sort_keys=True)
+        fp.close()
 
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
 
