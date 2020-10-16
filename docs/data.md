@@ -1,5 +1,10 @@
 # Data
 
+Please note that we recommend a **data organization**, described below, to facilitate the usage of these tools. 
+
+We provide test data, which allows you to inspect how the data is organized, but then also run a local installation
+of these tools to see if everything works correctly.
+
 ## Test data
 Already processed test data can be downloaded from [**Dropbox**](https://www.dropbox.com/sh/yr1s5olqwkvyx0i/AADH0QQtdNuWWq7z9wgQpLiOa?dl=0). With these data, you can verify if the different analysis steps are properly executed.
 

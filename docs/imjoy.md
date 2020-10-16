@@ -7,8 +7,7 @@
 * Some of its main **features** are:
 
     1. Specific functionality is provided by **plugins**, which can be installed with simple links. Available 
-        plugins are listed in the plugin list on the left part of the interface. Plugins using Python require 
-        a Plugin engine to be executed. Installation and usasage is detailed below.  
+        plugins are listed in the plugin list on the left part of the interface. Plugins using Python require a Plugin engine to be executed. Installation and usasage is detailed below.  
 
     2. ImJoy can have several **workspaces**. Each workspace can contain multiple plugins and is 
         dedicated to a specific data processing task. Workspaces can be selected from little puzzle 
@@ -19,6 +18,7 @@
 ## Basic usage
 
 ### Installing plugins
+
 We provide links to install ImJoy plugins for the different workflows. 
 
 If you press on the installation link, the ImJoy app will open and display a
@@ -27,28 +27,56 @@ the `install` button.
 
 ![imjoy-plugin-installation](img/imjoy-plugin-installation.png){: style="width:400px"}
 
-These installation links also specify in which **ImJoy workspaces** the plugin will be installed.  
+These installation links also specify in which [ImJoy workspaces](imjoy.md#opening-a-workspace) the plugin will be installed. 
 
 ### Opening a workspace
+
 Once a plugin is installed, ImJoy remembers the workspaces and plugins it contains. 
 
 If you want to redo an analysis, you simply have to open the [ImJoy app](https://imjoy.io/#/app) 
-and select the appropriate (`fq-segmentation` for this package): 
-
-![imjoy-workspacer.gif](img/imjoy-workspace.gif){: style="width:500px"}
+and select the workspace `fq-segmentation` for this package. 
 
 If **updates** for the installed plugins 
 are available, you will see a corresponding symbol next to the plugin name.
 
-## Running Python plugins 
+![imjoy-workspacer.gif](img/imjoy-workspace.gif){: style="width:500px"}
+
+## Running Python plugins
+
 Most of the provided plugins use Python for data processing. To use these plugins, 
 you have to connect ImJoy to a Plugin engine. For this repository, we use **Jupyter notebooks** as 
-and engine, which can be installed via Miniconda (see installation instructions [below](#install-jupyter-engine-for-imjoy)). 
+and engine, which can be installed via Miniconda (see installation instructions below [below](#install-jupyter-engine-for-imjoy)). 
+
+### Install Jupyter engine for ImJoy
+
+This you only need to do **once**.
+
+We recommend installing [**Miniconda** with Python](https://docs.conda.io/en/latest/miniconda.html): 
+choose latest Python version (3.X) and your operating system. You  can then use the annoconda prompt 
+to excecute the commands listed below. 
+
+We recommend creating a **dedicated environment** to run code in this analysis package. To create an environment called `fq-segmentation`, open an anaconda prompt and type (Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`):
+
+``` bash
+conda create --name fq-segmentation python=3.7
+```
+
+**Activate the environment**:
+
+``` bash
+conda activate fq-segmentation
+```
+
+**Install code Jupyter optimized for ImJoy**:
+
+``` bash
+pip install -U imjoy
+```
 
 ### Connect Jupyter engine
 
 Once installed Jupyter is installed, you can start a Jupyter Notebook in the anaconda terminal, 
-to which ImJoy can connect. 
+to which ImJoy can connect.
 
 * Please note that this engine runs on your local machine, so no data-transfer over the internet is taking place. 
 * In order to connect a Jupyter engine, you need to specify its url that also contains a token (a passphrase). 
@@ -58,16 +86,15 @@ to which ImJoy can connect.
 ![terminal-launch-jupyter.png](img/terminal-launch-jupyter.png)
 
 1. Launch a **Jupyter Engine for ImJoy**:
-   
+
     1. Start an **anaconda terminal**. 
     2. **Activate the environment**: `conda activate fq-segmentation`
     3. **Start Jupyter engine**: `imjoy --jupyter`
     4. **First time only**: copy the provided URL including the token, 
         e.g. `http://127.0.0.1:8888/?token=8b4885e452db1af7cd7b3cfa6c62036cbae46995e473c25e`
-        
- 
-2. **Connect ImJoy to Jupyter Engine**: 
-   
+
+2. **Connect ImJoy to Jupyter Engine**:
+
     1. In the ImJoy app, press on the rocket symbol in the upper right corner.
          * **First time only**: select `Add Jupyter-Engine`, paste the URL from the step above, and you can give a new name to the engine
          * **Subsequent use**: press on the pre-defined plugin engine to connect to it (of course you have to launch it first).
@@ -81,73 +108,43 @@ to which ImJoy can connect.
 
    ![imjoy-connect-jupyter.gif](img/imjoy-connect-jupyter.gif)
 
-
 ### Managing plugin engines
+
 ImJoy remembers the plugin engines it connected to (including the token). You can obtain the list of all
-registered engines by pressing on the rocket symbol. 
+registered engines by pressing on the rocket symbol.
 
 ![imjoy-plugin-manager.png](img/imjoy-plugin-manager.png){: style="width:300px"}
 
-* **Connected engines** will be shown with their name in black, and a red cross next to the name. Pressing the cross will disconnect ImJoy from the engine, but it will remain in the list. 
-* **Known engines** (but not connected) will be shown with their name in gray, with a little trash symbol next to them. Pressing on the trash symbol will remove the engine. 
+* **Connected engines** will be shown with their name in black, and a red cross next to the name. Pressing the cross will disconnect ImJoy from the engine, but it will remain in the list.
+* **Known engines** (but not connected) will be shown with their name in gray, with a little trash symbol next to them. Pressing on the trash symbol will remove the engine.
 
-
-## Install Jupyter engine for ImJoy
-We recommend installing an [**Miniconda** with Python](https://docs.conda.io/en/latest/miniconda.html): 
-choose Python 3.7 and your operating system. You  can then use the annoconda prompt to excecute the different commands listed below. 
-
-We further recommend creating a **dedicated environment** to run code in this analysis package. This guarantess that only necessary code is installed. 
-To create an environment called `fq-segmentation`, open an anaconda prompt and type
-(Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`): 
-
-```
-conda create --name fq-segmentation python=3.7
-```
-
-**Activate the environment**:
-```
-conda activate fq-segmentation
-```
-
-**Install code Jupyter optimized for ImJoy**:
-```
-pip install -U imjoy
-```
-
-## Trouble-shooting
+## FAQ
 
 ### Plugin running on wrong engine
+
 You have several options
 
-* Disconnect or delete the engine the plugin is connecting to (see )[here](#managing-plugin-engines)).
+* Disconnect or delete the engine the plugin is connecting to see [here](#managing-plugin-engines)).
 * In the plugin menu (clicking on the little puzzle symbol left of the plugin name), select the appropriate engine.
 
-
 ### Remove conda environment
+
 At one point, your conda environment might get corrupted. You can easily remove it, and create a new one
 
 1. Open anaconda terminal
-0. **Activate base environment**: `conda activate base`
+0. **Activate base environment**: `conda deactivate`
 0. **Remove `fq-segmentation` environment**: `conda env remove --name fq-segmentation`
 
-
-### Reporting bugs
-Detailed installation logs are provided in the console of the browser. Information in this log, can facilitate the correction of encountered bugs. When reporting problems with this package, please provide the log copied to text file. 
-
-To acces the console log in **Chrome**:
-
-1. In the ImJoy app mouse-right-click. 
-2. Select `Inspect`. 
-3. This will open a new interface on the right size of your browser windows. Select the panel `Console` and copy the entire content, and paste it to a file.  
-
 ### Specify your own Jupyter token
+
 You can specify your own token `yourtoken`
 
-```
+``` bash
 imjoy --jupyter --token yourtoken
 ```
+
 When launched like this, you will not get the full Jupyter URL in the terminal, but `http://localhost:8888/?token=...`.
 
 When copying this link to the ImJoy app for the first time you have to replace the `...` by the token you actually specified.
 
-The next time you start jupyter with `imjoy --jupyter` your custom token will be used
+The next time you start jupyter with `imjoy --jupyter` your custom token will be used.

@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "PreProcess",
   "type": "native-python",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Pre-process 3D images to obtain 2D images for segmentation.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -52,6 +52,7 @@ class ImJoyPlugin():
 
     def run(self, ctx):
         
+        api.log('>>> Plugin PreProcess running. Called with parameters:')
         api.log(ctx.config)
 
         # Path containing data, and to save results
