@@ -82,7 +82,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
 
     # Perform segmentation with CellPose
     model = models.Cellpose(device, model_type=model_type )  # model_type can be 'cyto' or 'nuclei'
-    masks, flows, styles, diams = model.eval(imgs, diameter=obj_size, channels=channels, net_avg=False, threshold=0.4)
+    masks, flows, styles, diams = model.eval(imgs, diameter=obj_size, channels=channels)
 
     # Display and save results
     log_message(f'\n Creating outputs ...\n', callback_fun=callback_log)
