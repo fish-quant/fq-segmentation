@@ -21,8 +21,8 @@ theme:
     - 404.html
 
   # Don't include MkDocs' JavaScript
-  include_search_page: false
-  search_index_only: true
+  #include_search_page: false
+  #search_index_only: true
 
   # Default values, taken from mkdocs_theme.yml
   language: en
@@ -46,14 +46,14 @@ extra:
 
 # MD extension
 markdown_extensions:
-  - toc:
-      permalink: true
   - admonition
   - pymdownx.details
   - pymdownx.tasklist
   - pymdownx.superfences
   - pymdownx.tilde
   - attr_list
+  - toc:
+      permalink: true
 
 nav:
     - Overview: index.md   # Needed for material theme but not for other
@@ -63,11 +63,10 @@ nav:
       - Installation: imjoy-installation.md
       - FAQ: imjoy-faq.md
 
-    - Data: data.md
-    
     - ImJoy Analysis:
       - Overview: analysis-overview.md
       - General behavior: analysis-general-behavior.md 
+      - Data: data.md
       - Preprocessing: analysis-preprocessing.md
       - Segmentation: analysis-segmentation.md
 
@@ -78,10 +77,11 @@ nav:
       - Create FQ outline files: workflows-create-fq-outlines.md
 
     - Advanced:
-      - Developer notes: developer-notes.md
+      - Developers: developer.md
+    
+    - More:  
       - Licence: licence.md
-
-    - Contact: contact.md
+      - Contact: contact.md
 
 #theme:
 #  name: 'material'

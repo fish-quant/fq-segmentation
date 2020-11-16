@@ -1,3 +1,8 @@
+# ImJoy installation
+
+Here we describe how you can install and maintain the ImJoy Jupyter plugin engine, which is
+needed to run the Python code for cell/nuclear segmentation and the pre/post processing 
+workflows. 
 
 ## Install Jupyter engine for ImJoy
 
@@ -69,34 +74,3 @@ registered engines by pressing on the rocket symbol.
 
 * **Connected engines** will be shown with their name in black, and a red cross next to the name. Pressing the cross will disconnect ImJoy from the engine, but it will remain in the list.
 * **Known engines** (but not connected) will be shown with their name in gray, with a little trash symbol next to them. Pressing on the trash symbol will remove the engine.
-
-### FAQ
-
-### Plugin running on wrong engine
-
-You have several options
-
-* Disconnect or delete the engine the plugin is connecting to see [here](#managing-plugin-engines)).
-* In the plugin menu (clicking on the little puzzle symbol left of the plugin name), select the appropriate engine.
-
-### Remove conda environment
-
-At one point, your conda environment might get corrupted. You can easily remove it, and create a new one
-
-1. Open anaconda terminal
-0. **Activate base environment**: `conda deactivate`
-0. **Remove `fq-segmentation` environment**: `conda env remove --name fq-segmentation`
-
-### Specify your own Jupyter token
-
-You can specify your own token `yourtoken`
-
-``` bash
-imjoy --jupyter --token yourtoken
-```
-
-When launched like this, you will not get the full Jupyter URL in the terminal, but `http://localhost:8888/?token=...`.
-
-When copying this link to the ImJoy app for the first time you have to replace the `...` by the token you actually specified.
-
-The next time you start jupyter with `imjoy --jupyter` your custom token will be used.

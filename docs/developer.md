@@ -1,15 +1,18 @@
 
-## Documentation
+# Developer
 
+Here we provide some information for developers who want to contribute to this repository. 
+
+## Documentation
 Documentation is written with mkdocs using the readthedocs theme.
 
 * [mkdocs website](https://www.mkdocs.org/)
 
-# Installation
+### Installation
 
 Install mkdocs:  `pip install mkdocs`
 
-# Basic use
+### Basic use
 
 * Launch dev-server: `mkdocs serve`
 * Building the site: `mkdocs build`
@@ -17,7 +20,9 @@ Install mkdocs:  `pip install mkdocs`
 
     __Note__ if this does not work, force commit with `mkdocs gh-deploy --clean --force`
 
-## Update imjoy manifest
+## ImJoy plugins
+
+### Update imjoy manifest
 
 After changes in ImJoy plugins, update the plugin manifest.
 

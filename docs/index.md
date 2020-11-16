@@ -16,9 +16,7 @@ __How to get started:__
 
 ## Python? ImJoy? Plugin engine?
 
-For new users it might be a bit confusing how the different software packages work together. We hence provide here a small overview of hwo the different pieces work together.
-
-There are **three essential parts**:
+For new users it might be a bit confusing how the different software packages work together. We hence provide here a small overview of hwo the different pieces work together. There are **three essential parts**:
 
 ![fq-get-version.gif](img/segmentation-overview.png){: style="width:500px"}
 
@@ -31,4 +29,5 @@ There are **three essential parts**:
 2. **ImJoy**: ImJoy is a plugin powered computing platform to deploy advanced image analysis tools. Here, we provide as a set of such plugins. Plugins can be installed with a simple installation link. More details about ImJoy and how it can be installed, can be found in the decicated overview section.
 3. **Plugin Engine**: the ImJoy app is running in your webbrowser (prefereably Chrome). In order to perform computations, you have to install a 
 so-called plugin engine. ImJoy can connect to such an engine, and launch data processing tasks. Importantly, this engine can run locally or remotely, but the ImJoy interface will always be the same. YOu have to install this engine once. Each time you want to use FISH-quant, you have to launch it and connect ImJoy to this engine.
+
 
