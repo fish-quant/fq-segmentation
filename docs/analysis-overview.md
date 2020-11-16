@@ -15,10 +15,9 @@ Each **workflow** is documented in a dedicated section. We provide
 
 ## ImJoy plugins
 Most of the workflows are implemented as **ImJoy plugins**, with a simple interface to
-specify the different workflow parameters. We describe in a dedicated [section](imjoy.md) how to **use ImJoy** and the
-**Plugin engine** to run these plugins. 
+specify the different workflow parameters. We describe in a dedicated [sections] how to [**use**](imjoy-overview.md) and  [**install**](imjoy-installation.md) the **Plugin engine** to run these plugins. 
 
-Once a plugin is installed, it will be available for later use in the ImJoy **workspace `fq-segmentation`** as explained [here](imjoy.md#opening-a-workspace). 
+Once a plugin is installed, it will be available for later use in the ImJoy **workspace `fq-segmentation`** as explained [here](imjoy-overview.md#opening-a-workspace). 
 
 !!! abstract "Quick summary for how to connect ImJoy to Jupyter engine"
     1. Open **anaconda terminal**. 

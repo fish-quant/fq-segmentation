@@ -31,7 +31,7 @@ the `install` button.
 
 ![imjoy-plugin-installation](img/imjoy-plugin-installation.png){: style="width:400px"}
 
-These installation links also specify in which [ImJoy workspaces](imjoy.md#opening-a-workspace) the plugin will be installed. 
+These installation links also specify in which [ImJoy workspaces](imjoy-overview.md#opening-a-workspace) the plugin will be installed. 
 
 ## Opening a workspace
 
