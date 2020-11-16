@@ -1,4 +1,6 @@
 
+# Segmentation with ImJoy and Cellpose
+
 This repository provides convience wrapper code for the **segmentation of cells and nuclei**. 
 
 __How to get started:__
