@@ -1,17 +1,18 @@
 
+# Developer
+
+Here we provide some information for developers who want to contribute to this repository. 
+
 ## Documentation
-Documentation is written with mkdocs using the Material style.
+Documentation is written with mkdocs using the readthedocs theme.
 
 * [mkdocs website](https://www.mkdocs.org/)
-* [Material for mkdocs](https://squidfunk.github.io/mkdocs-material/)
 
-# Installation
+### Installation
 
 Install mkdocs:  `pip install mkdocs`
 
-Install Material: `pip install mkdocs-material`
-
-# Basic use
+### Basic use
 
 * Launch dev-server: `mkdocs serve`
 * Building the site: `mkdocs build`
@@ -19,16 +20,20 @@ Install Material: `pip install mkdocs-material`
 
     __Note__ if this does not work, force commit with `mkdocs gh-deploy --clean --force`
 
-## Update imjoy manifest
+## ImJoy plugins
+
+### Update imjoy manifest
+
 After changes in ImJoy plugins, update the plugin manifest.
 
 Install `node.js` with conda
 
-```
+``` bash
 conda install -c conda-forge nodejs
 ```
 
 Run this command in project root path
-```
+
+``` bash
 node update_manifest.js
 ```

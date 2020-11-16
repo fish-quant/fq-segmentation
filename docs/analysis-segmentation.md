@@ -7,7 +7,8 @@ We provide different plugins for different segmentation tasks:
 ## General behavior
 
 ### Recursive search
-The plugins will search [**recursively**](general-behavior.md#recursive-search-for-data) the provided subfolder for images to segment. 
+
+The plugins will search [**recursively**](analysis-general-behavior.md#recursive-search-for-data) the provided subfolder for images to segment. 
 
 By default, all images matching the naming scheme will be processed. An optional parameter allows to specify
 in which subfolder the images have to be in order to be segmented. This allows to process nested folder
@@ -18,6 +19,7 @@ This would then scan this folder and all subfolders and potentially find inappro
 By defining the `Input subfolder` to be `segmentation-input`, the analysis will be restricted to this folder. 
 
 ### Results
+
 Results will be saved in the specified folder. For each image the following files, results files with different suffices are created: 
 
   *  `..._flow`: these are the predicted distance maps of CellPose. They are an intermediate result, and
@@ -31,6 +33,7 @@ Results will be saved in the specified folder. For each image the following file
 ![segmentation__nuclei](img/segmentation__nuclei.png)
 
 ### Resizing to speed up prediction
+
 Segmentation speed depends on the image size. In our experience, resizing the images
 can lead to a substantial speed-up. In case you resize the images, we implemented a post-processing
 routine that will resize the predicted masks back to the original image size.
@@ -41,9 +44,10 @@ Resizing can be specified in two ways
    to obtain the new size, i.e. a value of 2 will resize an image 512x512 to 256x256.
 2. **New size**: you can directly define the new size of the image, e.g. 256x256. Please note that this size
    will be applied to all images, independly of their size. This option is hence not suitable if your data-sets 
-   contain differently sized images. 
+   contain differently sized images.
 
 ## Recommended workflow
+
 The default settings of the plugins allow to quickly perform the recommended workflow. You only have 
 to paste your data folder.  
 
@@ -64,7 +68,7 @@ to paste your data folder.
     ---------------- | ---- | ----------- | -----------
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
     `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented.
-    `Path SAVE` | str  |  | Several options exist. See dedicated section here [below](general-behavior.md#specify-folder-to-save-your-data) for more details.
+    `Path SAVE` | str  |  | Several options exist. See dedicated section here [below](analysis-general-behavior.md#specify-folder-to-save-your-data) for more details.
     `Object name`    | str  |  nuclei | How the object is called.
     `String channel`    | str  |  dapi | Unique identifier to .
     `String img ext`     | str  | .png | File extension of images that should be segmented.
@@ -83,6 +87,7 @@ to paste your data folder.
     to verify on the fly if the segmentation works.
 
 ## Segmentation of cells AND nuclei
+
 ![imjoy-segment-cells-nuclei-ui](img/imjoy-segment-cells-nuclei-ui.png){: style="width:300px"}
 
 1. Before running the plugin, you have to **specify a few parameters**. This can be done in the plugin interface, 
