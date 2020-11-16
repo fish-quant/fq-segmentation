@@ -38,7 +38,7 @@ These installation links also specify in which [ImJoy workspaces](imjoy.md#openi
 Once a plugin is installed, ImJoy remembers the workspaces and plugins it contains. 
 
 If you want to redo an analysis, you simply have to open the [ImJoy app](https://imjoy.io/#/app) 
-and select the workspace `fq-segmentation` for this package.
+and select the workspace `fq-segmentation` for this package. 
 
 If **updates** for the installed plugins 
 are available, you will see a corresponding symbol next to the plugin name.

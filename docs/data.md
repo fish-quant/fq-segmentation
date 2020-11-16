@@ -11,7 +11,7 @@ Already processed test data can be downloaded from [**Dropbox**](https://www.dro
 ## Data organization
 We strongly recommend the following data-organization on which this workflow has been tested.
 
-1. Images are store as single-channel multi-z-stack tif files, e.g on tif per position and channel. If your data are not single-channel, see the section on how to split channels with [Fiji](fiji-split-channels.md).
+1. Images are store as single-channel multi-z-stack tif files, e.g on tif per position and channel. If your data are not single-channel, see the section on how to split channels with [Fiji](workflows-fiji-split-channels.md).
 2. All raw 3D images are stored in a folder `acquisition`
 3. All analysis results are stored in subfolder `analysis`, where each analysis step has a separate subfolder.
 

@@ -14,7 +14,7 @@ copyright: 'Copyright &copy; 2019 Florian MUELLER'
 
 # Configuration
 theme:
-  name: 'material'
+  name: 'readthedocs'
   #name: mkdocs
   # 404 page
   static_templates:
@@ -57,24 +57,31 @@ markdown_extensions:
 
 nav:
     - Overview: index.md   # Needed for material theme but not for other
-    - ImJoy: imjoy.md  
+    
+    - ImJoy: 
+      - Overview: imjoy-overview.md  
+      - Installation: imjoy-installation.md
+      - FAQ: imjoy-faq.md
+
     - Data: data.md
     
     - ImJoy Analysis:
-      - Overview: imjoy-overview.md
-      - General behavior: general-behavior.md 
-      - Preprocessing: imjoy-preprocessing.md
-      - Segmentation: imjoy-segmentation.md
+      - Overview: analysis-overview.md
+      - General behavior: analysis-general-behavior.md 
+      - Preprocessing: analysis-preprocessing.md
+      - Segmentation: analysis-segmentation.md
 
     - Diverse workflows:
-      - Overview: diverse-workflows-overview.md
-      - Split channels: fiji-split-channels.md
-      - Distance to objects: distance-objects.md
-      - Create FQ outline files: create-fq-outlines.md
+      - Overview: workflows-overview.md
+      - Split channels: workflows-fiji-split-channels.md
+      - Distance to objects: workflows-distance-objects.md
+      - Create FQ outline files: workflows-create-fq-outlines.md
 
     - Advanced:
       - Developer notes: developer-notes.md
       - Licence: licence.md
+
+    - Contact: contact.md
 
 #theme:
 #  name: 'material'
