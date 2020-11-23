@@ -4,21 +4,24 @@
 Here we provide some information for developers who want to contribute to this repository. 
 
 ## Documentation
-Documentation is written with mkdocs using the readthedocs theme.
+Documentation 
 
-* [mkdocs website](https://www.mkdocs.org/)
+* is **written** with mkdocs using the readthedocs theme: [mkdocs website](https://www.mkdocs.org/)
 
-### Installation
+* **Online documentation** is automatically build by [readthedocs.com](https://readthedocs.org/) from the GitHub repository.
+
+
+### Local build
+
+You can build the documentation locally, before pushing to GitHub:
 
 Install mkdocs:  `pip install mkdocs`
 
-### Basic use
+__Basic use__:
 
 * Launch dev-server: `mkdocs serve`
 * Building the site: `mkdocs build`
-* Deploy to GitHub pages: `mkdocs gh-deploy`
 
-    __Note__ if this does not work, force commit with `mkdocs gh-deploy --clean --force`
 
 ## ImJoy plugins
 
