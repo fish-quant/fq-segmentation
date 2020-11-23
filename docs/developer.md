@@ -1,10 +1,11 @@
 
 # Developer
 
-Here we provide some information for developers who want to contribute to this repository. 
+Here we provide some information for developers who want to contribute to this repository.
 
 ## Documentation
-Documentation 
+
+Documentation
 
 * is **written** with mkdocs using the readthedocs theme: [mkdocs website](https://www.mkdocs.org/)
 
