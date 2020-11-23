@@ -6,7 +6,7 @@
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
-For more information, please consult the dedicated [**documentation**](https://fish-quant.github.io/segmentation/).
+For more information, please consult the dedicated [**documentation**](https://fq-segmentation.readthedocs.io/en/latest/).
 
 If you encounter a problems, please file an [**issue**](https://github.com/fish-quant/segmentation/issues).
 
