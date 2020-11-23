@@ -10,7 +10,6 @@ Documentation
 
 * **Online documentation** is automatically build by [readthedocs.com](https://readthedocs.org/) from the GitHub repository.
 
-
 ### Local build
 
 You can build the documentation locally, before pushing to GitHub:
@@ -21,7 +20,6 @@ __Basic use__:
 
 * Launch dev-server: `mkdocs serve`
 * Building the site: `mkdocs build`
-
 
 ## ImJoy plugins
 
