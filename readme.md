@@ -2,7 +2,8 @@
 [![powered by ImJoy](https://imjoy.io/static/badge/powered-by-imjoy-badge.svg)](https://imjoy.io/)
 ![GitHub](https://img.shields.io/github/license/muellerflorian/segmentation)
 [![Documentation Status](https://readthedocs.org/projects/fq-segmentation/badge/?version=latest)](https://fq-segmentation.readthedocs.io/en/latest/?badge=latest)
-      
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+
 # Overview
 This repository provides wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 
