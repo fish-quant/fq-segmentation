@@ -1,15 +1,15 @@
 
 # Developer
 
-Here we provide some information for developers who want to contribute to this repository. 
+Here we provide some information for developers who want to contribute to this repository.
 
 ## Documentation
-Documentation 
+
+Documentation
 
 * is **written** with mkdocs using the readthedocs theme: [mkdocs website](https://www.mkdocs.org/)
 
 * **Online documentation** is automatically build by [readthedocs.com](https://readthedocs.org/) from the GitHub repository.
-
 
 ### Local build
 
@@ -21,7 +21,6 @@ __Basic use__:
 
 * Launch dev-server: `mkdocs serve`
 * Building the site: `mkdocs build`
-
 
 ## ImJoy plugins
 
