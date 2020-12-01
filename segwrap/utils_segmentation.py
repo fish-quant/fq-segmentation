@@ -106,7 +106,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
                 name_save = path_save_indiv / f'{name_base}_Z{str(i+1).zfill(3)}.png'
 
                 if name_save.is_file():
-                    log_message(f'File already exists. will be overwritten {name_save}', callback_fun=callback_log)
+                    log_message(f'File already exists. Will be overwritten {name_save}', callback_fun=callback_log)
                 imsave(name_save, img[i, :, :])
 
         else:
@@ -120,5 +120,5 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
             name_save = path_save_results / f'{name_base}.png'
 
             if name_save.is_file():
-                log_message(f'File already exists. will be overwritten {name_save}', callback_fun=callback_log)
+                log_message(f'File already exists. Will be overwritten {name_save}', callback_fun=callback_log)
             imsave(name_save, img_proj.astype('uint16'))
