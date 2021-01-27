@@ -17,7 +17,7 @@ We strongly recommend the following data-organization on which this workflow has
 
 The organization of the provided test data is the following
 
-```
+``` bash
 ├─ example_data/
 │  ├─ acquisition                          # Folder with raw data
 │  │  ├─ test_pos001_cy3.tif

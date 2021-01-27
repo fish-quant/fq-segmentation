@@ -9,7 +9,7 @@ We provide different plugins for different segmentation tasks:
 
 ### Recursive search
 
-The plugins will search [**recursively**](analysis-general-behavior.md#recursive-search-for-data) the provided subfolder for images to segment. 
+The plugins will search [**recursively**](analysis-general-behavior.md#recursive-search-for-data) the provided subfolder for images to segment.
 
 By default, all images matching the naming scheme will be processed. An optional parameter allows to specify
 in which subfolder the images have to be in order to be segmented. This allows to process nested folder
@@ -21,7 +21,7 @@ By defining the `Input subfolder` to be `segmentation-input`, the analysis will 
 
 ### Results
 
-Results will be saved in the specified folder. For each image the following files, results files with different suffices are created: 
+Results will be saved in the specified folder. For each image the following files, results files with different suffices are created:
 
 * `..._flow`: these are the predicted distance maps of CellPose. They are an intermediate result, and
      not needed for most end-users.
