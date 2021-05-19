@@ -65,17 +65,17 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         imgi_norm  = cv2.normalize(imgi, None, 0, 255, cv2.NORM_MINMAX).astype('uint8')
 
         # Save mask and flow images
-        f_mask = str(path_save / f'mask__{file_name.stem}.png')
+        f_mask = str(path_save / f'{file_name.stem}__mask__{obj_name}.png')
         log_message(f'\nMask saved to file: {f_mask}\n', callback_fun=callback_log)
 
-        io.imsave(str(path_save / f'mask__{file_name.stem}.png'), maski)
-        io.imsave(str(path_save / f'flow__{file_name.stem}.png'), flowi)
+        io.imsave(str(path_save / f'{file_name.stem}__mask__{obj_name}.png'), maski)
+        io.imsave(str(path_save / f'{file_name.stem}__flow__{obj_name}.png'), flowi)
 
         # Save overview image
         fig = plt.figure(figsize=(12,3))
         plot.show_segmentation(fig, imgi_norm, maski,flowi)
         plt.tight_layout()
-        fig.savefig(str(path_save / f'seg__{file_name.stem}.png'), dpi=300)
+        fig.savefig(str(path_save / f'{file_name.stem}__seg__{obj_name}.png'), dpi=300)
         plt.close(fig)
 
     log_message(f"\nSegmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)

@@ -21,14 +21,14 @@ By defining the `Input subfolder` to be `segmentation-input`, the analysis will 
 
 ### Results
 
-Results will be saved in the specified folder. For each image the following files, results files with different prefixes are created:
+Results will be saved in the specified folder. For each image the following files, results files with different suffixes are created:
 
-* `flow_ ...`: these are the predicted distance maps of CellPose. They are an intermediate result, and
+* `..._flow`: these are the predicted distance maps of CellPose. They are an intermediate result, and
      not needed for most end-users.
-* `mask_ ...`: these contain the actual segmentation results. Each segmented object is a filled 
+* `..._mask`: these contain the actual segmentation results. Each segmented object is a filled 
       object with a constant pixel value. If the images were resized during segmentation, the mask is scaled
       back up to the original image size. The actually obtained (smaller) mask is saved under the name `mask__rescale_...`.  
-* `seg_...`: summary plot showing the input image, the predicted distance map, and the segmented
+* `..._seg`: summary plot showing the input image, the predicted distance map, and the segmented
      objects. This plot is also shown in the interface.
 
 ![segmentation__nuclei](img/segmentation__nuclei.png)
@@ -38,9 +38,9 @@ Results will be saved in the specified folder. For each image the following file
 The default settings of the plugins allow to quickly perform the recommended workflow. You only have 
 to paste your data folder.  
 
-1. 2D images are stored in a subfolder  `segmentation-input`
+1. 2D images are stored in a subfolder `segmentation-input`
 2. Segmentation results will be stored in a subfolder `segmentation-results`, this can be achieved by setting
-    the save path to the string replacement  `segmentation-input>>segmentation-results`
+    the save path to the string replacement `segmentation-input>>segmentation-results`
 
 ## Segmentation of nuclei OR cells
 
