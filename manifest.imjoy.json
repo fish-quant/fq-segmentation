@@ -7,7 +7,7 @@
   {
    "name": "ObjectDist",
    "type": "native-python",
-   "version": "0.1.5",
+   "version": "0.2.0",
    "description": "Pre-process 3D images to obtain 2D images for segmentation.",
    "tags": [
     "stable",
@@ -35,7 +35,7 @@
      ""
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@master"
+     "pip: -U git+https://github.com/fish-quant/fq-segmentation@master"
     ]
    },
    "dependencies": [],
@@ -44,7 +44,7 @@
   {
    "name": "PreProcess",
    "type": "native-python",
-   "version": "0.1.7",
+   "version": "0.2.0",
    "description": "Pre-process 3D images to obtain 2D images for segmentation.",
    "tags": [
     "stable",
@@ -72,7 +72,7 @@
      ""
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@master"
+     "pip: -U git+https://github.com/fish-quant/fq-segmentation@master"
     ]
    },
    "dependencies": [],
@@ -81,7 +81,7 @@
   {
    "name": "SegmentCellsNuclei",
    "type": "native-python",
-   "version": "0.1.11",
+   "version": "0.2.0",
    "description": "Segment cells AND nuclei.",
    "tags": [
     "stable",
@@ -93,12 +93,13 @@
     "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
     "<span style='font-weight: 550; color:#666362'>String CELLS</span>: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
     "<span style='font-weight: 550; color:#666362'>String NUCLEI</span>: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
-    "<span style='font-weight: 550; color:#666362'>Scaling factor/New size:</span>: {id: 'new_size', type: 'string', placeholder: '2'}",
-    "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 100}",
-    "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 50}",
+    "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 200}",
+    "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 100}",
+    "<span style='font-weight: 550; color:#666362'>Net Average</span>: {id: 'net_avg', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
+    "<span style='font-weight: 550; color:#666362'>Resample</span>: {id: 'resample', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
     "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
    ],
-   "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
+   "cover": "https://fish-quant.github.io/fq-segmentation/img/segmentation__cells.png",
    "inputs": null,
    "outputs": null,
    "flags": [],
@@ -111,7 +112,7 @@
      ""
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@master"
+     "pip: -U git+https://github.com/fish-quant/fq-segmentation@master"
     ]
    },
    "dependencies": [],
@@ -120,7 +121,7 @@
   {
    "name": "SegmentObjects",
    "type": "native-python",
-   "version": "0.1.10",
+   "version": "0.2.0",
    "description": "Segment cells OR nuclei.",
    "tags": [
     "stable",
@@ -133,11 +134,12 @@
     "<span style='font-weight: 550; color:#666362'>String channel</span>: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
     "<span style='font-weight: 550; color:#666362'>Object name</span>: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
     "<span style='font-weight: 550; color:#666362'>Cellpose model</span>: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
-    "<span style='font-weight: 550; color:#666362'>Scaling factor/New size:</span>: {id: 'new_size', type: 'string', placeholder: '2'}",
-    "<span style='font-weight: 550; color:#666362'>Size object</span>: {id: 'obj_size', type: 'number', placeholder: 50}",
+    "<span style='font-weight: 550; color:#666362'>Object diameter</span>: {id: 'diameter', type: 'number', placeholder: 100}",
+    "<span style='font-weight: 550; color:#666362'>Net Average</span>: {id: 'net_avg', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
+    "<span style='font-weight: 550; color:#666362'>Resample</span>: {id: 'resample', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
     "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
    ],
-   "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png",
+   "cover": "https://fish-quant.github.io/fq-segmentation/img/segmentation__cells.png",
    "inputs": null,
    "outputs": null,
    "flags": [],
@@ -150,7 +152,7 @@
      ""
     ],
     "stable": [
-     "pip: -U git+https://github.com/fish-quant/segmentation@master"
+     "pip: -U git+https://github.com/fish-quant/fq-segmentation@master"
     ]
    },
    "dependencies": [],

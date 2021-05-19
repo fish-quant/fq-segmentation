@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentObjects",
   "type": "native-python",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "description": "Segment cells OR nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -17,8 +17,9 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
         "<span style='font-weight: 550; color:#666362'>String channel</span>: {id: 'str_channel', type: 'string', placeholder: 'dapi'}",
         "<span style='font-weight: 550; color:#666362'>Object name</span>: {id: 'obj_name', type: 'string', placeholder: 'nuclei'}",
         "<span style='font-weight: 550; color:#666362'>Cellpose model</span>: {id: 'model_type', type: 'choose', options: ['nuclei', 'cyto'], placeholder: 'nuclei'}",
-        "<span style='font-weight: 550; color:#666362'>Scaling factor/New size:</span>: {id: 'new_size', type: 'string', placeholder: '2'}",
-        "<span style='font-weight: 550; color:#666362'>Size object</span>: {id: 'obj_size', type: 'number', placeholder: 50}",
+        "<span style='font-weight: 550; color:#666362'>Object diameter</span>: {id: 'diameter', type: 'number', placeholder: 100}",
+        "<span style='font-weight: 550; color:#666362'>Net Average</span>: {id: 'net_avg', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
+        "<span style='font-weight: 550; color:#666362'>Resample</span>: {id: 'resample', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
         "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
         ],
   "cover": "",
@@ -31,10 +32,10 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
   "permissions": [],
   "requirements": {
                     "dev":   [""],
-                    "stable":["pip: -U git+https://github.com/fish-quant/segmentation@master"]
+                    "stable":["pip: -U git+https://github.com/fish-quant/fq-segmentation@master"]
                    },
   "dependencies": [],
-  "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png"
+  "cover": "https://fish-quant.github.io/fq-segmentation/img/segmentation__cells.png"
 }
 </config>
 
@@ -66,28 +67,9 @@ class ImJoyPlugin():
         # Get path for testing
         if api.TAG == 'dev':
             if path_scan == 'paste-path-to-data':
-                path_scan = r'D:\Documents\data-test\fish-quant\fq-imjoy-demo\analysis\segmentation-input'
+                path_scan = r'D:\Work\Documents\data-test\fish-quant\fq-imjoy-demo\analysis\segmentation-input'
   
         # >>> CHECK INPUT PARAMETERS
-
-        # >> Check new size
-        new_size_str = ctx.config.new_size
-
-        if len(new_size_str) == 0: 
-            new_size = ()
-
-        else:
-            if new_size_str.count(',') == 0:
-                new_size = (int(new_size_str),)
-
-            elif new_size_str.count(',') == 1:
-                new_size = tuple(int(x) for x in new_size_str.split(','))
-
-            else:
-                api.alert('String to define new size has to contain one or zero \",\" to separate the new dimensions in XY.')
-                return
-
-        api.log(new_size)
 
         # >> Path containing the data
         if path_scan == 'paste-path-to-data':
@@ -117,8 +99,19 @@ class ImJoyPlugin():
         else:
             input_subfolder = ctx.config.input_subfolder
 
+        # >> Interpret boolean parameters
+        if ctx.config.resample == 'true':
+            resample = True 
+        else:
+            resample = False
 
-        # Call pre-processing function
+        if ctx.config.net_avg == 'true':
+            net_avg = True 
+        else:
+            net_avg = False
+
+
+        # >>> Call segmentation function
         api.showStatus('Performing segmentation ... see log for details')
 
         utils_cellpose.segment_obj_indiv(
@@ -126,9 +119,10 @@ class ImJoyPlugin():
                                 obj_name=ctx.config.obj_name,
                                 str_channel=ctx.config.str_channel, 
                                 img_ext=ctx.config.img_ext, 
-                                new_size=new_size,
-                                obj_size= ctx.config.obj_size, 
                                 model_type=ctx.config.model_type,
+                                diameter= ctx.config.diameter, 
+                                net_avg=net_avg, 
+                                resample=resample,                            
                                 path_save=path_save,
                                 input_subfolder=input_subfolder,
                                 callback_log=api.log,

@@ -7,7 +7,7 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
 {
   "name": "SegmentCellsNuclei",
   "type": "native-python",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "description": "Segment cells AND nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -16,9 +16,10 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
         "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
         "<span style='font-weight: 550; color:#666362'>String CELLS</span>: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
         "<span style='font-weight: 550; color:#666362'>String NUCLEI</span>: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
-        "<span style='font-weight: 550; color:#666362'>Scaling factor/New size:</span>: {id: 'new_size', type: 'string', placeholder: '2'}",
-        "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 100}",
-        "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 50}",
+        "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 200}",
+        "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 100}",
+        "<span style='font-weight: 550; color:#666362'>Net Average</span>: {id: 'net_avg', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
+        "<span style='font-weight: 550; color:#666362'>Resample</span>: {id: 'resample', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
         "<span style='font-weight: 550; color:#666362'>String img ext</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
         ],
   "cover": "",
@@ -31,10 +32,10 @@ the generalist cell/nuclei segmentation package [**Cellpose**](https://github.co
   "permissions": [],
   "requirements": {
                     "dev":   [""],
-                    "stable":["pip: -U git+https://github.com/fish-quant/segmentation@master"]
+                    "stable":["pip: -U git+https://github.com/fish-quant/fq-segmentation@master"]
                    },
   "dependencies": [],
-  "cover": "https://fish-quant.github.io/segmentation/img/segmentation__cells.png"
+  "cover": "https://fish-quant.github.io/fq-segmentation/img/segmentation__cells.png"
 }
 </config>
 
@@ -66,27 +67,9 @@ class ImJoyPlugin():
         # Get path for debugging
         if api.TAG == 'dev':
             if path_scan == 'paste-path-to-data':
-                path_scan = r'D:\Documents\data-test\fish-quant\fq-imjoy-demo\analysis\segmentation-input'
+                path_scan = r'D:\Work\Documents\data-test\fish-quant\fq-imjoy-demo\analysis\segmentation-input'
         
         # >>> CHECK INPUT PARAMETERS
-
-
-        # >> Check new size
-        new_size_str = ctx.config.new_size
-
-        if len(new_size_str) == 0: 
-            new_size = ()
-
-        else:
-            if new_size_str.count(',') == 0:
-                new_size = (int(new_size_str),)
-
-            elif new_size_str.count(',') == 1:
-                new_size = tuple(int(x) for x in new_size_str.split(','))
-
-            else:
-                api.alert('String to define new size has to contain one or zero \",\" to separate the new dimensions in XY.')
-                return
 
         # >> Path containing the data
         if path_scan == 'paste-path-to-data':
@@ -117,16 +100,28 @@ class ImJoyPlugin():
         else:
             path_save = Path(path_save)
 
+        # >> Interpret boolean parameters
+        if ctx.config.resample == 'true':
+            resample = True 
+        else:
+            resample = False
+
+        if ctx.config.net_avg == 'true':
+            net_avg = True 
+        else:
+            net_avg = False
+
 
         # >>>> Call pre-processing function
         api.showStatus('Performing segmentation ... see log for details')
         utils_cellpose.segment_cells_nuclei_indiv(
                                       path_scan=path_scan, 
-                                      strings=(ctx.config.str_cyto, ctx.config.str_nuclei), 
+                                      str_channels=(ctx.config.str_cyto, ctx.config.str_nuclei), 
                                       img_ext=ctx.config.img_ext, 
-                                      new_size=new_size,
-                                      sizes=(ctx.config.size_cells, ctx.config.size_nuclei), 
-                                      models=('cyto','nuclei'),
+                                      model_types=('cyto','nuclei'),
+                                      diameters=(ctx.config.size_cells, ctx.config.size_nuclei), 
+                                      net_avg=net_avg, 
+                                      resample=resample,         
                                       path_save=path_save,
                                       input_subfolder=input_subfolder,
                                       callback_log=api.log,

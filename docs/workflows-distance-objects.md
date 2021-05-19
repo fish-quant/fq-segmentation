@@ -34,7 +34,7 @@ To **calculate these images** for all masks in a folder, you can use either
 
 * **Jupyter notebook**: notebooks\distance-closest-object.ipynb
 * **ImJoy plugin**:  `ObjectDist`, which you  
-<a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:ObjectDist@stable&upgrade=1" target="_blank">**install from here.**</a>
+<a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/fq-segmentation:ObjectDist@stable&upgrade=1" target="_blank">**install from here.**</a>
 
 In either case, the following **parameters** have to be specified
 

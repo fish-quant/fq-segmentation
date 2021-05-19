@@ -2,8 +2,8 @@
 
 We provide different plugins for different segmentation tasks:
 
-* Install plugin `SegmentObjects` to segment cells OR nuclei <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**from here.**</a>
-* Install plugin  `SegmentCellsNuclei` to segment cells AND nuclei <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**from here.**</a>
+* Install plugin `SegmentObjects` to segment cells OR nuclei <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/fq-segmentation:SegmentObjects@stable&upgrade=1" target="_blank">**from here.**</a>
+* Install plugin  `SegmentCellsNuclei` to segment cells AND nuclei <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/fq-segmentation:SegmentCellsNuclei@stable&upgrade=1" target="_blank">**from here.**</a>
 
 ## General behavior
 
@@ -21,31 +21,17 @@ By defining the `Input subfolder` to be `segmentation-input`, the analysis will 
 
 ### Results
 
-Results will be saved in the specified folder. For each image the following files, results files with different suffices are created:
+Results will be saved in the specified folder. For each image the following files, results files with different prefixes are created:
 
-* `..._flow`: these are the predicted distance maps of CellPose. They are an intermediate result, and
+* `flow_ ...`: these are the predicted distance maps of CellPose. They are an intermediate result, and
      not needed for most end-users.
-* `..._mask`: these contain the actual segmentation results. Each segmented object is a filled 
+* `mask_ ...`: these contain the actual segmentation results. Each segmented object is a filled 
       object with a constant pixel value. If the images were resized during segmentation, the mask is scaled
       back up to the original image size. The actually obtained (smaller) mask is saved under the name `mask__rescale_...`.  
-* `..._segmentation`: summary plot showing the input image, the predicted distance map, and the segmented
+* `seg_...`: summary plot showing the input image, the predicted distance map, and the segmented
      objects. This plot is also shown in the interface.
 
 ![segmentation__nuclei](img/segmentation__nuclei.png)
-
-### Resizing to speed up prediction
-
-Segmentation speed depends on the image size. In our experience, resizing the images
-can lead to a substantial speed-up. In case you resize the images, we implemented a post-processing
-routine that will resize the predicted masks back to the original image size.
-
-Resizing can be specified in two ways
-
-1. **Scaling factor** recommended]: simply add an integer value. The actual image size will then be divided by this factor
-   to obtain the new size, i.e. a value of 2 will resize an image 512x512 to 256x256.
-2. **New size**: you can directly define the new size of the image, e.g. 256x256. Please note that this size
-   will be applied to all images, independly of their size. This option is hence not suitable if your data-sets 
-   contain differently sized images.
 
 ## Recommended workflow
 
@@ -70,12 +56,13 @@ to paste your data folder.
     `Path DATA`    | str  |  | Full path to folder containing data to be segmented.
     `Input subfolder`    | str  |  | Name of the subfolder containing the images that should be segmented.
     `Path SAVE` | str  |  | Several options exist. See dedicated section [below](analysis-general-behavior.md#specify-folder-to-save-your-data) for more details.
-    `Object name`    | str  |  `nuclei` | How the object is called.
     `String channel`    | str  |  `dapi` | Unique identifier to identify channel.
-    `String img ext`     | str  | `.png` | File extension of images that should be segmented.
-    `Size object`     | int  | 50 | Typical size of a cell (in resized image).
+    `Object name`    | str  |  `nuclei` | How the object is called.
     `Cellpose model`    | str  |  `nuclei` | Cellpose model for segmentation: `cyto` or `nuclei`. Note that for dense nuclei, the cytoplasmic model might work better. 
-    `New size`     | str  | 512, 512 | String to specify new size of image. No resizing if empty.
+    `Object diameter`     | int  | 50 | Typical diameter of the object. Better to be set a bit to small.
+    `Net Average`     | Bool  | False | Can improve segmentation accuracy, but is slower (Runs the 4 built-in networks and averages them).
+    `Resample`     | Bool  | False | Gives more accurate boundaries, but can be very slow (Runs dynamics at original image size).
+    `String img ext`     | str  | `.png` | File extension of images that should be segmented.
 
 2. Pressing on the plugin name `SegmentObjects` will start the segmentation.
     When using CellPose for the first time, the models for nuclear and cytoplasmic segmentations are downloaded. 
@@ -106,7 +93,9 @@ to paste your data folder.
     `String img ext`     | str  | `.png` | File extension of images that should be segmented.
     `Size CELLS`     | int  | 100 | Typical size of a cell (in resized image).
     `Size NUCLEI`     | int  | 50 | Typical size of a nucleus (in resized image).
-    `New size`     | str  | 512, 512 | String to specify new size of image. No resizing if empty.
+    `Net Average`     | Bool  | False | Can improve segmentation accuracy, but is slower (Runs the 4 built-in networks and averages them).
+    `Resample`     | Bool  | False | Gives more accurate boundaries, but can be very slow (Runs dynamics at original image size).
+    `String img ext`     | str  | `.png` | File extension of images that should be segmented.
 
 2. Pressing on the plugin name `SegmentCellsNuclei` will start the segmentation. 
     When using CellPose for the first time, the models for nuclear and cytoplasmic segmentations are downloaded.

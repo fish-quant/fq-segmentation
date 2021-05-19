@@ -23,7 +23,7 @@ setuptools.setup(
     author="Florian MUELLER",
     author_email="muellerf.research@gmail.com",
     description="wrapper package for cellpose",
-    url="https://github.com/fish-quant/segmentation",
+    url="https://github.com/fish-quant/fq-segmentation",
     packages=setuptools.find_packages(),
     install_requires=REQUIREMENTS,
     include_package_data=True,
