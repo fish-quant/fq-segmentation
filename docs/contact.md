@@ -1,6 +1,6 @@
 # Reporting bugs
 
-If you encounter a bug, best is to create a [**GitHub issue**](https://github.com/fish-quant/segmentation/issues). This would allow other users to see 
+If you encounter a bug, best is to create a [**GitHub issue**](https://github.com/fish-quant/fq-segmentation/issues). This would allow other users to see 
 reported bugs and proposed solutions. If possible, please provide the following information
 
 1. **How** can the bug be produced?

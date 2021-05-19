@@ -1,50 +1,16 @@
-# Test cellpose
-# Run in cellpose environment
-# Slow on full size images
-# You can either the images before predictionm, but this requires resizing the mask.
-# Compare to see which option is faster.
-
-# Imports of general purpose libraries
-from skimage.transform import resize
-from skimage.io import imread, imsave
-from skimage.exposure import rescale_intensity
-
+# Imports 
 import numpy as np
 from tqdm import tqdm
 import time
-import mxnet as mx
 import matplotlib.pyplot as plt
 import pathlib
 from pathlib import Path
 import json
+import cv2
 
 # Imports of CellPose specific libraries
-from cellpose import models, utils
-from cellpose import plot
-
-from segwrap.utils_general import log_message
-from segwrap.utils_general import create_output_path
-
-
-# Function: check if GPU working, and if so use it
-def check_device(gpu_number=0, callback_log=None):
-    """ Check on which device (GPU or CPU) CellPose will be running. 
-
-    Parameters
-    ----------
-    gpu_number : int, optional
-        Index of GPU to be tested, by default 0
-    """
-    use_gpu = utils.use_gpu(gpu_number=gpu_number)
-    if use_gpu:
-        log_message('CellPose will be USING GPU', callback_fun=callback_log)
-        device = mx.gpu()
-    else:
-        log_message('CellPose will be USING CPU', callback_fun=callback_log)
-        device = mx.cpu()
-
-    return device
-
+from cellpose import models, utils, io, plot
+from segwrap.utils_general import log_message, create_output_path
 
 # Call predict function
 def cellpose_predict(data, config, path_save, callback_log=None):
@@ -63,15 +29,14 @@ def cellpose_predict(data, config, path_save, callback_log=None):
     # Get data
     imgs = data['imgs']
     file_names = data['file_names']
-    sizes_orginal = data['sizes_orginal']
     channels = data['channels']
-    new_size = data['new_size']
     obj_name = data['obj_name']
 
     # Get config
     model_type = config['model_type']
-    obj_size = config['obj_size']
-    device = config['device']
+    diameter = config['diameter']
+    net_avg = config['net_avg']
+    resample = config['resample']   
 
     log_message(f'\nPerforming segmentation of {obj_name}\n', callback_fun=callback_log)
 
@@ -81,49 +46,39 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         path_save.mkdir()
 
     # Perform segmentation with CellPose
-    model = models.Cellpose(device, model_type=model_type )  # model_type can be 'cyto' or 'nuclei'
-    masks, flows, styles, diams = model.eval(imgs, diameter=obj_size, channels=channels)
+    model = models.Cellpose(gpu=False, model_type=model_type)  # model_type can be 'cyto' or 'nuclei'
+    masks, flows, styles, diams = model.eval(imgs, diameter=diameter, channels=channels, net_avg=net_avg, resample=resample)
 
     # Display and save results
     log_message(f'\n Creating outputs ...\n', callback_fun=callback_log)
     n_img = len(imgs)
 
     for idx in tqdm(range(n_img)):
+        
+        # Get images and file-name
         file_name = file_names[idx]
         maski = masks[idx]
         flowi = flows[idx][0]
         imgi = imgs[idx]
-
-        # Rescale each channel separately
-        imgi_rescale = imgi.copy()
-
-        for idim in range(3):
-            imgdum = imgi[:, :, idim]
-            pa, pb = np.percentile(imgdum, (0.1, 99.9))
-            imgi_rescale[:, :, idim] = rescale_intensity(imgdum, in_range=(pa, pb), out_range=np.uint8).astype('uint8')
-
-        # Save overview image
-        fig = plt.figure(figsize=(12, 3))
-        plot.show_segmentation(fig, imgi_rescale.astype('uint8'), maski, flowi, channels=channels)
-        plt.tight_layout()
-
-        plt.savefig(path_save / f'{file_name.stem}__segment__{obj_name}.png', dpi=600)
-        plt.close()
+        
+        # Rescale image intensity to 8bit for better plotting results
+        imgi_norm  = cv2.normalize(imgi, None, 0, 255, cv2.NORM_MINMAX).astype('uint8')
 
         # Save mask and flow images
-        imsave(path_save / f'{file_name.stem}__flow__{obj_name}.png', flowi, check_contrast=False)
+        f_mask = str(path_save / f'mask__{file_name.stem}.png')
+        log_message(f'\nMask saved to file: {f_mask}\n', callback_fun=callback_log)
 
-        if new_size:
-            mask_full = resize_mask(maski, sizes_orginal[idx])
+        io.imsave(str(path_save / f'mask__{file_name.stem}.png'), maski)
+        io.imsave(str(path_save / f'flow__{file_name.stem}.png'), flowi)
 
-            imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', mask_full.astype('uint16'), check_contrast=False)
-            imsave(path_save / f'{file_name.stem}__mask_resize__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
-
-        else:
-            imsave(path_save / f'{file_name.stem}__mask__{obj_name}.png', maski.astype('uint16'), check_contrast=False)
+        # Save overview image
+        fig = plt.figure(figsize=(12,3))
+        plot.show_segmentation(fig, imgi_norm, maski,flowi)
+        plt.tight_layout()
+        fig.savefig(str(path_save / f'seg__{file_name.stem}.png'), dpi=300)
+        plt.close(fig)
 
     log_message(f"\nSegmentation of provided images finished ({(time.time() - start_time)}s)", callback_fun=callback_log)
-    # log_message("\n--- %s seconds ---" % ), callback_fun=callback_log)    
 
 
 def clean_par_dict(par_dict):
@@ -140,7 +95,7 @@ def clean_par_dict(par_dict):
 
 
 # Function to load and segment objects individually 
-def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_size, model_type, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None):
+def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext,  model_type, diameter, net_avg, resample, path_save,  input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None):
     """ Will recursively search folder for images to be analyzed!
 
     Parameters
@@ -151,12 +106,9 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
         [description]
     img_ext : [type]
         [description]
-    new_size : tuple
-        Defines resizing of image. If two elements, new size of image. If one element, resizing factor. 
-        If emtpy, no resizing.
-    size_nuclei : [type]
+    diameter : [type]
         [description]
-    model_nuclei : [type]
+    model_type : [type]
         [description]
     path_save : pathlib object or string
         Path to save results,
@@ -183,11 +135,10 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
     log_message(f"Function (segment_obj_indiv) called with: {str(par_dict)} ", callback_fun=callback_log)
 
     # Configurations
-    device = check_device(callback_log=callback_log)
-
     config = {'model_type': model_type,
-              'obj_size': obj_size,
-              'device': device}
+              'diameter': diameter,
+              'net_avg': net_avg,
+              'resample': resample}
 
     channels = [0, 1]
 
@@ -235,11 +186,12 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
             callback_progress(progress)
 
         # Read images
-        img = imread(str(path_img))
+        img = io.imread(str(path_img))
         if img.ndim != 2:
             log_message(f'\nERROR\n  Input image has to be 2D. Current image is {img.ndim}D', callback_fun=callback_log)
             continue
         
+        """
         sizes_orginal.append(img.shape)
 
         # Resize
@@ -252,7 +204,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
                 new_size = tuple(int(ti/scale_factor) for ti in img_size)
 
             img = resize(img, new_size)
-
+        """
         img_zeros = np.zeros(img.shape)
 
         # For object segmentation
@@ -263,9 +215,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
         # >>> Call function for prediction
         data = {'imgs': imgs,
                 'file_names': files,
-                'sizes_orginal': sizes_orginal,
                 'channels': channels,
-                'new_size': new_size,
                 'obj_name': obj_name}
 
         # Create new output path if specified
@@ -285,7 +235,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, obj_s
 
 
 # Function to load and segment cells and nuclei images individually 
-def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, models, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None): 
+def segment_cells_nuclei_indiv(path_scan, str_channels, img_ext,  model_types, diameters, net_avg, resample, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None): 
     """[summary] segment cells and nuclei in bulk, e.g. first all images are loaded and then segmented. 
     TODO: specify parameters
     Parameters
@@ -321,9 +271,9 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
     log_message(f"Function (segment_obj_indiv) called with: {str(par_dict)} ", callback_fun=callback_log)
 
     # Get parameters
-    (str_cyto, str_nuclei) = strings
-    (size_cells, size_nuclei) = sizes
-    (model_cells, model_nuclei) = models
+    (str_cyto, str_nuclei) = str_channels
+    (diameter_cells, diameter_nuclei) = diameters
+    (model_type_cells, model_type_nuclei) = model_types
 
     # Use provided absolute user-path to save images.
     if isinstance(path_save, pathlib.PurePath):
@@ -335,15 +285,15 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         path_save_str_replace = path_save
 
     # Configurations
-    device = check_device(callback_log=callback_log)
+    config_nuclei = {'model_type': model_type_nuclei,
+                     'diameter': diameter_nuclei,
+                     'net_avg': net_avg,
+                     'resample': resample}
 
-    config_nuclei = {'model_type': model_nuclei,
-                     'obj_size': size_nuclei,
-                     'device': device}
-
-    config_cyto = {'model_type': model_cells,
-                   'obj_size': size_cells,
-                   'device': device}
+    config_cyto = {'model_type': model_type_cells,
+                   'diameter': diameter_cells,
+                   'net_avg': net_avg,
+                   'resample': resample}
 
     channels_cyto = [1, 3]
     channels_nuclei = [0, 1]
@@ -371,14 +321,12 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         return
 
     # Process files
-
     for idx, path_cyto in enumerate(files_proc):
         imgs_cyto = []
         imgs_nuclei = []
         files_cyto = []
         files_nuclei = []
-        sizes_orginal = []        
-
+      
         log_message(f'Segmenting image : {path_cyto.name}', callback_fun=callback_log)
 
         if callback_status:
@@ -395,29 +343,15 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
             continue
 
         # Read images
-        img_cyto = imread(str(path_cyto))
+        img_cyto = io.imread(str(path_cyto))
         if img_cyto.ndim != 2:
             log_message(f'\nERROR\n  Input image of cell has to be 2D. Current image is {img_cyto.ndim}D', callback_fun=callback_log)
             continue
         
-        img_nuclei = imread(str(path_nuclei))
+        img_nuclei = io.imread(str(path_nuclei))
         if img_nuclei.ndim != 2:
             log_message(f'\nERROR\n  Input image of cell has to be 2D. Current image is {img_nuclei.ndim}D', callback_fun=callback_log)
             continue
-        
-        sizes_orginal.append(img_cyto.shape)
-
-        # Resize
-        if new_size:
-            
-            # New size can also be defined as a scalar factor
-            if len(new_size) == 1:
-                scale_factor = new_size[0]
-                img_size = img_cyto.shape
-                new_size = tuple(int(ti/scale_factor) for ti in img_size)
-            
-            img_cyto = resize(img_cyto, new_size)
-            img_nuclei = resize(img_nuclei, new_size)
 
         img_zeros = np.zeros(img_cyto.shape)
 
@@ -439,9 +373,7 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         # >>> Call function for prediction of cell
         data_cyto = {'imgs': imgs_cyto,
                      'file_names': files_cyto,
-                     'sizes_orginal': sizes_orginal,
                      'channels': channels_cyto,
-                     'new_size': new_size,
                      'obj_name': 'cells'}
 
         cellpose_predict(data_cyto, config_cyto, path_save=path_save_results, callback_log=callback_log)
@@ -449,9 +381,7 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         # >>> Call function for prediction of nuclei
         data_nuclei = {'imgs': imgs_nuclei,
                        'file_names': files_nuclei,
-                       'sizes_orginal': sizes_orginal,
                        'channels': channels_nuclei,
-                       'new_size': new_size,
                        'obj_name': 'nuclei'}
 
         cellpose_predict(data_nuclei, config_nuclei, path_save=path_save_results, callback_log=callback_log)
@@ -463,39 +393,3 @@ def segment_cells_nuclei_indiv(path_scan, strings, img_ext, new_size, sizes, mod
         fp.close()
 
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
-
-
-def resize_mask(mask_small, size_orginal):
-    """ Resize a label image.
-
-    Parameters
-    ----------
-    mask_small : [type]
-        [description]
-    size_orginal : [type]
-        [description]
-
-    Returns
-    -------
-    [type]
-        [description]
-    """
-
-    mask_full = np.zeros(size_orginal).astype('uint16')
-    maski_template = np.zeros(mask_small.shape).astype('uint8')
-
-    ind_objs = np.unique(mask_small)
-    ind_objs = np.delete(ind_objs, np.where(ind_objs == 0))
-
-    if ind_objs.size > 0:
-
-        for obj_int in np.nditer(ind_objs):
-
-            # Create binary mask for current object and find contour
-            img_obj_loop = np.copy(maski_template)
-            img_obj_loop[mask_small == obj_int] = 1
-
-            img_obj_loop_large = resize(img_obj_loop, size_orginal, order=1).astype('bool')
-            mask_full[img_obj_loop_large] = obj_int
-
-    return mask_full

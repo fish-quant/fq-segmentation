@@ -2,11 +2,11 @@
 site_name: Cell segmentation
 site_description:  Wrapper code to use the generalist cell/nuclei segmentation package [**Cellpose**]
 site_author: Florian MUELLER
-site_url: https://github.com/fish-quant/segmentation
+site_url: https://github.com/fish-quant/fq-segmentation
 
 # Repository
 repo_name: GitHub
-repo_url: https://github.com/fish-quant/segmentation.git
+repo_url: https://github.com/fish-quant/fq-segmentation.git
 edit_uri: ""
 
 # Copyright
@@ -42,7 +42,7 @@ theme:
 extra:
   social:
     - type: github-alt
-      link: https://github.com/fish-quant/segmentation
+      link: https://github.com/fish-quant/fq-segmentation
 
 # MD extension
 markdown_extensions:

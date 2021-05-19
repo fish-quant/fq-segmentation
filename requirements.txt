@@ -1,5 +1,2 @@
-numpy == 1.16.6
-scikit-image == 0.17.2
-tqdm == 4.50.2
-cellpose == 0.1.0.1
-scipy == 1.5.2
+cellpose == 0.6.5
+matplotlib == 3.4.2

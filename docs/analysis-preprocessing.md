@@ -5,7 +5,7 @@ Segmentation is performed on **2D images**. This plugin allows to obtain 2D imag
 a projection or by saving each z-plane separately. These images are typically stored in a separate folder. 
 2D images by applying a projection, and these images are typically stored in a separate folder.
 
-Install ImJoy plugin `PreProcess` <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/segmentation:PreProcess@stable&upgrade=1" target="_blank">** from here.**</a>
+Install ImJoy plugin `PreProcess` <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/fq-segmentation:PreProcess@stable&upgrade=1" target="_blank">** from here.**</a>
 
 ## Recommended workflow
 
