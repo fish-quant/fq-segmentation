@@ -1,16 +1,13 @@
 ﻿<docs lang="markdown">
-ImJoy plugin to perform deep-learning based cell segmentation.
-
-- For more information, see the detailed documentation [**here**](https://fq-segmentation.readthedocs.io/en/latest/).
-- Used the the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
-
+ImJoy plugin to perform cell segmentation with 
+the generalist cell/nuclei segmentation package [**Cellpose**](https://github.com/mouseland/cellpose). 
 </docs>
 
 <config lang="json">
 {
   "name": "SegmentCellsNuclei",
   "type": "native-python",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Segment cells AND nuclei.",
   "tags":  ["stable","dev"],
   "ui": [
@@ -19,6 +16,7 @@ ImJoy plugin to perform deep-learning based cell segmentation.
         "<span style='font-weight: 550; color:#666362'>Path SAVE</span>: {id: 'path_save', type: 'string', placeholder: 'segmentation-input˃˃segmentation-results'}",
         "<span style='font-weight: 550; color:#666362'>String CELLS</span>: {id: 'str_cyto', type: 'string', placeholder: 'cy3'}",
         "<span style='font-weight: 550; color:#666362'>String NUCLEI</span>: {id: 'str_nuclei', type: 'string', placeholder: 'dapi'}",
+        "<span style='font-weight: 550; color:#666362'>Scaling factor/New size: </span>: {id: 'new_size', type: 'string', placeholder: '2'}",
         "<span style='font-weight: 550; color:#666362'>Size CELLS</span>: {id: 'size_cells', type: 'number', placeholder: 200}",
         "<span style='font-weight: 550; color:#666362'>Size NUCLEI</span>: {id: 'size_nuclei', type: 'number', placeholder: 100}",
         "<span style='font-weight: 550; color:#666362'>Net Average</span>: {id: 'net_avg', type: 'choose', options: ['false', 'true'], placeholder: 'false'}",
@@ -38,7 +36,7 @@ ImJoy plugin to perform deep-learning based cell segmentation.
                     "stable":["pip: -U git+https://github.com/fish-quant/fq-segmentation@master"]
                    },
   "dependencies": [],
-  "cover": "https://raw.githubusercontent.com/fish-quant/fq-segmentation/master/docs/img/segmentation__cells.png"
+  "cover": "https://fish-quant.github.io/fq-segmentation/img/segmentation__cells.png"
 }
 </config>
 
@@ -114,6 +112,24 @@ class ImJoyPlugin():
         else:
             net_avg = False
 
+        # >> Check new size
+        new_size_str = ctx.config.new_size
+
+        if len(new_size_str) == 0: 
+            new_size = ()
+
+        else:
+            if new_size_str.count(',') == 0:
+                new_size = (int(new_size_str),)
+
+            elif new_size_str.count(',') == 1:
+                new_size = tuple(int(x) for x in new_size_str.split(','))
+
+            else:
+                api.alert('String to define new size has to contain one or zero \",\" to separate the new dimensions in XY.')
+                return
+
+        api.log(f'New size: {new_size}')
 
         # >>>> Call pre-processing function
         api.showStatus('Performing segmentation ... see log for details')
@@ -121,6 +137,7 @@ class ImJoyPlugin():
                                       path_scan=path_scan, 
                                       str_channels=(ctx.config.str_cyto, ctx.config.str_nuclei), 
                                       img_ext=ctx.config.img_ext, 
+                                      new_size=new_size,
                                       model_types=('cyto','nuclei'),
                                       diameters=(ctx.config.size_cells, ctx.config.size_nuclei), 
                                       net_avg=net_avg, 

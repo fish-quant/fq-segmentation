@@ -33,6 +33,20 @@ Results will be saved in the specified folder. For each image the following file
 
 ![segmentation__nuclei](img/segmentation__nuclei.png)
 
+### Resizing can speed up prediction & yield better results
+
+We found that resizing images before segmentation can yield better results for certain images. 
+Also, it will lead to faster computation time. In case you resize the images, we implemented a post-processing
+routine that will resize the predicted masks back to the original image size.
+
+Resizing can be specified in two ways
+
+1. **Scaling factor** recommended]: simply add an integer value. The actual image size will then be divided by this factor
+   to obtain the new size, i.e. a value of 2 will resize an image 512x512 to 256x256.
+2. **New size**: you can directly define the new size of the image, e.g. 256x256. Please note that this size
+   will be applied to all images, independly of their size. This option is hence not suitable if your data-sets 
+   contain differently sized images.
+
 ## Recommended workflow
 
 The default settings of the plugins allow to quickly perform the recommended workflow. You only have 
@@ -59,10 +73,12 @@ to paste your data folder.
     `String channel`    | str  |  `dapi` | Unique identifier to identify channel.
     `Object name`    | str  |  `nuclei` | How the object is called.
     `Cellpose model`    | str  |  `nuclei` | Cellpose model for segmentation: `cyto` or `nuclei`. Note that for dense nuclei, the cytoplasmic model might work better. 
+    `New size` | int | 2 | Numbers to specify resizing (see above). No resizing if empty.
     `Object diameter`     | int  | 50 | Typical diameter of the object. Better to be set a bit to small.
     `Net Average`     | Bool  | False | Can improve segmentation accuracy, but is slower (Runs the 4 built-in networks and averages them).
     `Resample`     | Bool  | False | Gives more accurate boundaries, but can be very slow (Runs dynamics at original image size).
     `String img ext`     | str  | `.png` | File extension of images that should be segmented.
+    `New size` | int | 2 | Numbers to specify resizing (see abov. No resizing if empty.
 
 2. Pressing on the plugin name `SegmentObjects` will start the segmentation.
     When using CellPose for the first time, the models for nuclear and cytoplasmic segmentations are downloaded. 
@@ -91,6 +107,7 @@ to paste your data folder.
     `String CELLS`    | str  |  `cy3` | Unique identifier for images of cytoplasmic stain.
     `String NUCLEI`    | str  |  `dapi` | Unique identifier for images of nuclear stain.
     `String img ext`     | str  | `.png` | File extension of images that should be segmented.
+    `New size` | int | 2 | Numbers to specify resizing (see above). No resizing if empty.
     `Size CELLS`     | int  | 100 | Typical size of a cell (in resized image).
     `Size NUCLEI`     | int  | 50 | Typical size of a nucleus (in resized image).
     `Net Average`     | Bool  | False | Can improve segmentation accuracy, but is slower (Runs the 4 built-in networks and averages them).
