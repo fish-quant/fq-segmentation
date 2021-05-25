@@ -261,7 +261,7 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, model
 
     # Save settings
     if len(imgs) > 0:
-        fp = open(str(path_save_results / 'segmentation_settings.json'), "w")
+        fp = open(str(path_save_results / f'segmentation_settings__{obj_name}.json'), "w")
         json.dump(par_dict, fp, indent=4, sort_keys=True)
         fp.close()
 
@@ -444,7 +444,7 @@ def segment_cells_nuclei_indiv(path_scan, str_channels, img_ext, new_size, model
 
     # Save settings
     if len(imgs_cyto) > 0:
-        fp = open(str(path_save_results / 'segmentation_settings.json'), "w")
+        fp = open(str(path_save_results / 'segmentation_settings__cells_nuclei.json'), "w")
         json.dump(par_dict, fp, indent=4, sort_keys=True)
         fp.close()
 
