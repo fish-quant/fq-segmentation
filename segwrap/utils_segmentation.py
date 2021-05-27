@@ -1,8 +1,8 @@
 # Imports
 import pathlib
 import json
-from skimage.io import imread, imsave
-
+#from skimage.io import imread, imsave
+from cellpose.io import imread, imsave
 from segwrap.utils_general import log_message, create_output_path
 
 # Functions
@@ -107,7 +107,7 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
 
                 if name_save.is_file():
                     log_message(f'File already exists. Will be overwritten {name_save}', callback_fun=callback_log)
-                imsave(name_save, img[i, :, :])
+                imsave(str(name_save), img[i, :, :])
 
         else:
 
@@ -121,4 +121,4 @@ def folder_prepare_prediction(path_process, channel_ident, img_ext, path_save, p
 
             if name_save.is_file():
                 log_message(f'File already exists. Will be overwritten {name_save}', callback_fun=callback_log)
-            imsave(name_save, img_proj.astype('uint16'))
+            imsave(str(name_save), img_proj.astype('uint16'))

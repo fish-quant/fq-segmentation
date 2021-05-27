@@ -9,7 +9,7 @@ import json
 import cv2
 
 # Imports of CellPose specific libraries
-from cellpose import models, utils, io, plot
+from cellpose import models, io, plot
 from segwrap.utils_general import log_message, create_output_path
 
 # Call predict function
