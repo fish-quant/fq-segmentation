@@ -1,5 +1,5 @@
 # Imports
-from skimage.io import imread, imsave
+from cellpose.io import imread, imsave
 from skimage.measure import regionprops
 import numpy as np
 from tqdm import tqdm
@@ -67,7 +67,6 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
 
         log_message(f'\n>>> Processing file:\n{file_label}', callback_fun=callback_status)
 
-    
         # >>> Create path to save data if necessary
         if not isinstance(path_save, pathlib.PurePath):
             path_save_results = create_output_path(file_label.parent, path_save_str_replace, subfolder=None, create_path=True)
@@ -121,5 +120,3 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
             imsave(name_save_dist, dist_obj_dist_3D[:, :, 0].astype('uint16'), check_contrast=False)
         else:
             log_message(f'Name to save index matrix could not be established: {name_save_dist}', callback_fun=callback_log)
-
-
