@@ -1,10 +1,8 @@
 # Imports
 from cellpose.io import imread, imsave
-from skimage.measure import regionprops
 import numpy as np
 from tqdm import tqdm
 from scipy import ndimage
-from pathlib import Path
 import pathlib
 
 from segwrap.utils_general import log_message, create_output_path
@@ -47,7 +45,6 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
         path_save_results = path_save
         if not path_save_results.is_dir():
             path_save_results.mkdir(parents=True)
-        path_save_settings = path_save_results
 
     else:
         path_save_str_replace = path_save
@@ -62,7 +59,6 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
             files_proc.append(path_mask)
 
     # Process files
-    n_files = len(files_proc)
     for idx, file_label in enumerate(files_proc):
 
         log_message(f'\n>>> Processing file:\n{file_label}', callback_fun=callback_status)
@@ -105,7 +101,6 @@ def create_img_closest_obj(path_scan, str_label, strs_save, path_save=None, sear
 
         for indx, obj_int in enumerate(np.nditer(labels)):
             ind_obj_closest[dist_obj_ind_2D == indx] = obj_int
-
 
         # Save index of closest object
         name_save_ind = path_save_results / f'{file_label.stem.replace(str_label, strs_save[0])}.png'

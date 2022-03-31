@@ -382,12 +382,12 @@ def segment_cells_nuclei_indiv(path_scan, str_channels, img_ext, new_size, model
         if img_cyto.ndim != 2:
             log_message(f'\nERROR\n  Input image of cell has to be 2D. Current image is {img_cyto.ndim}D', callback_fun=callback_log)
             continue
-        
+
         img_nuclei = io.imread(str(path_nuclei))
         if img_nuclei.ndim != 2:
             log_message(f'\nERROR\n  Input image of cell has to be 2D. Current image is {img_nuclei.ndim}D', callback_fun=callback_log)
             continue
-        
+
         # Resize image before CellPose if specified
         sizes_orginal.append(img_cyto.shape)
 
@@ -400,11 +400,11 @@ def segment_cells_nuclei_indiv(path_scan, str_channels, img_ext, new_size, model
                 img_size = img_cyto.shape
                 new_size = tuple(int(ti/scale_factor) for ti in img_size)
 
-            # IMPORTANT: CV2 resize is defined as (width, height)    
+            # IMPORTANT: CV2 resize is defined as (width, height)
             dsize = (new_size[1], new_size[0])  
             img_cyto = cv2.resize(img_cyto, dsize)
             img_nuclei = cv2.resize(img_nuclei, dsize)
-        
+
         img_zeros = np.zeros(img_cyto.shape)
 
         # For cell segmentation

@@ -1,0 +1,122 @@
+﻿<docs lang="markdown">
+ImJoy plugin to create numbered label images.  
+</docs>
+
+<config lang="json">
+{
+  "name": "CreateNumberedLabels",
+  "type": "native-python",
+  "version": "0.0.1",
+  "description": "Created numbered label images.",
+  "tags":  ["stable","dev"],
+  "ui": [
+        "<span style='font-weight: 550; color:#666362'>Path LABELS</span>: {id: 'path_labels', type: 'string', placeholder: 'paste-path-to-labels'}",
+        "<span style='font-weight: 550; color:#666362'>File string</span>: {id: 'file_ident', type: 'string', placeholder: 'mask__'}",
+        "<span style='font-weight: 550; color:#666362'>Img extension</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
+        ],
+  "cover": "",
+  "inputs": null,
+  "outputs": null,
+  "flags": [],
+  "icon": "extension",
+  "api_version": "0.1.7",
+  "env": "",
+  "permissions": [],
+  "requirements": {
+                    "dev":   [""],
+                    "stable":["pip: -U git+https://github.com/fish-quant/fq-segmentation@master"]
+                   },
+  "dependencies": []
+}
+</config>
+
+<script lang="python">
+from imjoy import api
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage.io import imread
+from skimage.measure import regionprops
+import segwrap
+
+from pathlib import Path
+
+class ImJoyPlugin():
+
+    async def setup(self):
+        api.log('>>> Plugin CreateNumberedLabels initialized')
+        api.log(f" * plugin version: {await api.getConfig('_version')}")
+        api.log(f' * segwrap version: {segwrap.__version__}')
+
+    def run(self, ctx):
+        
+        api.log('>>> Plugin CreateNumberedLabels running. Called with parameters:')
+        api.log(ctx.config)
+
+        # >> Prepare INPUT PARAMETERS
+        file_ident  = ctx.config.file_ident
+        img_ext = ctx.config.img_ext
+
+        # Path containing data, and to save results
+        path_labels = ctx.config.path_labels
+        
+        # Get path for testing
+        if api.TAG == 'dev':
+            if path_labels == 'paste-path-to-labels':
+                path_labels = r'D:\Documents\data-test\fish-quant\fq-imjoy-dev\analysis\segmentation-results'
+
+        # Path containing the data
+        if path_labels == 'paste-path-to-labels':
+            api.alert('Path containing labels has to be specified.')
+            return
+
+        path_labels = Path(path_labels)
+        if not path_labels.is_dir():
+            api.alert('Path containing labels does not exist.')    
+            return
+
+        # Path to save data
+        path_save = path_labels / 'labels_numbered'
+        if not path_save.is_dir():
+            path_save.mkdir(parents=True)
+
+        # >> Create random lookup table for Matplotlib
+        # From: https://gist.github.com/jgomezdans/402500
+        vals = np.linspace(0, 1, 256)
+        np.random.shuffle(vals)
+        test = plt.cm.jet(vals)
+        test[0 ,:] = [0, 0, 0, 0]   # Set to zero
+        cmap_random = plt.cm.colors.ListedColormap(test)
+
+        # >> Loop over files and create label images
+        api.showStatus('Create numbered label images')
+
+        for f_labels in path_labels.glob(f'*{file_ident}*{img_ext}'):
+            api.log(f'Processing label image {f_labels}') 
+
+            # >> Read label image and analyse objects
+            img_labels = imread(str(f_labels))
+            props = regionprops(img_labels) 
+
+            # >> Create plots
+            fig, ax = plt.subplots(1, 1, facecolor='white')
+            fig.set_size_inches((6, 6))
+            ax.imshow(img_labels, cmap=cmap_random)
+            ax.get_xaxis().set_visible(False)
+            ax.get_yaxis().set_visible(False)
+
+            for prop in props:
+                ax.text(prop.centroid[1],
+                        prop.centroid[0],
+                        f'{prop.label}',
+                        fontsize=5, weight='bold',
+                        verticalalignment='center', horizontalalignment='center')
+                
+            name_save = path_save / f'{f_labels.stem}__numbered.png'
+            plt.savefig(name_save, dpi=300)
+
+            plt.close()
+
+        api.showStatus('Preprocessing finished.')
+
+api.export(ImJoyPlugin())
+</script>

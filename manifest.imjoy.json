@@ -5,6 +5,39 @@
  "version": "0.2.0",
  "plugins": [
   {
+   "name": "CreateNumberedLabels",
+   "type": "native-python",
+   "version": "0.0.1",
+   "description": "Created numbered label images.",
+   "tags": [
+    "stable",
+    "dev"
+   ],
+   "ui": [
+    "<span style='font-weight: 550; color:#666362'>Path LABELS</span>: {id: 'path_labels', type: 'string', placeholder: 'paste-path-to-labels'}",
+    "<span style='font-weight: 550; color:#666362'>File string</span>: {id: 'file_ident', type: 'string', placeholder: 'mask__'}",
+    "<span style='font-weight: 550; color:#666362'>Img extension</span>: {id: 'img_ext', type: 'string', placeholder: '.png'}"
+   ],
+   "cover": "",
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": "extension",
+   "api_version": "0.1.7",
+   "env": "",
+   "permissions": [],
+   "requirements": {
+    "dev": [
+     ""
+    ],
+    "stable": [
+     "pip: -U git+https://github.com/fish-quant/fq-segmentation@master"
+    ]
+   },
+   "dependencies": [],
+   "uri": "imjoy-plugins\\CreateNumberedLabels.imjoy.html"
+  },
+  {
    "name": "ObjectDist",
    "type": "native-python",
    "version": "0.2.1",
