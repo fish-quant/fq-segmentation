@@ -2,7 +2,7 @@
 
 Here we describe how you can install and maintain the ImJoy Jupyter plugin engine, which is
 needed to run the Python code for cell/nuclear segmentation and the pre/post processing 
-workflows. 
+workflows.
 
 ## Install Jupyter engine for ImJoy
 
@@ -15,8 +15,10 @@ to excecute the commands listed below.
 We recommend creating a **dedicated environment** to run code in this analysis package. To create an environment called `fq-segmentation`, open an anaconda prompt and type (Confirm with `y` when asked if you want to proceed (`Proceed ([y]/n)?`):
 
 ``` bash
-conda create --name fq-segmentation python=3.7
+conda create --name fq-segmentation  pytorch=1.8.2 cudatoolkit=10.2 -c pytorch-lts
 ```
+
+Note (31-3-2022): specifying the environment seems necessary due to a change in the Pytorch channel (more [information](https://github.com/MouseLand/cellpose/issues/481)).
 
 **Activate the environment**:
 

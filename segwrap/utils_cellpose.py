@@ -1,4 +1,4 @@
-# Imports 
+# Imports of general libraries
 import numpy as np
 from tqdm import tqdm
 import time
@@ -7,6 +7,7 @@ import pathlib
 from pathlib import Path
 import json
 import cv2
+from skimage.exposure import rescale_intensity
 
 # Imports of CellPose specific libraries
 from cellpose import models, io, plot
@@ -64,16 +65,12 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         imgi = imgs[idx]
         
         # Rescale each channel separately
-        imgi_norm = imgi.copy()
+        imgi_scaled = imgi.copy()
         for idim in range(3):
             imgdum = imgi[:, :, idim]
-            
-            # Renormalize to 8bit between 1 and 99 percentile
             pa = np.percentile(imgdum, 0.5)
             pb = np.percentile(imgdum, 99.5)
-            
-            if pb > pa:
-                imgi_norm[:, :, idim] = 255 * (imgdum - pa) / (pb - pa)
+            imgi_scaled[:, :, idim] = rescale_intensity(imgdum, in_range=(pa, pb),out_range=np.uint8)
 
         # Save flow
         io.imsave(str(path_save / f'{file_name.stem}__flow__{obj_name}.png'), flowi)
@@ -81,23 +78,15 @@ def cellpose_predict(data, config, path_save, callback_log=None):
         # Resize masks if necessary 
         if new_size:
             mask_full = resize_mask(maski, sizes_orginal[idx])
-
             io.imsave(str(path_save / f'{file_name.stem}__mask__{obj_name}.png'), mask_full)
             io.imsave(str(path_save / f'{file_name.stem}__mask_resize__{obj_name}.png'), maski)
 
         else:
             io.imsave(str(path_save / f'{file_name.stem}__mask__{obj_name}.png'), maski)
 
-        # Save mask and flow images
-        #f_mask = str(path_save / f'{file_name.stem}__mask__{obj_name}.png')
-        #log_message(f'\nMask saved to file: {f_mask}\n', callback_fun=callback_log)
-
-        #io.imsave(str(path_save / f'{file_name.stem}__mask__{obj_name}.png'), maski)
-
-
         # Save overview image
         fig = plt.figure(figsize=(12,3))
-        plot.show_segmentation(fig, imgi_norm.astype('uint8'), maski, flowi)
+        plot.show_segmentation(fig, imgi_scaled, maski, flowi)
         plt.tight_layout()
         fig.savefig(str(path_save / f'{file_name.stem}__seg__{obj_name}.png'), dpi=300)
         plt.close(fig)
@@ -107,7 +96,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
 
 def clean_par_dict(par_dict):
     """
-    Cleam up dictionary containing all parameters such that it can
+    Clean dictionary containing all parameters such that it can
     be written into a json file.
     """
     par_dict['path_scan'] = str(par_dict['path_scan'])
@@ -255,7 +244,6 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, model
         # Create new output path if specified
         if not isinstance(path_save, pathlib.PurePath):
             path_save_results = create_output_path(path_img.parent, path_save_str_replace, subfolder='', create_path=True)
-            path_save_settings = path_save_results
 
         cellpose_predict(data, config, path_save=path_save_results, callback_log=callback_log)
 
