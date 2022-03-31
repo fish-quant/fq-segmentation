@@ -1,2 +1,1 @@
 pymdown-extensions
-jinja2==3.0.3
