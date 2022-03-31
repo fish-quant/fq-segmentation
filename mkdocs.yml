@@ -73,6 +73,7 @@ nav:
     - Diverse workflows:
       - Overview: workflows-overview.md
       - Split channels: workflows-fiji-split-channels.md
+      - Numbered label image: workflows-create-numbered-labels.md
       - Distance to objects: workflows-distance-objects.md
       - Create FQ outline files: workflows-create-fq-outlines.md
 
