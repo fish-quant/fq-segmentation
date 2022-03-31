@@ -9,7 +9,7 @@ This workflow permits to create such an image from any label image created by th
 
 You can install the plugin from <a href="https://imjoy.io/#/app?w=fq-segmentation&plugin=fish-quant/fq-segmentation:CreateNumberedLabels@stable&upgrade=1" target="_blank">**here.**</a>
 
-## Recommended workflow
+## Workflow
 
 The default settings of the plugins allow to quickly perform the recommended workflow. You only have 
 to paste the path to folder containing the segmentation results (usually a folder called `segmentation-results`). The plugin will then loop over all files in this folder, and select the onces fitting the other two parameters:
