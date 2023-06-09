@@ -34,7 +34,7 @@ def cellpose_predict(data, config, path_save, callback_log=None):
     obj_name = data['obj_name']
     sizes_orginal = data['sizes_orginal']
     new_size = data['new_size']
-    
+
     # Get config
     model_type = config['model_type']
     diameter = config['diameter']
@@ -57,20 +57,24 @@ def cellpose_predict(data, config, path_save, callback_log=None):
     n_img = len(imgs)
 
     for idx in tqdm(range(n_img)):
-        
+
         # Get images and file-name
         file_name = file_names[idx]
         maski = masks[idx]
         flowi = flows[idx][0]
         imgi = imgs[idx]
-        
+
         # Rescale each channel separately
         imgi_scaled = imgi.copy()
         for idim in range(3):
             imgdum = imgi[:, :, idim]
             pa = np.percentile(imgdum, 0.5)
             pb = np.percentile(imgdum, 99.5)
-            imgi_scaled[:, :, idim] = rescale_intensity(imgdum, in_range=(pa, pb),out_range=np.uint8)
+            imgi_scaled[:, :, idim] = rescale_intensity(imgdum, in_range=(pa, pb), out_range=np.uint8)
+
+            # Rescale image
+#        pa, pb = np.percentile(imgi, (np.percentile[0.5], np.percentile[0.995]))
+#        imgi_scaled = rescale_intensity(imgi, in_range=(pa, pb), out_range=np.uint8)
 
         # Save flow
         io.imsave(str(path_save / f'{file_name.stem}__flow__{obj_name}.png'), flowi)
@@ -86,6 +90,8 @@ def cellpose_predict(data, config, path_save, callback_log=None):
 
         # Save overview image
         fig = plt.figure(figsize=(12,3))
+        print('yeah')
+        #plot.show_segmentation(fig, imgi, maski, flowi)
         plot.show_segmentation(fig, imgi_scaled, maski, flowi)
         plt.tight_layout()
         fig.savefig(str(path_save / f'{file_name.stem}__seg__{obj_name}.png'), dpi=300)
@@ -204,7 +210,6 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, model
             log_message(f'\nERROR\n  Input image has to be 2D. Current image is {img.ndim}D', callback_fun=callback_log)
             continue
         
-        
         # IMPORTANT: CV2 resize is defined as (width, height)
         print('>>> process file')
         print(f'input file (size): {img.shape}')
@@ -219,14 +224,13 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, model
                 scale_factor = new_size[0]
                 img_size = img.shape
                 new_size = tuple(int(ti/scale_factor) for ti in img_size)
-                
+
             # IMPORTANT: CV2 resize is defined as (width, height)    
-            dsize = (new_size[1], new_size[0])             
+            dsize = (new_size[1], new_size[0])
             img = cv2.resize(img, dsize)
-            
+
         print(f'resized file (size): {img.shape}')
-        
-            
+
         # For object segmentation
         img_zeros = np.zeros(img.shape)
         img_3d_dpi = np.dstack([img_zeros, img_zeros, img])
@@ -254,7 +258,6 @@ def segment_obj_indiv(path_scan, obj_name, str_channel, img_ext, new_size, model
         fp.close()
 
     log_message(f'\n BATCH SEGMENTATION finished', callback_fun=callback_log)
-
 
 # Function to load and segment cells and nuclei images individually 
 def segment_cells_nuclei_indiv(path_scan, str_channels, img_ext, new_size, model_types, diameters, net_avg, resample, path_save, input_subfolder=None, callback_log=None, callback_status=None, callback_progress=None): 
@@ -359,7 +362,7 @@ def segment_cells_nuclei_indiv(path_scan, str_channels, img_ext, new_size, model
             progress = float((idx+1)/n_imgs)
             callback_progress(progress)
 
-        # DAPI image: existing?
+        # Nuclei image: existing?
         path_nuclei = Path(str(path_cyto).replace(str_cyto, str_nuclei))
         if not path_nuclei.is_file():
             log_message(f'DAPI image not found : {path_nuclei}', callback_fun=callback_log)
